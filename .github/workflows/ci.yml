@@ -1,0 +1,100 @@
+name: Intégration continue
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    name: Backend (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
+
+      # //go:embed exige que frontend/dist existe, même vide : le backend se
+      # compile et se teste sans construire l'interface.
+      - name: Préparer le dossier embarqué
+        run: mkdir -p frontend/dist && touch frontend/dist/.gitkeep
+
+      - name: Formatage
+        run: |
+          unformatted=$(gofmt -l . | grep -v '^frontend/' || true)
+          if [ -n "$unformatted" ]; then
+            echo "Fichiers non formatés :"; echo "$unformatted"
+            echo "Lancez « make fmt »."; exit 1
+          fi
+
+      - name: Analyse statique
+        run: go vet ./...
+
+      - name: Tests
+        run: go test -race -count=1 ./...
+
+  frontend:
+    name: Interface (TypeScript)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Typage et compilation
+        run: npm run build
+
+  build:
+    name: Exécutable (${{ matrix.os }})
+    needs: [go, frontend]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Dépendances système
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+
+      - name: Installer Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.15.0
+
+      - name: Compiler
+        run: wails build -clean -ldflags "-X main.version=${{ github.sha }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comptoir-${{ matrix.os }}
+          path: build/bin/*
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,25 @@
+# Binaires et artefacts de compilation
+/build/bin/
+/Comptoir
+/comptoir
+*.exe
+*.syso
+
+# Interface compilée : régénérée par « wails build ».
+# Le dossier lui-même reste versionné : //go:embed exige qu'il existe pour que
+# « go build » et « go test » fonctionnent sans avoir compilé le frontend.
+/frontend/dist/*
+!/frontend/dist/.gitkeep
+/frontend/node_modules/
+/frontend/wailsjs/
+/frontend/package.json.md5
+
+# Données locales — jamais versionnées
+/data/
+/backups/
+/exports/
+*.log
+
+# Systèmes
+.DS_Store
+Thumbs.db

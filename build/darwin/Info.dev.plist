@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleName</key><string>{{.Info.ProductName}}</string>
+    <key>CFBundleExecutable</key><string>{{.Name}}</string>
+    <key>CFBundleIdentifier</key><string>com.comptoir.app</string>
+    <key>CFBundleVersion</key><string>{{.Info.ProductVersion}}</string>
+    <key>CFBundleShortVersionString</key><string>{{.Info.ProductVersion}}</string>
+    <key>CFBundleIconFile</key><string>iconfile</string>
+    <key>LSMinimumSystemVersion</key><string>10.15.0</string>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSHumanReadableCopyright</key><string>{{.Info.Copyright}}</string>
+    <!-- Application strictement locale : aucune connexion sortante n'est faite. -->
+    <key>NSAppTransportSecurity</key>
+    <dict><key>NSAllowsArbitraryLoads</key><false/></dict>
+</dict>
+</plist>
