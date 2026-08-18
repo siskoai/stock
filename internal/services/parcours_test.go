@@ -58,7 +58,7 @@ func TestParcoursComplet(t *testing.T) {
 	// Coût de revient de l'entrée : (4 × 330 000 + 60 000) / 4 = 345 000.
 	// Coût moyen : (6 × 320 000 + 4 × 345 000) / 10 = 330 000.
 	if pcApres.PurchasePrice != 33000000 {
-		t.Errorf("coût moyen = %d, attendu 33000000 — les frais de transport sont-ils intégrés ?", pcApres.PurchasePrice)
+		t.Errorf("coût moyen = %d, attendu 33000000, les frais de transport sont-ils intégrés ?", pcApres.PurchasePrice)
 	}
 
 	// --- 3. Une vente au comptoir, réglée en partie -------------------------
@@ -182,7 +182,7 @@ func TestParcoursComplet(t *testing.T) {
 			}
 		}
 		if solde != p.Quantity {
-			t.Errorf("« %s » : le journal totalise %d, la fiche porte %d — une variation n'est pas tracée",
+			t.Errorf("« %s » : le journal totalise %d, la fiche porte %d, une variation n'est pas tracée",
 				p.Name, solde, p.Quantity)
 		}
 	}

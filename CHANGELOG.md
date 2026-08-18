@@ -10,7 +10,7 @@ pas la liste des fichiers modifiés.
 
 Rien pour l'instant.
 
-## [1.0.0] — 2026-08-18
+## [1.0.0] (2026-08-18)
 
 Première version utilisable de bout en bout.
 
@@ -69,7 +69,7 @@ Première version utilisable de bout en bout.
   le filtrage est appliqué dans les services, pas seulement à l'écran.
 - Fiche « Mon compte » : chacun change son propre mot de passe.
 - Mot de passe provisoire généré à la réinitialisation, à changer à la
-  première connexion — d'ici là, le compte n'ouvre rien.
+  première connexion, d'ici là, le compte n'ouvre rien.
 - Journal d'audit en ajout seul, filtrable.
 - Verrouillage après cinq tentatives, expiration de session réglable.
 

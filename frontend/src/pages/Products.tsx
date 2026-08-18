@@ -445,7 +445,7 @@ function HistoryModal({ productId, onClose }: { productId: string; onClose: () =
   return (
     <Modal
       title={data?.product.name ?? 'Fiche de vie'}
-      subtitle={data ? `Référence ${data.product.sku} — ${data.movements.length} mouvement(s)` : undefined}
+      subtitle={data ? `Référence ${data.product.sku}, ${data.movements.length} mouvement(s)` : undefined}
       size="xwide"
       onClose={onClose}
       footer={<button className="btn" onClick={onClose}>Fermer</button>}
@@ -489,7 +489,7 @@ function HistoryModal({ productId, onClose }: { productId: string; onClose: () =
                 key: 'reason', header: 'Motif',
                 render: (m) => (
                   <>
-                    <div className="truncate" style={{ maxWidth: 260 }}>{m.reason || '—'}</div>
+                    <div className="truncate" style={{ maxWidth: 260 }}>{m.reason || '-'}</div>
                     {m.documentNo && <div className="cell-secondary mono">{m.documentNo}</div>}
                   </>
                 ),

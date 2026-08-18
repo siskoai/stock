@@ -347,7 +347,7 @@ func phoneSuffix(p models.Party) string {
 	if trim(p.Phone) == "" {
 		return ""
 	}
-	return " — " + p.Phone
+	return ", " + p.Phone
 }
 
 // periodLabel rend « Du 01/01/2026 au 31/03/2026 ».

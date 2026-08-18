@@ -1,7 +1,7 @@
 # Règles de calcul
 
 Ce document décrit comment Comptoir calcule ce qu'il affiche, et surtout ce
-qu'il ne calcule pas. Il s'adresse à qui doit vérifier un chiffre — vous, votre
+qu'il ne calcule pas. Il s'adresse à qui doit vérifier un chiffre, vous, votre
 comptable, ou un développeur qui reprend le code.
 
 ---
@@ -15,8 +15,8 @@ Les nombres à virgule flottante sont écartés : `0,1 + 0,2` ne vaut pas `0,3` 
 binaire, et sur mille lignes de facture cet écart devient visible. Un entier
 est exact.
 
-Quand une division est nécessaire — un pourcentage, une répartition au prorata
-— le résultat est **arrondi au plus proche**, jamais tronqué. Les reliquats
+Quand une division est nécessaire, un pourcentage, une répartition au prorata
+- le résultat est **arrondi au plus proche**, jamais tronqué. Les reliquats
 d'arrondi sont reportés sur la dernière ligne, de sorte que la somme des lignes
 égale toujours le total imprimé, au centième près.
 
@@ -53,7 +53,7 @@ nouveau coût = (ancienne quantité × ancien coût + quantité reçue × coût 
 ```
 
 Le **coût de revient** d'une réception comprend le prix d'achat net de remise,
-plus la quote-part des frais annexes — transport, douane, manutention —
+plus la quote-part des frais annexes, transport, douane, manutention,
 répartie au prorata de la valeur des lignes. Négliger ces frais surestime les
 bénéfices, parfois de plusieurs points de marge.
 
@@ -76,8 +76,8 @@ au coût moyen de ce jour-là. Une facture émise ne voit plus sa marge bouger,
 même si le coût de l'article change ensuite : c'est ce qui rend les rapports
 d'une période close stables.
 
-Cas particulier du devis : les prix de vente sont ceux du devis — c'est un
-engagement pris envers le client — mais les coûts sont réalignés sur le coût
+Cas particulier du devis : les prix de vente sont ceux du devis, c'est un
+engagement pris envers le client, mais les coûts sont réalignés sur le coût
 moyen du jour de l'émission. La marge reflète ce que la marchandise a
 réellement coûté au moment où elle sort.
 
@@ -122,7 +122,7 @@ Le flux affiché situe une tendance ; il n'arrête pas une trésorerie.
 L'écran « Situation » présente ce que Comptoir suit réellement :
 
 - la valeur du stock vendable et du stock défectueux, au coût moyen ;
-- les créances clients — les factures dont le solde est positif ;
+- les créances clients, les factures dont le solde est positif ;
 - le résultat cumulé depuis l'ouverture ;
 - les taxes facturées restant à reverser.
 
@@ -146,7 +146,7 @@ l'acompte encaissé est signalé comme montant à rembourser. Le remboursement
 lui-même n'est pas un mouvement suivi : il se constate hors du logiciel.
 
 **Retours clients.** Le mouvement ne touche que le stock physique. L'avoir
-financier se fait par annulation de la facture d'origine — Comptoir n'émet pas
+financier se fait par annulation de la facture d'origine, Comptoir n'émet pas
 de note de crédit distincte.
 
 **Pas de valorisation FIFO ou LIFO.** Le coût moyen pondéré est le seul mode

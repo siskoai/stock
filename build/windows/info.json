@@ -6,7 +6,7 @@
     "0000": {
       "ProductVersion": "1.0.0.0",
       "CompanyName": "Comptoir",
-      "FileDescription": "Comptoir — gestion de boutique hors ligne",
+      "FileDescription": "Comptoir, gestion de boutique hors ligne",
       "LegalCopyright": "Logiciel de gestion de boutique",
       "ProductName": "Comptoir",
       "Comments": "Stock, ventes, achats et rapports. Aucune donnée ne quitte le poste."

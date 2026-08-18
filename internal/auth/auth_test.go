@@ -73,7 +73,7 @@ func TestLogin(t *testing.T) {
 		t.Errorf("mauvais mot de passe : %v, attendu ErrInvalidCredentials", err)
 	}
 	if _, err := s.Login("inconnu", "motdepasse1"); !errors.Is(err, ErrInvalidCredentials) {
-		t.Errorf("compte inconnu : %v — le message ne doit pas révéler que le compte n'existe pas", err)
+		t.Errorf("compte inconnu : %v, le message ne doit pas révéler que le compte n'existe pas", err)
 	}
 	pub, err := s.Login("PATRON", "motdepasse1")
 	if err != nil {

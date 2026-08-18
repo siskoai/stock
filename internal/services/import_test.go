@@ -71,7 +71,7 @@ func TestParseSheet_DevineLeSeparateur(t *testing.T) {
 			t.Fatalf("parseSheet : %v", err)
 		}
 		if len(header) != 2 {
-			t.Errorf("%d colonne(s) détectée(s), attendu 2 — séparateur mal deviné", len(header))
+			t.Errorf("%d colonne(s) détectée(s), attendu 2, séparateur mal deviné", len(header))
 		}
 		if len(records) != 1 || records[0][0] != "Clavier" {
 			t.Errorf("lignes = %v", records)
@@ -107,7 +107,7 @@ func TestImportProducts_ApercuPuisApplication(t *testing.T) {
 		t.Error("l'aperçu se déclare appliqué")
 	}
 	if preview.Created != 3 || preview.Updated != 0 || preview.Skipped != 0 {
-		t.Errorf("aperçu : %d créations, %d mises à jour, %d écartées — attendu 3/0/0",
+		t.Errorf("aperçu : %d créations, %d mises à jour, %d écartées, attendu 3/0/0",
 			preview.Created, preview.Updated, preview.Skipped)
 	}
 	if n := s.db.Products.Count(); n != 0 {
@@ -172,7 +172,7 @@ func TestImportProducts_MiseAJourNeTouchePasAuStockNiAuCout(t *testing.T) {
 		t.Fatalf("import : %v", err)
 	}
 	if report.Updated != 1 || report.Created != 0 {
-		t.Fatalf("%d mise(s) à jour, %d création(s) — attendu 1/0", report.Updated, report.Created)
+		t.Fatalf("%d mise(s) à jour, %d création(s), attendu 1/0", report.Updated, report.Created)
 	}
 
 	after := s.reload(p.ID)
@@ -243,6 +243,6 @@ func TestImportTemplate(t *testing.T) {
 		t.Fatalf("le modèle produit n'est pas relisible : %v", err)
 	}
 	if report.Created != 2 || report.Skipped != 0 {
-		t.Errorf("modèle : %d création(s), %d écartée(s) — attendu 2/0", report.Created, report.Skipped)
+		t.Errorf("modèle : %d création(s), %d écartée(s), attendu 2/0", report.Created, report.Skipped)
 	}
 }

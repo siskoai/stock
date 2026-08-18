@@ -27,7 +27,7 @@ const empty: State = {
   needsSetup: false, authenticated: false, scopes: [],
   companyName: 'Comptoir', currencySymbol: 'FCFA', decimals: 0,
   theme: 'light', appVersion: '',
-  author: 'SISKO', notice: 'Édité avec Comptoir — un logiciel SISKO',
+  author: 'SISKO', notice: 'Édité avec Comptoir, un logiciel SISKO',
   brandingIntact: true,
 }
 

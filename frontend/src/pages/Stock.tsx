@@ -1,5 +1,5 @@
 // Mouvements de stock : le journal, et les opérations qui l'alimentent en
-// dehors des ventes et des achats — défauts, réparations, rebuts, retours et
+// dehors des ventes et des achats, défauts, réparations, rebuts, retours et
 // corrections d'inventaire.
 
 import { useMemo, useState } from 'react'
@@ -142,7 +142,7 @@ export function StockPage({ refreshCounters }: PageContext) {
                 key: 'reason', header: 'Motif / document',
                 render: (m) => (
                   <>
-                    <div className="truncate" style={{ maxWidth: 240 }}>{m.reason || '—'}</div>
+                    <div className="truncate" style={{ maxWidth: 240 }}>{m.reason || '-'}</div>
                     {(m.documentNo || m.partyName) && (
                       <div className="cell-secondary truncate" style={{ maxWidth: 240 }}>
                         {[m.documentNo, m.partyName].filter(Boolean).join(' · ')}

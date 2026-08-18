@@ -237,7 +237,7 @@ func (s *Purchases) CreatePurchase(in PurchaseInput) (models.Purchase, error) {
 		return models.Purchase{}, err
 	}
 
-	s.log(u, "CREATE", "purchase", purchase.ID, "Bon d'entrée %s — %d ligne(s), total %d",
+	s.log(u, "CREATE", "purchase", purchase.ID, "Bon d'entrée %s, %d ligne(s), total %d",
 		purchase.Number, len(docLines), purchase.Total)
 	return purchase, nil
 }
@@ -277,7 +277,7 @@ func (s *Purchases) CancelPurchase(id, reason string) error {
 			return fmt.Errorf("un article du bon d'entrée n'existe plus : annulation impossible")
 		}
 		if p.Quantity < qty {
-			return fmt.Errorf("« %s » : %d en stock, %d à retirer — une partie a déjà été vendue, l'annulation retirerait un stock inexistant",
+			return fmt.Errorf("« %s » : %d en stock, %d à retirer, une partie a déjà été vendue, l'annulation retirerait un stock inexistant",
 				p.Name, p.Quantity, qty)
 		}
 	}
@@ -291,7 +291,7 @@ func (s *Purchases) CancelPurchase(id, reason string) error {
 				Type: models.MovementReturnSupplier, Date: time.Now(), Quantity: l.Quantity,
 				UnitCost: l.UnitCost, PartyID: purchase.SupplierID, PartyName: purchase.SupplierName,
 				DocumentID: purchase.ID, DocumentNo: purchase.Number,
-				Reason: "Annulation du bon d'entrée — " + motif,
+				Reason: "Annulation du bon d'entrée, " + motif,
 			},
 		})
 	}
@@ -303,12 +303,12 @@ func (s *Purchases) CancelPurchase(id, reason string) error {
 	purchase.Status = models.StatusCancelled
 	purchase.CancelledAt = &now
 	purchase.UpdatedAt = now
-	purchase.Notes = appendNote(purchase.Notes, fmt.Sprintf("Annulé le %s par %s — %s",
+	purchase.Notes = appendNote(purchase.Notes, fmt.Sprintf("Annulé le %s par %s, %s",
 		now.Format("02/01/2006"), u.FullName, motif))
 	if err := s.db.Purchases.Update(purchase); err != nil {
 		return err
 	}
-	s.log(u, "CANCEL", "purchase", purchase.ID, "Bon d'entrée %s annulé — %s", purchase.Number, motif)
+	s.log(u, "CANCEL", "purchase", purchase.ID, "Bon d'entrée %s annulé, %s", purchase.Number, motif)
 	return nil
 }
 

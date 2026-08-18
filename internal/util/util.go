@@ -30,7 +30,7 @@ func NewID(prefix string) string {
 
 // TempPassword génère un mot de passe provisoire lisible à l'oral : dix
 // caractères de l'alphabet sans ambiguïté (ni I, L, O, U, ni 0/O confondus),
-// dont au moins une lettre et un chiffre — la politique de auth.ValidatePassword
+// dont au moins une lettre et un chiffre, la politique de auth.ValidatePassword
 // est donc toujours respectée.
 func TempPassword() (string, error) {
 	const letters = "ABCDEFGHJKMNPQRSTVWXYZ"

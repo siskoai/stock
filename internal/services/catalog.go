@@ -236,7 +236,7 @@ func matchesProduct(p models.Product, search string) bool {
 // viewProduct enrichit un produit pour l'affichage. showCost à faux retire le
 // prix d'achat et tout ce qui s'en déduit : un vendeur voit ce qu'il vend, pas
 // ce que la boutique paie. Le filtrage est fait ici, à la source, et pas dans
-// l'interface — masquer une colonne n'est pas une protection.
+// l'interface, masquer une colonne n'est pas une protection.
 func (s *Catalog) viewProduct(p models.Product, cats map[string]models.Category, showCost bool) ProductView {
 	v := ProductView{
 		Product:    p,

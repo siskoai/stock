@@ -16,7 +16,7 @@ import (
 //
 // Reprendre un stock existant à la main, article par article, est le premier
 // obstacle à l'adoption du logiciel. L'import lit le fichier que le commerçant
-// a déjà — une liste exportée d'Excel — plutôt que d'exiger un format précis :
+// a déjà (une liste exportée d'Excel) plutôt que d'exiger un format précis :
 // les colonnes sont reconnues par leur intitulé, dans n'importe quel ordre, et
 // celles qu'il ne comprend pas sont ignorées.
 //

@@ -89,7 +89,7 @@ export function useDocumentPreview() {
     }
   }
 
-  /** Enregistre directement, sans aperçu — pour les exports tableur. */
+  /** Enregistre directement, sans aperçu, pour les exports tableur. */
   async function download(produce: () => Promise<FileResult>) {
     setBusy(true)
     try {

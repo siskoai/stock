@@ -1,0 +1,65 @@
+name: Signaler un problème
+description: Quelque chose ne fonctionne pas, ou un chiffre est faux
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce problème.
+
+        **S'il s'agit d'une faille de sécurité, n'utilisez pas ce formulaire.**
+        Passez par Security > Report a vulnerability, qui reste privé.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version de Comptoir
+      description: Visible dans Mon compte, en bas de la fiche
+      placeholder: '1.0.0'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: systeme
+    attributes:
+      label: Système
+      options: ['Windows 10', 'Windows 11', 'macOS', 'Linux']
+    validations:
+      required: true
+
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Ce que vous attendiez
+    validations:
+      required: true
+
+  - type: textarea
+    id: obtenu
+    attributes:
+      label: Ce qui s'est produit
+      description: |
+        Si un chiffre est faux, donnez les montants exacts qui l'ont produit :
+        prix, quantités, remises, taux de taxe. C'est ce qui permet de
+        reproduire le calcul.
+    validations:
+      required: true
+
+  - type: textarea
+    id: etapes
+    attributes:
+      label: Comment le reproduire
+      placeholder: |
+        1. Ouvrir l'écran Ventes
+        2. Ajouter deux fois le même article
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: complement
+    attributes:
+      label: Autre chose à signaler
+      description: Captures d'écran, contenu du fichier comptoir.log, contexte
+    validations:
+      required: false

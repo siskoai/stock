@@ -17,7 +17,7 @@
 /frontend/wailsjs/
 /frontend/package.json.md5
 
-# Données locales — jamais versionnées
+# Données locales, jamais versionnées
 /data/
 /backups/
 /exports/

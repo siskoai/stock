@@ -7,8 +7,8 @@ import (
 	"comptoir/internal/models"
 )
 
-// Le générateur de rapports reçoit une description neutre — des indicateurs et
-// des tableaux déjà formatés — plutôt que les structures métier. Le paquet
+// Le générateur de rapports reçoit une description neutre, des indicateurs et
+// des tableaux déjà formatés, plutôt que les structures métier. Le paquet
 // pdfgen reste ainsi indépendant du paquet services : la mise en page ne
 // change pas quand un calcul change, et l'inverse est vrai aussi.
 
@@ -50,7 +50,7 @@ func Report(rd ReportDoc, settings models.Settings) ([]byte, error) {
 	d := newDoc(settings)
 	p := d.pdf
 
-	d.footer("", "Édité le "+time.Now().Format("02/01/2006 à 15h04")+" depuis Comptoir — document interne.")
+	d.footer("", "Édité le "+time.Now().Format("02/01/2006 à 15h04")+" depuis Comptoir, document interne.")
 	p.AddPage()
 	d.header(rd.Title, rd.Period, time.Now(), "")
 
@@ -184,7 +184,7 @@ func Report(rd ReportDoc, settings models.Settings) ([]byte, error) {
 		p.SetFont("Helvetica", "", 7.5)
 		for _, n := range rd.Notes {
 			p.SetX(15)
-			p.MultiCell(180, 3.6, d.text("— "+n), "", "L", false)
+			p.MultiCell(180, 3.6, d.text("- "+n), "", "L", false)
 		}
 	}
 

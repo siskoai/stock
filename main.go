@@ -1,4 +1,4 @@
-// Comptoir — gestion de boutique hors ligne.
+// Comptoir, gestion de boutique hors ligne.
 //
 // Le programme assemble ici les trois couches : le stockage (fichiers JSON
 // locaux), les services métier, et l'interface servie par Wails. Aucune des
@@ -40,8 +40,8 @@ func main() {
 
 func run() error {
 	// L'identité visuelle de l'auteur est vérifiée avant tout le reste. Un
-	// échec n'empêche pas la boutique de travailler — priver un commerçant de
-	// sa caisse serait disproportionné — mais il est consigné, et l'interface
+	// échec n'empêche pas la boutique de travailler, priver un commerçant de
+	// sa caisse serait disproportionné, mais il est consigné, et l'interface
 	// le signale. Voir internal/brand et l'article 3 de la licence.
 	brandErr := brand.Verify()
 

@@ -11,8 +11,8 @@ import (
 
 // Config expose les paramètres de l'application : identité de l'entreprise,
 // monnaie, taxes, numérotation, sauvegardes. Lecture ouverte à tout compte
-// connecté — l'interface a besoin du symbole monétaire et du nom de la boutique
-// pour s'afficher —, écriture réservée au rôle Administrateur.
+// connecté, l'interface a besoin du symbole monétaire et du nom de la boutique
+// pour s'afficher -, écriture réservée au rôle Administrateur.
 type Config struct{ core }
 
 // NewConfig construit le service des paramètres.
@@ -131,7 +131,7 @@ func (s *Config) Save(in models.Settings) (models.Settings, error) {
 		return models.Settings{}, err
 	}
 	s.auth.SetTimeout(next.SessionTimeoutMin)
-	s.log(u, "UPDATE", "settings", "settings", "Paramètres modifiés — %s, %s, TVA %.2f %%",
+	s.log(u, "UPDATE", "settings", "settings", "Paramètres modifiés, %s, %s, TVA %.2f %%",
 		next.CompanyName, next.CurrencySymbol, next.DefaultTaxRate)
 	return next, nil
 }

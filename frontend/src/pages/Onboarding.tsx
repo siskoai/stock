@@ -3,7 +3,7 @@
 // Sept étapes, dans l'ordre où les questions se posent réellement à quelqu'un
 // qui ouvre une boutique : qui tient la caisse, quelle entreprise, quelle
 // monnaie, quel catalogue, quelles sauvegardes. Rien n'est écrit avant la
-// dernière étape — on peut revenir en arrière autant qu'on veut, et fermer
+// dernière étape, on peut revenir en arrière autant qu'on veut, et fermer
 // l'application en cours de route ne laisse pas un poste à moitié configuré.
 
 import { useMemo, useState } from 'react'
@@ -264,7 +264,7 @@ export function Onboarding() {
                       }))
                     }}
                     options={(currencies.data ?? []).map((c) => ({
-                      value: c.code, label: `${c.label} — ${c.symbol}`,
+                      value: c.code, label: `${c.label}, ${c.symbol}`,
                     }))}
                   />
                 </Field>
@@ -277,8 +277,8 @@ export function Onboarding() {
                       value={String(form.decimals)}
                       onChange={(v) => set('decimals', parseInt(v, 10))}
                       options={[
-                        { value: '0', label: 'Aucune — 1 500' },
-                        { value: '2', label: 'Deux — 1 500,00' },
+                        { value: '0', label: 'Aucune (1 500)' },
+                        { value: '2', label: 'Deux (1 500,00)' },
                       ]}
                     />
                   </Field>
@@ -328,7 +328,7 @@ export function Onboarding() {
                 )}
                 <Alert tone="info">
                   Vos articles s'ajoutent ensuite un par un, ou d'un coup en important le fichier
-                  de votre tableur — depuis l'écran Articles, bouton « Importer ».
+                  de votre tableur, depuis l'écran Articles, bouton « Importer ».
                 </Alert>
               </div>
             )}
@@ -373,16 +373,16 @@ export function Onboarding() {
               <div className="stack" style={{ gap: 14 }}>
                 <p className="wizard-lead">
                   Vérifiez, puis lancez la boutique. Tout reste modifiable ensuite dans les
-                  paramètres — sauf l'identifiant de connexion.
+                  paramètres, sauf l'identifiant de connexion.
                 </p>
                 <div className="wizard-review">
                   <ReviewRow label="Entreprise" value={form.companyName} />
                   <ReviewRow label="Adresse"
-                    value={[form.address, form.city, form.country].filter(Boolean).join(', ') || '—'} />
+                    value={[form.address, form.city, form.country].filter(Boolean).join(', ') || '-'} />
                   <ReviewRow label="Administrateur"
                     value={`${form.fullName} (${form.username})`} />
                   <ReviewRow label="Monnaie"
-                    value={`${form.currencySymbol} — ${form.decimals} décimale${form.decimals > 1 ? 's' : ''}`} />
+                    value={`${form.currencySymbol} (${form.decimals} décimale${form.decimals > 1 ? 's' : ''})`} />
                   <ReviewRow label="Taxe par défaut"
                     value={`${form.defaultTaxRate} %${form.pricesIncludeTax ? ', prix TTC' : ', prix HT'}`} />
                   <ReviewRow label="Catégories de départ"

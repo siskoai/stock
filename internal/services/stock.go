@@ -13,7 +13,7 @@ import (
 
 // Stock gère les mouvements de marchandise : retours, produits défectueux,
 // réparations, rebuts et corrections d'inventaire. Les entrées d'achat sont
-// dans le service Purchases, les sorties de vente dans le service Sales — mais
+// dans le service Purchases, les sorties de vente dans le service Sales, mais
 // tous écrivent dans le même journal de mouvements.
 type Stock struct{ core }
 
@@ -48,7 +48,7 @@ type stockOp struct {
 
 // applyStock applique un lot d'opérations de stock. Tout le lot passe ou rien
 // ne passe, et l'ensemble ne coûte qu'une écriture de products.json et une de
-// movements.json — quel que soit le nombre de lignes du document.
+// movements.json, quel que soit le nombre de lignes du document.
 //
 // Les produits sont relus à l'intérieur de la transaction : deux lignes du même
 // article dans un même document s'additionnent correctement au lieu de s'écraser.
@@ -299,7 +299,7 @@ func (s *Stock) DeclareDefective(in MovementInput) (models.Movement, error) {
 	if err != nil {
 		return models.Movement{}, err
 	}
-	s.log(u, "DEFECT", "product", p.ID, "%d × « %s » déclaré(s) défectueux — %s", in.Quantity, p.Name, reason)
+	s.log(u, "DEFECT", "product", p.ID, "%d × « %s » déclaré(s) défectueux, %s", in.Quantity, p.Name, reason)
 	return m, nil
 }
 
@@ -348,7 +348,7 @@ func (s *Stock) ScrapDefective(in MovementInput) (models.Movement, error) {
 	if err != nil {
 		return models.Movement{}, err
 	}
-	s.log(u, "SCRAP", "product", p.ID, "%d × « %s » mis au rebut (perte %d) — %s",
+	s.log(u, "SCRAP", "product", p.ID, "%d × « %s » mis au rebut (perte %d), %s",
 		in.Quantity, p.Name, int64(in.Quantity)*p.PurchasePrice, reason)
 	return m, nil
 }
@@ -409,7 +409,7 @@ func (s *Stock) ReturnFromCustomer(in MovementInput) (models.Movement, error) {
 	if err != nil {
 		return models.Movement{}, err
 	}
-	s.log(u, "RETURN_IN", "product", p.ID, "Retour client : %d × « %s » vers %s — %s",
+	s.log(u, "RETURN_IN", "product", p.ID, "Retour client : %d × « %s » vers %s, %s",
 		in.Quantity, p.Name, destination, reason)
 	return m, nil
 }
@@ -451,7 +451,7 @@ func (s *Stock) ReturnToSupplier(in MovementInput) (models.Movement, error) {
 	if err != nil {
 		return models.Movement{}, err
 	}
-	s.log(u, "RETURN_OUT", "product", p.ID, "Retour fournisseur : %d × « %s » (%d défectueux) — %s",
+	s.log(u, "RETURN_OUT", "product", p.ID, "Retour fournisseur : %d × « %s » (%d défectueux), %s",
 		in.Quantity, p.Name, fromDefective, reason)
 	return m, nil
 }
@@ -506,7 +506,7 @@ func (s *Stock) AdjustInventory(in InventoryInput) (models.Movement, error) {
 	if err != nil {
 		return models.Movement{}, err
 	}
-	s.log(u, "ADJUST", "product", p.ID, "Inventaire « %s » : écart %+d sain, %+d défectueux — %s",
+	s.log(u, "ADJUST", "product", p.ID, "Inventaire « %s » : écart %+d sain, %+d défectueux, %s",
 		p.Name, deltaSound, deltaDefect, reason)
 	return m, nil
 }

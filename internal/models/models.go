@@ -308,7 +308,7 @@ type Purchase struct {
 
 	SubtotalHT int64 `json:"subtotalHT"`
 	TaxTotal   int64 `json:"taxTotal"`
-	OtherCosts int64 `json:"otherCosts"` // transport, douane — réparti au prorata
+	OtherCosts int64 `json:"otherCosts"` // transport, douane, réparti au prorata
 	Total      int64 `json:"total"`
 
 	Status DocStatus `json:"status"`

@@ -1,5 +1,5 @@
 // Écrans d'entrée : premier démarrage, connexion, changement de mot de passe
-// imposé. Ils partagent la même carte centrée, sans barre latérale — tant que
+// imposé. Ils partagent la même carte centrée, sans barre latérale, tant que
 // la session n'est pas ouverte, il n'y a rien à naviguer.
 
 import { useState, type FormEvent } from 'react'
@@ -21,7 +21,7 @@ function Shell({ title, subtitle, children, footer }: {
         {children}
         <div style={{ marginTop: 20 }}><Attribution compact /></div>
         <div className="gate-foot">
-          {footer ?? <>Comptoir {state.appVersion} — vos données restent sur ce poste.</>}
+          {footer ?? <>Comptoir {state.appVersion}, vos données restent sur ce poste.</>}
         </div>
       </div>
     </div>
@@ -50,7 +50,7 @@ export function LoginPage() {
   }
 
   return (
-    <Shell title="Connexion" subtitle={`${state.companyName} — identifiez-vous pour ouvrir la caisse.`}>
+    <Shell title="Connexion" subtitle={`${state.companyName}. Identifiez-vous pour ouvrir la caisse.`}>
       <form onSubmit={submit} className="stack-sm" style={{ gap: 13 }}>
         {error && <Alert tone="danger">{error}</Alert>}
         <Field label="Identifiant">

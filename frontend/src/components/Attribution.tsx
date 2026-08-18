@@ -24,10 +24,10 @@ export function Attribution({ compact = false }: { compact?: boolean }) {
       <img src={b.logoDataUrl} alt={b.author} />
       <div className="attribution-text">
         <div className="attribution-author">{b.author}</div>
-        <div className="muted">{compact ? b.notice : `${b.notice} — version ${state.appVersion}`}</div>
+        <div className="muted">{compact ? b.notice : `${b.notice} (version ${state.appVersion})`}</div>
         {!b.intact && (
           <div style={{ color: 'var(--red)', marginTop: 3 }}>
-            Identité visuelle modifiée — voir {b.licenseRef}.
+            Identité visuelle modifiée, voir {b.licenseRef}.
           </div>
         )}
       </div>

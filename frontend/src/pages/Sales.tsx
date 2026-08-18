@@ -47,8 +47,8 @@ export function SalesPage({ refreshCounters, arg }: PageContext) {
   )
   const invoices = useAsync(() => Sales.list(query), [query])
 
-  // Une navigation venue d'ailleurs porte soit un identifiant de facture — la
-  // page l'ouvre — soit « client:<id> », qui filtre la liste sur ce client.
+  // Une navigation venue d'ailleurs porte soit un identifiant de facture, la
+  // page l'ouvre, soit « client:<id> », qui filtre la liste sur ce client.
   useEffect(() => {
     if (!arg) return
     if (arg.startsWith('client:')) {
@@ -147,7 +147,7 @@ export function SalesPage({ refreshCounters, arg }: PageContext) {
                 key: 'balance', header: 'Reste dû', align: 'right', width: 110,
                 render: (i) => i.balance > 0
                   ? <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{amount(i.balance)}</span>
-                  : <span className="muted">—</span>,
+                  : <span className="muted">-</span>,
               },
               {
                 key: 'actions', header: '', align: 'right', width: 100,
@@ -273,7 +273,7 @@ function InvoiceDetail(props: {
   return (
     <Modal
       title={`${inv.status === 'DRAFT' ? 'Devis' : 'Facture'} ${inv.number}`}
-      subtitle={`${inv.customerName} — ${formatDate(inv.date)}`}
+      subtitle={`${inv.customerName}, ${formatDate(inv.date)}`}
       size="wide"
       onClose={props.onClose}
       footer={
@@ -335,7 +335,7 @@ function InvoiceDetail(props: {
             { key: 'price', header: 'PU HT', align: 'right', width: 110, render: (l) => amount(l.unitPrice) },
             {
               key: 'discount', header: 'Remise', align: 'right', width: 100,
-              render: (l) => l.discount > 0 ? amount(l.discount) : <span className="muted">—</span>,
+              render: (l) => l.discount > 0 ? amount(l.discount) : <span className="muted">-</span>,
             },
             { key: 'tax', header: 'Taxe', align: 'right', width: 70, render: (l) => `${l.taxRate} %` },
             { key: 'ht', header: 'Total HT', align: 'right', width: 110, render: (l) => <strong>{amount(l.lineHT)}</strong> },
@@ -440,7 +440,7 @@ function PaymentModal(props: { invoice: Invoice; onClose: () => void; onPaid: (n
   return (
     <Modal
       title="Enregistrer un règlement"
-      subtitle={`Facture ${props.invoice.number} — reste dû ${money(props.invoice.balance)}`}
+      subtitle={`Facture ${props.invoice.number}, reste dû ${money(props.invoice.balance)}`}
       onClose={props.onClose}
       onSubmit={save}
       footer={
@@ -489,7 +489,7 @@ function CancelModal(props: { invoice: Invoice; onClose: () => void; onCancelled
   return (
     <Modal
       title="Annuler la facture"
-      subtitle={`${props.invoice.number} — ${money(props.invoice.total)}`}
+      subtitle={`${props.invoice.number}, ${money(props.invoice.total)}`}
       onClose={props.onClose}
       onSubmit={submit}
       footer={

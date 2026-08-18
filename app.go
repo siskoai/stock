@@ -54,7 +54,7 @@ func (a *App) shutdown(ctx context.Context) {
 
 // SaveFile propose l'enregistrement d'un document produit par l'application
 // (PDF ou CSV) via le sélecteur natif. Renvoie le chemin retenu, ou une chaîne
-// vide si l'utilisateur a annulé — une annulation n'est pas une erreur.
+// vide si l'utilisateur a annulé, une annulation n'est pas une erreur.
 func (a *App) SaveFile(name string, content []byte) (string, error) {
 	if _, err := a.sec.Require(""); err != nil {
 		return "", err

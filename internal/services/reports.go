@@ -67,7 +67,7 @@ func shortMonthFR(m time.Month) string {
 	return names[int(m)-1]
 }
 
-// advance passe au début de la période suivante — sert à générer les intervalles
+// advance passe au début de la période suivante, sert à générer les intervalles
 // vides pour que les graphiques n'aient pas de trous.
 func advance(t time.Time, g Granularity) time.Time {
 	switch g {
@@ -159,7 +159,7 @@ func (s *Reports) SalesReport(q ReportQuery) (SalesReport, error) {
 
 // salesReport est le calcul sans contrôle d'accès. Le tableau de bord s'en sert
 // pour construire les courbes de chiffre d'affaires d'un vendeur, dont il retire
-// ensuite les colonnes de coût — un vendeur voit ce qu'il vend, mais il le voit.
+// ensuite les colonnes de coût, un vendeur voit ce qu'il vend, mais il le voit.
 func (s *Reports) salesReport(q ReportQuery) (SalesReport, error) {
 	gran := q.Granularity
 	if gran == "" {
@@ -520,7 +520,7 @@ type IncomeStatement struct {
 // IncomeStatement construit le compte de résultat d'une période.
 //
 // Le flux de trésorerie estimé suppose que les achats fournisseurs sont réglés
-// à la réception — hypothèse courante en commerce de détail. Comptoir ne suit
+// à la réception, hypothèse courante en commerce de détail. Comptoir ne suit
 // pas les échéances fournisseurs ; ce chiffre est donc une estimation, signalée
 // comme telle dans l'interface.
 func (s *Reports) IncomeStatement(from, to string) (IncomeStatement, error) {
@@ -597,7 +597,7 @@ func (s *Reports) IncomeStatement(from, to string) (IncomeStatement, error) {
 //
 // Portée : Comptoir suit le stock, les créances clients et le résultat
 // d'exploitation. Il ne tient pas de comptes bancaires, d'immobilisations ni de
-// dettes fournisseurs — ce n'est pas un logiciel comptable certifié. Les
+// dettes fournisseurs, ce n'est pas un logiciel comptable certifié. Les
 // rubriques absentes sont laissées explicites plutôt que fictives.
 type BalanceSheet struct {
 	AsOf time.Time `json:"asOf"`

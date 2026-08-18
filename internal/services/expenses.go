@@ -12,7 +12,7 @@ import (
 )
 
 // Expenses gère les charges d'exploitation : loyer, salaires, électricité,
-// transport… Le coût d'achat des marchandises n'y figure pas — il est porté par
+// transport… Le coût d'achat des marchandises n'y figure pas, il est porté par
 // les bons d'entrée et ressort en coût des ventes.
 type Expenses struct{ core }
 

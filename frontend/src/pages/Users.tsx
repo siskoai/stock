@@ -111,7 +111,7 @@ function Accounts() {
                       <div>{money(u.revenue)}</div>
                       <div className="cell-secondary">{u.invoiceCount} facture(s)</div>
                     </>
-                  : <span className="muted">—</span> },
+                  : <span className="muted">-</span> },
               { key: 'last', header: 'Dernière connexion', align: 'right', width: 170,
                 render: (u) => <span className="small muted">{u.lastLogin ? formatDateTime(u.lastLogin) : 'jamais'}</span> },
               {
@@ -306,7 +306,7 @@ function ResetPasswordModal(props: { user: UserView; onClose: () => void; onDone
   return (
     <Modal
       title="Réinitialiser le mot de passe"
-      subtitle={`Compte ${props.user.username} — ${props.user.fullName}`}
+      subtitle={`Compte ${props.user.username}, ${props.user.fullName}`}
       onClose={props.onClose}
       onSubmit={submit}
       footer={

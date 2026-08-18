@@ -66,7 +66,7 @@ export function ProductPicker(props: {
       ?? candidates.find((p) => p.sku.toUpperCase() === needle)
   }
 
-  // Satisfait une validation arrivée avant les résultats — le cas de la douchette.
+  // Satisfait une validation arrivée avant les résultats, le cas de la douchette.
   useEffect(() => {
     if (!pending.current || results.loading || query === '') return
     pending.current = false

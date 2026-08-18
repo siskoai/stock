@@ -39,7 +39,7 @@ type metaFile struct {
 }
 
 // DataDir renvoie le répertoire de données de l'application.
-// Windows : %APPDATA%\Comptoir — macOS : ~/Library/Application Support/Comptoir
+// Windows : %APPDATA%\Comptoir, macOS : ~/Library/Application Support/Comptoir
 // Un fichier portable.txt placé à côté de l'exécutable bascule en mode
 // portable : les données vivent alors dans .\data (clé USB, dossier partagé).
 func DataDir() (string, error) {

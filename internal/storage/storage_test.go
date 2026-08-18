@@ -86,7 +86,7 @@ func TestTransaction_ToutOuRien(t *testing.T) {
 	}
 	for _, p := range db.Products.All() {
 		if p.Quantity != 10 {
-			t.Errorf("%s : quantité = %d, attendu 10 — une transaction refusée ne laisse aucune trace", p.ID, p.Quantity)
+			t.Errorf("%s : quantité = %d, attendu 10, une transaction refusée ne laisse aucune trace", p.ID, p.Quantity)
 		}
 	}
 

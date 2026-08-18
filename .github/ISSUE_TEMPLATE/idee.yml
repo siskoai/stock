@@ -1,0 +1,32 @@
+name: Proposer une amélioration
+description: Une gêne à l'usage, ou une fonctionnalité qui manque
+labels: ['amélioration']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Les meilleures fonctionnalités viennent d'une gêne bien décrite.
+        Commencez par le problème, la solution viendra ensuite.
+
+  - type: textarea
+    id: probleme
+    attributes:
+      label: Quel problème rencontrez-vous
+      description: Ce que vous essayez de faire, et ce qui vous ralentit ou vous bloque aujourd'hui
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Ce que vous imaginez
+      description: Facultatif. Si vous avez une idée précise, décrivez-la
+    validations:
+      required: false
+
+  - type: textarea
+    id: contournement
+    attributes:
+      label: Comment vous faites en attendant
+    validations:
+      required: false

@@ -4,7 +4,7 @@
 // La mise en page est écrite à la main plutôt que rendue depuis du HTML : le
 // résultat est identique sur tous les postes, ne dépend d'aucun navigateur et
 // pèse quelques kilo-octets. Les polices sont les polices standard PDF
-// (Helvetica), encodées en CP1252 — les accents français passent sans avoir à
+// (Helvetica), encodées en CP1252, les accents français passent sans avoir à
 // embarquer de fichier de police.
 package pdfgen
 
@@ -27,7 +27,7 @@ var (
 	mutedRGB  = [3]int{110, 118, 125} // #6E767D
 	ruleRGB   = [3]int{224, 227, 224} // #E0E3E0
 	washRGB   = [3]int{244, 246, 244} // #F4F6F4
-	accentRGB = [3]int{176, 90, 38}   // #B05A26 — cuivre, réservé au net à payer
+	accentRGB = [3]int{176, 90, 38}   // #B05A26, cuivre, réservé au net à payer
 )
 
 // Document est le contexte de rendu partagé par tous les documents.
@@ -50,7 +50,7 @@ func (d *doc) setDraw(c [3]int)     { d.pdf.SetDrawColor(c[0], c[1], c[2]) }
 func (d *doc) text(s string) string { return d.tr(s) }
 
 // money formate un montant en unités monétaires lisibles, avec séparateur de
-// milliers en espace insécable fine — la convention francophone.
+// milliers en espace insécable fine, la convention francophone.
 func (d *doc) money(amount int64) string {
 	return FormatMoney(amount, d.settings.Decimals) + " " + d.settings.CurrencySymbol
 }
@@ -149,7 +149,7 @@ func (d *doc) footer(terms, note string) {
 		}
 		// Mention de paternité, discrète et constante : le document appartient
 		// au commerçant, la mention nomme l'éditeur du logiciel. Elle est prévue
-		// par l'article 3 de la licence — voir internal/brand.
+		// par l'article 3 de la licence, voir internal/brand.
 		p.SetXY(15, -11)
 		p.SetFont("Helvetica", "", 6)
 		d.setColor(mutedRGB)
@@ -177,7 +177,7 @@ func Invoice(inv models.Invoice, settings models.Settings) ([]byte, error) {
 	case models.StatusDraft:
 		title = "Devis"
 	case models.StatusCancelled:
-		statusNote = "DOCUMENT ANNULÉ — sans valeur commerciale"
+		statusNote = "DOCUMENT ANNULÉ, sans valeur commerciale"
 	}
 
 	d.footer(settings.InvoiceTerms, settings.InvoiceFooter)
@@ -265,7 +265,7 @@ func Invoice(inv models.Invoice, settings models.Settings) ([]byte, error) {
 			p.CellFormat(widths[3], 6.5, d.text("-"+d.money(l.Discount)), "", 0, "R", fill, 0, "")
 		} else {
 			d.setColor(mutedRGB)
-			p.CellFormat(widths[3], 6.5, d.text("—"), "", 0, "R", fill, 0, "")
+			p.CellFormat(widths[3], 6.5, d.text("-"), "", 0, "R", fill, 0, "")
 			d.setColor(inkRGB)
 		}
 		p.SetFont("Helvetica", "B", 9)
@@ -382,7 +382,7 @@ func PurchaseNote(pu models.Purchase, settings models.Settings) ([]byte, error) 
 	if pu.Status == models.StatusCancelled {
 		statusNote = "BON D'ENTRÉE ANNULÉ"
 	}
-	d.footer("", "Document interne — justificatif de réception de marchandise.")
+	d.footer("", "Document interne, justificatif de réception de marchandise.")
 	p.AddPage()
 	d.header("Bon d'entrée", pu.Number, pu.Date, statusNote)
 

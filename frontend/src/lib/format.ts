@@ -7,26 +7,26 @@ const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
 
 /** formatDate rend « 18/08/2026 ». */
 export function formatDate(iso: string | undefined): string {
-  if (!iso) return '—'
+  if (!iso) return '-'
   const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return '—'
+  if (Number.isNaN(d.getTime())) return '-'
   return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 /** formatDateTime rend « 18/08/2026 à 14h30 ». */
 export function formatDateTime(iso: string | undefined): string {
-  if (!iso) return '—'
+  if (!iso) return '-'
   const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return '—'
+  if (Number.isNaN(d.getTime())) return '-'
   const heure = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h')
   return `${formatDate(iso)} à ${heure}`
 }
 
 /** formatLongDate rend « 18 août 2026 ». */
 export function formatLongDate(iso: string | undefined): string {
-  if (!iso) return '—'
+  if (!iso) return '-'
   const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return '—'
+  if (Number.isNaN(d.getTime())) return '-'
   return `${d.getDate()} ${MOIS[d.getMonth()]} ${d.getFullYear()}`
 }
 

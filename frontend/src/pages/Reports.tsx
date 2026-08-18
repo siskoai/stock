@@ -138,12 +138,12 @@ function Evolution({ from, to, granularity }: { from: string; to: string; granul
           }
           columns={[
             { key: 'label', header: 'Période', render: (p) => p.label },
-            { key: 'invoices', header: 'Factures', align: 'right', render: (p) => p.invoiceCount || '—' },
+            { key: 'invoices', header: 'Factures', align: 'right', render: (p) => p.invoiceCount || '-' },
             { key: 'units', header: 'Articles', align: 'right', render: (p) => formatNumber(p.unitsSold) },
             { key: 'revenue', header: 'CA HT', align: 'right', render: (p) => <strong>{amount(p.revenueHT)}</strong> },
             { key: 'cost', header: 'Coût', align: 'right', render: (p) => amount(p.costOfSales) },
             { key: 'margin', header: 'Marge', align: 'right', render: (p) => amount(p.grossMargin) },
-            { key: 'rate', header: 'Taux', align: 'right', render: (p) => p.revenueHT > 0 ? formatPercent(p.marginRate) : '—' },
+            { key: 'rate', header: 'Taux', align: 'right', render: (p) => p.revenueHT > 0 ? formatPercent(p.marginRate) : '-' },
             { key: 'expenses', header: 'Charges', align: 'right', render: (p) => amount(p.expenses) },
             {
               key: 'result', header: 'Résultat', align: 'right',
@@ -385,7 +385,7 @@ function Stats({ from, to }: { from: string; to: string }) {
 
         <Card
           title="Articles dormants"
-          note="En stock, aucune vente sur la période — de la trésorerie immobilisée"
+          note="En stock, aucune vente sur la période, de la trésorerie immobilisée"
           flush
         >
           <DataTable

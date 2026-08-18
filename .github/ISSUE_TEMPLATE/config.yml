@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Faille de sécurité
+    url: https://github.com/siskoai/stock/security/advisories/new
+    about: Un problème de sécurité se signale en privé, jamais par une issue publique.
+  - name: Question d'utilisation
+    url: https://github.com/siskoai/stock/discussions
+    about: Pour demander comment faire quelque chose avec le logiciel.

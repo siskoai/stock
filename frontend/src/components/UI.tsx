@@ -1,5 +1,5 @@
 // Briques d'interface partagées : champs, tableaux, fenêtres, états vides.
-// Tout est écrit à la main — aucune bibliothèque de composants — pour que le
+// Tout est écrit à la main (aucune bibliothèque de composants) pour que le
 // rendu reste identique sur macOS et sur Windows.
 
 import {
@@ -432,7 +432,7 @@ export function KPI(props: {
       {change !== undefined ? (
         <div className="kpi-hint">
           <span className={`kpi-delta ${tone}`}>
-            {tone === 'flat' ? '—' : `${change > 0 ? '+' : ''}${change.toFixed(0)} %`}
+            {tone === 'flat' ? '-' : `${change > 0 ? '+' : ''}${change.toFixed(0)} %`}
           </span>
           {props.hint && <span> · {props.hint}</span>}
         </div>

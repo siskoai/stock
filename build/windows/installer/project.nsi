@@ -4,8 +4,8 @@ Unicode true
 ## Installeur Windows de Comptoir.
 ##
 ## Ce fichier est repris de la trame produite par Wails, puis adapté :
-## interface en français, affichage de la licence — dont l'article 3 sur la
-## paternité doit être lu avant installation — et désinstallation qui ne touche
+## interface en français, affichage de la licence, dont l'article 3 sur la
+## paternité doit être lu avant installation, et désinstallation qui ne touche
 ## jamais aux données du commerçant.
 ##
 ## Pour le reconstruire :
@@ -59,7 +59,7 @@ ManifestDPIAware true
 !insertmacro MUI_PAGE_FINISH
 
 # --- Désinstallation --------------------------------------------------------
-!define MUI_UNCONFIRMPAGE_TEXT_TOP "Comptoir va être retiré de ce poste. Vos données de gestion — articles, ventes, clients, sauvegardes — ne seront pas supprimées : elles restent dans %APPDATA%\Comptoir."
+!define MUI_UNCONFIRMPAGE_TEXT_TOP "Comptoir va être retiré de ce poste. Vos données de gestion (articles, ventes, clients, sauvegardes) ne seront pas supprimées : elles restent dans %APPDATA%\Comptoir."
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
@@ -107,7 +107,7 @@ Section "uninstall"
 
     # Cache de WebView2 propre à l'application. Ce chemin est celui de
     # l'exécutable (« Comptoir.exe »), distinct du dossier de données
-    # « %APPDATA%\Comptoir » — que la désinstallation ne doit jamais toucher.
+    # « %APPDATA%\Comptoir », que la désinstallation ne doit jamais toucher.
     RMDir /r "$AppData\${PRODUCT_EXECUTABLE}"
 
     RMDir /r $INSTDIR

@@ -11,7 +11,7 @@
 // administrateur au système de fichiers. Les fichiers de données sont du JSON
 // lisible, par choix (inspection et récupération manuelles possibles). Le
 // chiffrement du disque relève du système (BitLocker sous Windows) et c'est la
-// bonne couche pour le faire — voir docs/SECURITE.md.
+// bonne couche pour le faire, voir docs/SECURITE.md.
 package auth
 
 import (

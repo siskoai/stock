@@ -1,0 +1,139 @@
+name: Publication
+
+# Déclenchée par un tag de version. Construit les trois exécutables, puis les
+# joint à une version GitHub dont le corps reprend la section correspondante
+# du journal des versions.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version à publier, par exemple v1.0.0'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.nom }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            nom: Linux
+            drapeaux: ''
+            produit: comptoir
+            archive: comptoir-linux-amd64.tar.gz
+          - os: windows-latest
+            nom: Windows
+            drapeaux: '-nsis'
+            produit: 'comptoir-amd64-installer.exe'
+            archive: comptoir-windows-amd64-installer.exe
+          - os: macos-latest
+            nom: macOS
+            drapeaux: '-platform darwin/universal'
+            produit: comptoir.app
+            archive: comptoir-macos-universal.zip
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Dépendances système
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+
+      - name: Installer Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.15.0
+
+      - name: Déterminer la version
+        id: version
+        shell: bash
+        run: |
+          version="${{ github.event.inputs.version }}"
+          if [ -z "$version" ]; then version="${GITHUB_REF_NAME}"; fi
+          echo "numero=${version#v}" >> "$GITHUB_OUTPUT"
+          echo "tag=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Compiler
+        shell: bash
+        run: |
+          wails build -clean ${{ matrix.drapeaux }} \
+            -ldflags "-X main.version=${{ steps.version.outputs.numero }}"
+
+      # Une application macOS est un dossier : elle doit être compressée pour
+      # traverser un téléchargement sans perdre son bit d'exécution.
+      - name: Empaqueter
+        shell: bash
+        run: |
+          cd build/bin
+          case "${{ runner.os }}" in
+            Linux)   tar -czf "${{ matrix.archive }}" "${{ matrix.produit }}" ;;
+            macOS)   ditto -c -k --keepParent "${{ matrix.produit }}" "${{ matrix.archive }}" ;;
+            Windows) mv "${{ matrix.produit }}" "${{ matrix.archive }}" ;;
+          esac
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.archive }}
+          path: build/bin/${{ matrix.archive }}
+          if-no-files-found: error
+
+  publier:
+    name: Publier la version
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artefacts
+          merge-multiple: true
+
+      - name: Extraire la section du journal des versions
+        id: notes
+        run: |
+          version="${{ github.event.inputs.version }}"
+          if [ -z "$version" ]; then version="${GITHUB_REF_NAME}"; fi
+          numero="${version#v}"
+          # Du titre de la version jusqu'au titre suivant, exclu.
+          awk -v v="## [$numero]" '
+            index($0, v) == 1 { dans = 1; next }
+            dans && /^## \[/    { exit }
+            dans                { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "Aucune section « $numero » dans CHANGELOG.md" >&2
+            exit 1
+          fi
+          echo "tag=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Empreintes des fichiers
+        run: |
+          cd artefacts
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Créer la version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.notes.outputs.tag }}" \
+            artefacts/* \
+            --title "Comptoir ${{ steps.notes.outputs.tag }}" \
+            --notes-file notes.md \
+            --verify-tag

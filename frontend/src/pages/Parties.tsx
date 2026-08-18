@@ -114,23 +114,23 @@ export function PartiesPage({ navigate }: PageContext) {
                 key: 'contact', header: 'Contact',
                 render: (p) => (
                   <>
-                    <div>{p.phone || '—'}</div>
+                    <div>{p.phone || '-'}</div>
                     {p.email && <div className="cell-secondary">{p.email}</div>}
                   </>
                 ),
               },
-              { key: 'city', header: 'Ville', render: (p) => p.city || '—' },
-              { key: 'docs', header: 'Documents', align: 'right', render: (p) => p.documentCount || '—' },
+              { key: 'city', header: 'Ville', render: (p) => p.city || '-' },
+              { key: 'docs', header: 'Documents', align: 'right', render: (p) => p.documentCount || '-' },
               { key: 'total', header: 'Total', align: 'right', render: (p) => money(p.totalAmount) },
               ...(isCustomer ? [{
                 key: 'due', header: 'Impayés', align: 'right' as const,
                 render: (p: PartyView) => p.outstandingBalance > 0
                   ? <strong style={{ color: 'var(--accent)' }}>{money(p.outstandingBalance)}</strong>
-                  : <span className="muted">—</span>,
+                  : <span className="muted">-</span>,
               }] : []),
               {
                 key: 'last', header: 'Dernière activité', align: 'right',
-                render: (p) => <span className="small muted">{p.lastActivity ? formatDate(p.lastActivity) : '—'}</span>,
+                render: (p) => <span className="small muted">{p.lastActivity ? formatDate(p.lastActivity) : '-'}</span>,
               },
               {
                 key: 'actions', header: '', align: 'right', width: 190,
@@ -140,7 +140,7 @@ export function PartiesPage({ navigate }: PageContext) {
                       <button className="btn btn-sm btn-ghost" disabled={doc.busy}
                         onClick={(e) => {
                           e.stopPropagation()
-                          doc.open(`Relevé — ${p.name}`, () => Documents.partyStatement(p.id))
+                          doc.open(`Relevé, ${p.name}`, () => Documents.partyStatement(p.id))
                         }}><IconPrint />Relevé</button>
                     )}
                     {isCustomer && p.documentCount > 0 && (

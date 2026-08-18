@@ -18,8 +18,8 @@ projections envoyées à l'interface ne contiennent tout simplement pas les
 champs interdits. Masquer une colonne n'est pas une protection ; ne pas envoyer
 la donnée en est une.
 
-**La traçabilité.** Chaque action sensible — création, modification,
-suppression, annulation, connexion, réinitialisation de mot de passe — est
+**La traçabilité.** Chaque action sensible, création, modification,
+suppression, annulation, connexion, réinitialisation de mot de passe, est
 inscrite dans un journal d'audit en ajout seul, avec l'auteur et l'horodatage.
 Aucune fonction du logiciel ne permet de l'effacer ni de le modifier.
 
@@ -49,10 +49,10 @@ Quelqu'un qui peut lire ces fichiers lit tout, sans passer par Comptoir.
 Le chiffrement du disque est la bonne couche pour s'en protéger, et c'est le
 système d'exploitation qui la fournit :
 
-- **Windows** — BitLocker (Paramètres → Confidentialité et sécurité →
+- **Windows**, BitLocker (Paramètres → Confidentialité et sécurité →
   Chiffrement de l'appareil) ;
-- **macOS** — FileVault (Réglages → Confidentialité et sécurité) ;
-- **Linux** — LUKS, à configurer à l'installation.
+- **macOS**, FileVault (Réglages → Confidentialité et sécurité) ;
+- **Linux**, LUKS, à configurer à l'installation.
 
 **Un poste compromis.** Un logiciel malveillant installé sur la machine peut
 lire la mémoire, enregistrer les frappes ou modifier les fichiers. Aucune
@@ -94,12 +94,12 @@ voix ne doit pas rester une clé utilisable indéfiniment.
 ## Intégrité des données
 
 **Écriture atomique.** Chaque enregistrement passe par un fichier temporaire,
-une synchronisation disque, puis un renommage — opération atomique sur NTFS
+une synchronisation disque, puis un renommage, opération atomique sur NTFS
 comme sur APFS et ext4. Une coupure de courant en pleine écriture laisse
 l'ancien fichier intact, jamais un fichier à moitié écrit.
 
-**Transactions.** Une opération qui touche plusieurs enregistrements — émission
-de facture, réception, inventaire — est appliquée en une seule écriture par
+**Transactions.** Une opération qui touche plusieurs enregistrements, émission
+de facture, réception, inventaire, est appliquée en une seule écriture par
 collection : soit tout passe, soit rien ne change. Si le journal des mouvements
 ne peut pas être écrit, les quantités sont remises exactement dans leur état
 antérieur.
@@ -110,7 +110,7 @@ permettre une récupération manuelle.
 
 **Numérotation.** Les numéros de facture et de bon d'entrée sont réservés avant
 écriture et rendus si le document n'est finalement pas créé : ni doublon, ni
-trou. Les compteurs ne sont pas modifiables depuis l'interface — les abaisser
+trou. Les compteurs ne sont pas modifiables depuis l'interface, les abaisser
 redistribuerait des numéros déjà attribués.
 
 **Schéma.** Des données créées par une version plus récente du logiciel sont

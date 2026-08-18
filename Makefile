@@ -1,4 +1,4 @@
-# Comptoir — raccourcis de développement.
+# Comptoir, raccourcis de développement.
 #
 # La compilation complète passe par la ligne de commande Wails, qui construit
 # le frontend puis l'embarque dans l'exécutable :

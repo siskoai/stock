@@ -1,7 +1,7 @@
 // Fiche du compte connecté : ce qu'il voit, et le changement de son mot de passe.
 //
 // Cet écran existe pour tous les rôles. Sans lui, un vendeur ne pourrait jamais
-// changer son propre mot de passe — il devrait le demander à un administrateur,
+// changer son propre mot de passe, il devrait le demander à un administrateur,
 // qui le lui fixerait, ce qui revient à ce que deux personnes le connaissent.
 
 import { useState } from 'react'

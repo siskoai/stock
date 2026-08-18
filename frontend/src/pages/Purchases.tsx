@@ -91,7 +91,7 @@ export function PurchasesPage({ refreshCounters }: PageContext) {
               { key: 'ht', header: 'Total HT', align: 'right', width: 120, render: (p) => amount(p.subtotalHT) },
               {
                 key: 'other', header: 'Frais', align: 'right', width: 100,
-                render: (p) => p.otherCosts > 0 ? amount(p.otherCosts) : <span className="muted">—</span>,
+                render: (p) => p.otherCosts > 0 ? amount(p.otherCosts) : <span className="muted">-</span>,
               },
               { key: 'total', header: 'Total', align: 'right', width: 120, render: (p) => <strong>{amount(p.total)}</strong> },
               {
@@ -390,7 +390,7 @@ function PurchaseDetail(props: {
     return (
       <Modal
         title="Annuler le bon d'entrée"
-        subtitle={`${pu.number} — ${money(pu.total)}`}
+        subtitle={`${pu.number}, ${money(pu.total)}`}
         onClose={() => setCancelling(false)}
         onSubmit={cancel}
         footer={
@@ -418,7 +418,7 @@ function PurchaseDetail(props: {
   return (
     <Modal
       title={`Bon d'entrée ${pu.number}`}
-      subtitle={`${pu.supplierName || 'Fournisseur non renseigné'} — ${formatDate(pu.date)}`}
+      subtitle={`${pu.supplierName || 'Fournisseur non renseigné'}, ${formatDate(pu.date)}`}
       size="wide"
       onClose={props.onClose}
       footer={

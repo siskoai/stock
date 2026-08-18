@@ -2,7 +2,7 @@
 //
 // Une bibliothèque de graphes pèserait plus lourd que tout le reste de
 // l'interface pour deux formes : une courbe et un histogramme. Les échelles
-// sont linéaires et démarrent à zéro — une courbe de chiffre d'affaires dont
+// sont linéaires et démarrent à zéro, une courbe de chiffre d'affaires dont
 // l'axe ne part pas de zéro ment sur l'amplitude des variations.
 
 import { useId, useState } from 'react'

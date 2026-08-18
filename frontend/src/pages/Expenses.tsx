@@ -1,4 +1,4 @@
-// Charges d'exploitation : loyer, salaires, électricité — tout sauf l'achat de
+// Charges d'exploitation : loyer, salaires, électricité, tout sauf l'achat de
 // marchandise, qui passe par les bons d'entrée.
 
 import { useMemo, useState } from 'react'

@@ -30,7 +30,7 @@ type InvoiceLineInput struct {
 	Discount  int64  `json:"discount"`
 
 	// TaxRate distingue « non renseigné » de « zéro ». Absent, le taux par
-	// défaut des paramètres s'applique ; à 0, la ligne est exonérée — une
+	// défaut des paramètres s'applique ; à 0, la ligne est exonérée, une
 	// exonération doit pouvoir s'exprimer.
 	TaxRate *float64 `json:"taxRate"`
 
@@ -44,7 +44,7 @@ type InvoiceInput struct {
 	Lines []InvoiceLineInput `json:"lines"`
 
 	// Client enregistré. Laissé vide, les champs libres ci-dessous sont
-	// utilisés — le cas courant d'une vente au comptoir.
+	// utilisés, le cas courant d'une vente au comptoir.
 	CustomerID      string `json:"customerId"`
 	CustomerName    string `json:"customerName"`
 	CustomerPhone   string `json:"customerPhone"`
@@ -58,7 +58,7 @@ type InvoiceInput struct {
 
 	// Draft enregistre un devis : rien n'est déduit du stock, aucun chiffre
 	// d'affaires n'est comptabilisé tant que la facture n'est pas émise. Les
-	// montants, eux, sont calculés comme sur une facture — un devis sans TVA
+	// montants, eux, sont calculés comme sur une facture, un devis sans TVA
 	// n'engagerait à rien.
 	Draft bool `json:"draft"`
 }
@@ -282,7 +282,7 @@ func serialNote(serials []string) string {
 //
 // Déroulé : validation intégrale, réservation du numéro, écriture du document,
 // puis application du stock en un seul lot. Si le lot échoue, le document est
-// retiré et son numéro rendu — jamais de facture avec un stock partiellement
+// retiré et son numéro rendu, jamais de facture avec un stock partiellement
 // déduit, jamais de trou dans la numérotation.
 func (s *Sales) CreateInvoice(in InvoiceInput) (models.Invoice, error) {
 	u, err := s.guard("sales")
@@ -395,7 +395,7 @@ func (s *Sales) CreateInvoice(in InvoiceInput) (models.Invoice, error) {
 	if in.Draft {
 		kind = "Devis"
 	}
-	s.log(u, "CREATE", "invoice", inv.ID, "%s %s — %s, %d ligne(s), total %d, marge %d",
+	s.log(u, "CREATE", "invoice", inv.ID, "%s %s, %s, %d ligne(s), total %d, marge %d",
 		kind, inv.Number, inv.CustomerName, len(docLines), inv.Total, inv.Margin)
 	return redactInvoice(inv, s.canSeeCost(u)), nil
 }
@@ -403,7 +403,7 @@ func (s *Sales) CreateInvoice(in InvoiceInput) (models.Invoice, error) {
 // IssueDraft convertit un devis en facture : le stock est déduit et le chiffre
 // d'affaires devient effectif.
 //
-// Les prix de vente restent ceux du devis — c'est un engagement pris envers le
+// Les prix de vente restent ceux du devis, c'est un engagement pris envers le
 // client. Les coûts, eux, sont réalignés sur le coût moyen du jour : la marge
 // doit refléter ce que la marchandise a réellement coûté au moment où elle sort.
 func (s *Sales) IssueDraft(id string) (models.Invoice, error) {
@@ -454,7 +454,7 @@ func (s *Sales) IssueDraft(id string) (models.Invoice, error) {
 	if err := s.db.Invoices.Update(inv); err != nil {
 		return models.Invoice{}, err
 	}
-	s.log(u, "ISSUE", "invoice", inv.ID, "Devis %s converti en facture — total %d, marge %d",
+	s.log(u, "ISSUE", "invoice", inv.ID, "Devis %s converti en facture, total %d, marge %d",
 		inv.Number, inv.Total, inv.Margin)
 	return redactInvoice(inv, s.canSeeCost(u)), nil
 }
@@ -501,7 +501,7 @@ func (s *Sales) RegisterPayment(in PaymentInput) (models.Invoice, error) {
 	inv.PaymentMethod = defaultPayment(in.Method)
 	inv.UpdatedAt = time.Now()
 	if trim(in.Note) != "" {
-		inv.Notes = appendNote(inv.Notes, fmt.Sprintf("%s — règlement %d : %s",
+		inv.Notes = appendNote(inv.Notes, fmt.Sprintf("%s, règlement %d : %s",
 			time.Now().Format("02/01/2006"), in.Amount, trim(in.Note)))
 	}
 	if err := s.db.Invoices.Update(inv); err != nil {
@@ -546,7 +546,7 @@ func (s *Sales) CancelInvoice(id, reason string) error {
 					UnitCost: l.UnitCost, UnitPrice: l.UnitPrice,
 					PartyID: inv.CustomerID, PartyName: inv.CustomerName,
 					DocumentID: inv.ID, DocumentNo: inv.Number,
-					Reason: "Annulation de facture — " + motif,
+					Reason: "Annulation de facture, " + motif,
 					Notes:  serialNote(l.Serials),
 				},
 			})
@@ -563,7 +563,7 @@ func (s *Sales) CancelInvoice(id, reason string) error {
 	inv.Balance = 0
 	inv.RefundDue = refund
 	inv.UpdatedAt = now
-	inv.Notes = appendNote(inv.Notes, fmt.Sprintf("Annulée le %s par %s — %s",
+	inv.Notes = appendNote(inv.Notes, fmt.Sprintf("Annulée le %s par %s, %s",
 		now.Format("02/01/2006"), u.FullName, motif))
 	if refund > 0 {
 		inv.Notes = appendNote(inv.Notes, fmt.Sprintf("Acompte de %d encaissé : à rembourser au client.", refund))
@@ -571,7 +571,7 @@ func (s *Sales) CancelInvoice(id, reason string) error {
 	if err := s.db.Invoices.Update(inv); err != nil {
 		return err
 	}
-	s.log(u, "CANCEL", "invoice", inv.ID, "Facture %s annulée — %s (à rembourser : %d)",
+	s.log(u, "CANCEL", "invoice", inv.ID, "Facture %s annulée, %s (à rembourser : %d)",
 		inv.Number, motif, refund)
 	return nil
 }

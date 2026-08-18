@@ -2,7 +2,7 @@
 //
 // L'écran est fait pour le comptoir : on cherche un article, on l'ajoute, on
 // encaisse. Les totaux affichés reproduisent le calcul du backend, mais ce
-// dernier recalcule tout à l'enregistrement — ce qui est montré ici n'est
+// dernier recalcule tout à l'enregistrement, ce qui est montré ici n'est
 // qu'une aide à la saisie, jamais la source des montants enregistrés.
 
 import { useMemo, useRef, useState } from 'react'
@@ -55,7 +55,7 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
   const settings = useAsync(() => Config.get(), [])
   const defaultTax = settings.data?.defaultTaxRate ?? 0
 
-  // Totaux d'aide à la saisie : même règle que le backend — la remise globale
+  // Totaux d'aide à la saisie : même règle que le backend, la remise globale
   // réduit la base taxable au prorata de chaque ligne.
   const totals = useMemo(() => {
     let subtotal = 0

@@ -1,7 +1,7 @@
 // Import d'un catalogue depuis un tableur.
 //
 // Le fichier est d'abord analysé sans rien écrire : l'utilisateur voit
-// exactement ce qui sera créé, mis à jour et écarté — et pourquoi — avant de
+// exactement ce qui sera créé, mis à jour et écarté (et pourquoi) avant de
 // confirmer. Reprendre un stock existant est le premier obstacle à l'adoption
 // du logiciel ; il ne doit pas se franchir à l'aveugle.
 
@@ -150,9 +150,9 @@ export function ImportCatalog(props: { onClose: () => void; onImported: () => vo
               columns={[
                 { key: 'line', header: 'Ligne', width: 70, align: 'right', render: (r) => r.line },
                 { key: 'action', header: 'Action', width: 120, render: (r) => <Badge tone={tone(r.action)}>{label(r.action)}</Badge> },
-                { key: 'sku', header: 'Référence', width: 140, render: (r) => <span className="mono small">{r.sku || '—'}</span> },
-                { key: 'name', header: 'Désignation', render: (r) => r.name || <span className="muted">—</span> },
-                { key: 'qty', header: 'Stock', width: 80, align: 'right', render: (r) => r.quantity || <span className="muted">—</span> },
+                { key: 'sku', header: 'Référence', width: 140, render: (r) => <span className="mono small">{r.sku || '-'}</span> },
+                { key: 'name', header: 'Désignation', render: (r) => r.name || <span className="muted">-</span> },
+                { key: 'qty', header: 'Stock', width: 80, align: 'right', render: (r) => r.quantity || <span className="muted">-</span> },
                 { key: 'message', header: 'Détail', render: (r) => <span className="small muted">{r.message}</span> },
               ]}
             />
