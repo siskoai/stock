@@ -10,6 +10,30 @@ pas la liste des fichiers modifiés.
 
 Rien pour l'instant.
 
+## [1.0.1] (2026-08-18)
+
+### Corrigé
+
+- **macOS annonçait que l'application était endommagée et refusait de
+  l'ouvrir.** Le fichier `Info.plist` déclarait un exécutable nommé `comptoir`
+  alors que le binaire s'appelle `Comptoir`. Le défaut restait invisible sur un
+  Mac, dont le système de fichiers ignore la casse, mais `codesign` résout
+  l'exécutable par cette clé : la signature du bundle était donc invalide, et
+  macOS présente une signature invalide comme une corruption. Le clic droit sur
+  « Ouvrir » ne suffisait même pas à contourner le blocage.
+
+  L'application reste signée de façon ad hoc, faute de certificat Apple : macOS
+  la signale comme provenant d'un développeur non identifié, ce qui se contourne
+  au premier lancement. La marche à suivre est décrite dans le README.
+
+### Ajouté
+
+- Le workflow de publication vérifie la signature macOS avant de publier. Ce
+  défaut ne se voyait pas sur le poste qui compile, seulement après
+  téléchargement ; il est désormais rattrapé en amont.
+- Signature Developer ID et certification Apple prises en charge par le workflow
+  dès que le certificat est fourni en secret du dépôt.
+
 ## [1.0.0] (2026-08-18)
 
 Première version utilisable de bout en bout.
@@ -92,5 +116,6 @@ Première version utilisable de bout en bout.
 - Refus d'ouvrir des données créées par une version plus récente.
 - Protection contre les archives piégées à la restauration.
 
-[Non publié]: https://github.com/siskoai/stock/compare/v1.0.0...HEAD
+[Non publié]: https://github.com/siskoai/stock/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/siskoai/stock/releases/tag/v1.0.1
 [1.0.0]: https://github.com/siskoai/stock/releases/tag/v1.0.0

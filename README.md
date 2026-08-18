@@ -52,7 +52,7 @@ Téléchargez l'exécutable de votre système depuis la page des
 | Système | Fichier à télécharger | Ce qu'il faut de plus |
 |---|---|---|
 | **Windows 10/11** | `comptoir-windows-amd64-installer.exe` | Rien. WebView2 est déjà présent ; sinon l'installeur le propose. |
-| **macOS 10.15+** | `comptoir-macos-universal.zip` | Décompressez, glissez dans « Applications ». Au premier lancement : clic droit → « Ouvrir ». Intel et Apple Silicon. |
+| **macOS 10.15+** | `comptoir-macos-universal.zip` | Décompressez, glissez dans « Applications », puis voir ci-dessous. Intel et Apple Silicon. |
 | **Linux** | `comptoir-linux-amd64.tar.gz` | `libgtk-3-0` et `libwebkit2gtk-4.0-37`, présents sur la plupart des distributions. |
 
 Chaque version publiée contient aussi `SHA256SUMS.txt`, qui permet de vérifier
@@ -62,6 +62,35 @@ qu'un fichier téléchargé est bien celui qui a été construit :
 sha256sum -c SHA256SUMS.txt      # Linux
 shasum -a 256 -c SHA256SUMS.txt  # macOS
 ```
+
+#### Première ouverture sur macOS
+
+macOS refuse d'ouvrir une application téléchargée dont le développeur n'est pas
+enregistré auprès d'Apple. C'est une règle du système, pas un défaut du fichier.
+L'ouverture se débloque une seule fois, de deux façons :
+
+**Par l'interface.** Clic droit sur l'application, puis « Ouvrir », puis
+« Ouvrir » à nouveau dans la fenêtre d'avertissement. Un double-clic ordinaire
+suffit ensuite.
+
+**Par le terminal**, si l'avertissement persiste :
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Comptoir.app
+```
+
+Cette commande retire la marque de quarantaine posée par le navigateur au
+téléchargement. Ne l'appliquez qu'à une application dont vous connaissez la
+provenance, et après avoir vérifié son empreinte SHA-256 ci-dessus.
+
+> Si macOS annonce que l'application est **endommagée**, c'est que le fichier a
+> réellement un problème : signalez-le, ce n'est pas le comportement attendu.
+> Le message normal pour une application non enregistrée parle d'un
+> « développeur non identifié ».
+
+L'enregistrement auprès d'Apple, qui supprimerait cet avertissement, suppose un
+compte Apple Developer payant. Le workflow de publication le prend en charge dès
+que le certificat est fourni en secret du dépôt.
 
 L'application est un fichier unique. Il n'y a ni base de données à installer,
 ni service à démarrer, ni port à ouvrir.

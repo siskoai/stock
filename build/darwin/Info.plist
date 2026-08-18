@@ -4,7 +4,12 @@
 <dict>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleName</key><string>{{.Info.ProductName}}</string>
-    <key>CFBundleExecutable</key><string>{{.Name}}</string>
+    <!-- Doit nommer exactement le binaire présent dans Contents/MacOS, donc
+         « outputfilename » de wails.json. Le gabarit {{.Name}} rendrait le nom
+         du projet, qui n'est pas le même ici : codesign résout l'exécutable par
+         cette clé, et un nom qui ne correspond pas produit une signature
+         invalide, que macOS présente comme une application endommagée. -->
+    <key>CFBundleExecutable</key><string>Comptoir</string>
     <key>CFBundleIdentifier</key><string>com.comptoir.app</string>
     <key>CFBundleVersion</key><string>{{.Info.ProductVersion}}</string>
     <key>CFBundleShortVersionString</key><string>{{.Info.ProductVersion}}</string>

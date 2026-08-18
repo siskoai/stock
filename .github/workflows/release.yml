@@ -78,6 +78,57 @@ jobs:
           wails build -clean ${{ matrix.drapeaux }} \
             -ldflags "-X main.version=${{ steps.version.outputs.numero }}"
 
+      # Signature Developer ID, si le certificat est configuré en secret. Sans
+      # lui, l'application garde sa signature ad hoc : macOS la considère comme
+      # provenant d'un développeur non identifié, ce qui reste ouvrable par un
+      # clic droit. Voir la section macOS du README.
+      - name: Signer et faire certifier par Apple
+        if: runner.os == 'macOS' && env.CERTIFICAT != ''
+        env:
+          CERTIFICAT: ${{ secrets.MACOS_CERTIFICATE }}
+          MOT_DE_PASSE: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          IDENTITE: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_MDP: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_EQUIPE: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          trousseau="$RUNNER_TEMP/signature.keychain-db"
+          motpasse=$(uuidgen)
+          security create-keychain -p "$motpasse" "$trousseau"
+          security set-keychain-settings -lut 900 "$trousseau"
+          security unlock-keychain -p "$motpasse" "$trousseau"
+          echo "$CERTIFICAT" | base64 --decode > "$RUNNER_TEMP/certificat.p12"
+          security import "$RUNNER_TEMP/certificat.p12" -k "$trousseau" \
+            -P "$MOT_DE_PASSE" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -k "$motpasse" "$trousseau"
+          security list-keychain -d user -s "$trousseau"
+
+          codesign --force --deep --timestamp --options runtime \
+            --sign "$IDENTITE" build/bin/comptoir.app
+
+          # La certification porte sur une archive, pas sur le dossier.
+          ditto -c -k --keepParent build/bin/comptoir.app "$RUNNER_TEMP/soumission.zip"
+          xcrun notarytool submit "$RUNNER_TEMP/soumission.zip" \
+            --apple-id "$APPLE_ID" --password "$APPLE_MDP" --team-id "$APPLE_EQUIPE" --wait
+          # L'agrafage inscrit le ticket dans le bundle : l'ouverture ne
+          # nécessite alors plus de connexion.
+          xcrun stapler staple build/bin/comptoir.app
+          security delete-keychain "$trousseau"
+
+      # Une signature invalide fait présenter l'application comme « endommagée »
+      # par macOS, et le clic droit ne la débloque même pas. Le défaut est
+      # invisible sur le poste qui compile : il ne se révèle qu'après
+      # téléchargement. On le rattrape donc ici, avant publication.
+      - name: Vérifier la signature
+        if: runner.os == 'macOS'
+        run: |
+          codesign --verify --deep --strict --verbose=2 build/bin/comptoir.app
+          echo "Architectures :"
+          lipo -archs build/bin/comptoir.app/Contents/MacOS/Comptoir
+          echo "Exécutable déclaré :"
+          plutil -extract CFBundleExecutable raw build/bin/comptoir.app/Contents/Info.plist
+
       # Une application macOS est un dossier : elle doit être compressée pour
       # traverser un téléchargement sans perdre son bit d'exécution.
       - name: Empaqueter
