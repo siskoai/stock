@@ -9,6 +9,7 @@ import {
   IconLogout, IconSettings, IconShield, IconTruck, IconUsers, IconWallet,
 } from './Icons'
 import { Account } from './Account'
+import { CompanyLogo } from './CompanyLogo'
 
 export type PageKey =
   | 'dashboard' | 'products' | 'categories' | 'stock' | 'sales'
@@ -78,8 +79,15 @@ export function Layout(props: {
     <div className="shell">
       <aside className="sidebar">
         <div className="sidebar-head">
-          <div className="sidebar-brand">Comptoir</div>
-          <div className="sidebar-company" title={state.companyName}>{state.companyName}</div>
+          <div className="sidebar-identity">
+            <CompanyLogo className="sidebar-logo" />
+            <div style={{ minWidth: 0 }}>
+              <div className="sidebar-brand truncate" title={state.companyName}>
+                {state.companyName}
+              </div>
+              <div className="sidebar-company">Comptoir</div>
+            </div>
+          </div>
         </div>
 
         <nav className="nav">

@@ -67,6 +67,33 @@ func (s *Documents) Purchase(id string) (File, error) {
 	return File{Name: fmt.Sprintf("bon_entree_%s.pdf", slug(pu.Number)), MIME: "application/pdf", Content: data}, nil
 }
 
+// Movement rend le justificatif d'un mouvement de stock : bon de sortie, bon de
+// retour, constat de défaut selon le type. C'est la pièce que l'on fait signer
+// quand de la marchandise bouge sans qu'une facture l'accompagne.
+func (s *Documents) Movement(id string) (File, error) {
+	u, err := s.guard("")
+	if err != nil {
+		return File{}, err
+	}
+	m, err := s.db.Movements.Get(id)
+	if err != nil {
+		return File{}, err
+	}
+	// Le coût figure sur le bon : un vendeur ne doit pas l'y trouver.
+	if !s.canSeeCost(u) {
+		m.UnitCost = 0
+	}
+	data, err := pdfgen.MovementNote(m, s.db.Settings())
+	if err != nil {
+		return File{}, fmt.Errorf("génération du PDF : %w", err)
+	}
+	return File{
+		Name:    fmt.Sprintf("mouvement_%s.pdf", slug(m.Ref)),
+		MIME:    "application/pdf",
+		Content: data,
+	}, nil
+}
+
 // SalesReport rend le rapport périodique de ventes.
 func (s *Documents) SalesReport(q ReportQuery) (File, error) {
 	if _, err := s.guard("finance"); err != nil {

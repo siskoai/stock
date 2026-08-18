@@ -1,6 +1,8 @@
 package services
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"time"
 
@@ -43,6 +45,13 @@ type State struct {
 	Author         string `json:"author"`
 	Notice         string `json:"notice"`
 	BrandingIntact bool   `json:"brandingIntact"`
+
+	// CompanyLogoFingerprint change quand le commerçant remplace son logo.
+	// L'image elle-même n'est pas transmise ici : elle pèse jusqu'à 380 Ko et
+	// cet état est relu toutes les minutes. L'interface la demande par
+	// CompanyLogo(), et sait qu'elle doit la redemander quand cette empreinte
+	// ne correspond plus à celle qu'elle a en mémoire.
+	CompanyLogoFingerprint string `json:"companyLogoFingerprint"`
 }
 
 // Version est renseignée à la compilation (voir Makefile / build).
@@ -53,16 +62,17 @@ var Version = "dev"
 func (s *Session) State() State {
 	settings := s.db.Settings()
 	st := State{
-		NeedsSetup:     !s.auth.HasUsers(),
-		Scopes:         []string{},
-		CompanyName:    settings.CompanyName,
-		CurrencySymbol: settings.CurrencySymbol,
-		Decimals:       settings.Decimals,
-		Theme:          settings.Theme,
-		AppVersion:     Version,
-		Author:         brand.Author,
-		Notice:         brand.Notice,
-		BrandingIntact: brand.Verify() == nil,
+		NeedsSetup:             !s.auth.HasUsers(),
+		Scopes:                 []string{},
+		CompanyName:            settings.CompanyName,
+		CurrencySymbol:         settings.CurrencySymbol,
+		Decimals:               settings.Decimals,
+		Theme:                  settings.Theme,
+		AppVersion:             Version,
+		Author:                 brand.Author,
+		Notice:                 brand.Notice,
+		BrandingIntact:         brand.Verify() == nil,
+		CompanyLogoFingerprint: fingerprint(settings.LogoDataURL),
 	}
 	if u, err := s.auth.Current(); err == nil {
 		pub := u.Sanitized()
@@ -93,6 +103,26 @@ func (s *Session) DefaultCategoryNames() []string {
 		out = append(out, c.Name)
 	}
 	return out
+}
+
+// CompanyLogo renvoie le logo du commerçant, tel qu'il a été téléversé dans les
+// paramètres, sous forme de data URL directement affichable. Chaîne vide si
+// aucun logo n'est configuré.
+func (s *Session) CompanyLogo() (string, error) {
+	if _, err := s.guard(""); err != nil {
+		return "", err
+	}
+	return s.db.Settings().LogoDataURL, nil
+}
+
+// fingerprint résume une valeur volumineuse en une empreinte courte, qui suffit
+// à détecter un changement sans transporter la valeur.
+func fingerprint(value string) string {
+	if value == "" {
+		return ""
+	}
+	sum := sha256.Sum256([]byte(value))
+	return hex.EncodeToString(sum[:6])
 }
 
 // SetupInput porte l'ensemble des réponses de l'assistant de premier démarrage.

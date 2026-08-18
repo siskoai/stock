@@ -32,10 +32,11 @@ mentions légales se règlent au premier démarrage.
 
 | | |
 |---|---|
+| **Votre identité** | Votre logo et vos mentions légales se règlent au premier démarrage, s'affichent dans l'application et s'impriment en tête de chaque facture, devis et bon. |
 | **Catalogue et stock** | Articles, catégories, seuils d'alerte, emplacements, numéros de série. Le stock défectueux est compté à part et n'est jamais vendable. Un catalogue existant s'importe depuis un tableur, avec aperçu ligne à ligne avant écriture. |
 | **Ventes** | Devis, factures, règlements partiels, annulations. Saisie au clavier de bout en bout : on cherche ou on scanne, les flèches choisissent, Entrée ajoute. Une douchette code-barres fonctionne sans réglage. |
 | **Achats** | Réceptions fournisseur avec frais annexes répartis au prorata. Le coût moyen pondéré est recalculé à chaque entrée ; une marge cible peut réajuster les prix de vente. |
-| **Mouvements** | Retours, défauts, réparations, rebuts, inventaire. **Aucune quantité ne change sans mouvement daté et signé**, c'est ce qui rend l'inventaire vérifiable. |
+| **Mouvements** | Retours, défauts, réparations, rebuts, inventaire. **Aucune quantité ne change sans mouvement daté et signé**, c'est ce qui rend l'inventaire vérifiable. Chaque mouvement s'imprime en bon de sortie ou en constat, avec ses emplacements de signature. |
 | **Charges et rapports** | Charges par rubrique, compte de résultat, situation patrimoniale, statistiques par catégorie, client, vendeur et jour de la semaine. Articles dormants et trésorerie immobilisée. Export CSV, impression PDF. |
 | **Comptes** | Administrateur, gérant, vendeur. Un vendeur ne voit ni prix d'achat, ni marge, ni charges. Journal d'audit en ajout seul. |
 | **Sauvegardes** | Archive complète automatique au premier démarrage de chaque journée, restauration en deux clics. |

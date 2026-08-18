@@ -7,10 +7,12 @@ import { formatDate, formatDateTime, movementLabel, movementTone, statusLabel, s
 import { formatNumber } from '../lib/money'
 import { Alert, Badge, BarList, Card, DataTable, Empty, KPI, Loading } from '../components/UI'
 import { LineChart } from '../components/Chart'
+import { CompanyLogo, useCompanyLogo } from '../components/CompanyLogo'
 import type { PageContext } from '../App'
 
 export function DashboardPage({ navigate }: PageContext) {
-  const { money, amount, can } = useSession()
+  const { money, amount, can, state } = useSession()
+  const logo = useCompanyLogo()
   const { data, loading, error } = useAsync(() => Reports.dashboard(), [])
 
   if (loading) return <Loading />
@@ -21,6 +23,21 @@ export function DashboardPage({ navigate }: PageContext) {
 
   return (
     <div className="stack">
+      {/* Bandeau d'identité : le commerçant reconnaît sa boutique avant de lire
+          ses chiffres, et voit du premier coup d'œil que son logo est bien
+          celui qui partira sur ses factures. */}
+      <div className={`shopfront ${logo ? '' : 'shopfront-plain'}`}>
+        <CompanyLogo className="shopfront-logo" />
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div className="shopfront-name truncate">{state.companyName}</div>
+          <div className="shopfront-date">{aujourdhui()}</div>
+        </div>
+        <div className="shopfront-figure">
+          <div className="kpi-label">Encaissé aujourd'hui</div>
+          <div className="shopfront-amount">{money(data.todayRevenue.value)}</div>
+        </div>
+      </div>
+
       <div className="grid grid-4">
         <KPI
           label="Ventes du jour"
@@ -188,4 +205,12 @@ export function DashboardPage({ navigate }: PageContext) {
       </Card>
     </div>
   )
+}
+
+/** aujourdhui rend « lundi 18 août 2026 », en tête du tableau de bord. */
+function aujourdhui(): string {
+  const jour = new Date().toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  })
+  return jour.charAt(0).toUpperCase() + jour.slice(1)
 }

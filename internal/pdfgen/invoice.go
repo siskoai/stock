@@ -9,6 +9,8 @@
 package pdfgen
 
 import (
+	"bytes"
+	"encoding/base64"
 	"fmt"
 	"strings"
 	"time"
@@ -89,6 +91,65 @@ func FormatMoney(amount int64, decimals int) string {
 
 // header dessine le bandeau d'identité : un aplat vert plein largeur portant le
 // nom de l'entreprise, et à droite le type et le numéro du document.
+// logoBox est le côté, en millimètres, du carré réservé au logo de la boutique
+// dans le bandeau de marque.
+const logoBox = 17.0
+
+// registerLogo décode le logo enregistré dans les paramètres et le confie au
+// moteur PDF. Renvoie faux si aucun logo n'est configuré, ou si l'image est
+// illisible : un logo abîmé ne doit pas empêcher d'imprimer une facture.
+func (d *doc) registerLogo() bool {
+	raw := d.settings.LogoDataURL
+	virgule := strings.Index(raw, ",")
+	if raw == "" || virgule < 0 {
+		return false
+	}
+	entete, charge := raw[:virgule], raw[virgule+1:]
+	if !strings.Contains(entete, "base64") {
+		return false
+	}
+	data, err := base64.StdEncoding.DecodeString(charge)
+	if err != nil || len(data) == 0 {
+		return false
+	}
+	format := "PNG"
+	if strings.Contains(entete, "jpeg") || strings.Contains(entete, "jpg") {
+		format = "JPG"
+	}
+	d.pdf.RegisterImageOptionsReader("logo-boutique",
+		fpdf.ImageOptions{ImageType: format}, bytes.NewReader(data))
+	if d.pdf.Err() {
+		// L'erreur est effacée pour que la suite du document se produise
+		// normalement, sans le logo.
+		d.pdf.ClearError()
+		return false
+	}
+	return true
+}
+
+// drawLogo place le logo dans un carré blanc, à l'échelle et centré. Le fond
+// blanc est nécessaire : un logo sombre sur le bandeau vert serait illisible,
+// et la plupart des logos de commerçants sont fournis sans transparence.
+func (d *doc) drawLogo(x, y float64) {
+	info := d.pdf.GetImageInfo("logo-boutique")
+	if info == nil || info.Width() <= 0 || info.Height() <= 0 {
+		return
+	}
+	d.setFill([3]int{255, 255, 255})
+	d.pdf.RoundedRect(x, y, logoBox, logoBox, 2, "1234", "F")
+
+	marge := 1.5
+	dispo := logoBox - 2*marge
+	echelle := dispo / info.Width()
+	if h := dispo / info.Height(); h < echelle {
+		echelle = h
+	}
+	w, h := info.Width()*echelle, info.Height()*echelle
+	d.pdf.ImageOptions("logo-boutique",
+		x+(logoBox-w)/2, y+(logoBox-h)/2, w, h, false,
+		fpdf.ImageOptions{ImageType: "", ReadDpi: false}, 0, "")
+}
+
 func (d *doc) header(title, number string, date time.Time, statusNote string) {
 	p := d.pdf
 	s := d.settings
@@ -97,15 +158,24 @@ func (d *doc) header(title, number string, date time.Time, statusNote string) {
 	d.setFill(brandRGB)
 	p.Rect(0, 0, 210, 30, "F")
 
-	p.SetXY(15, 9)
+	// Le texte se décale si un logo occupe la gauche du bandeau.
+	texteX := 15.0
+	largeur := 110.0
+	if d.registerLogo() {
+		d.drawLogo(15, 6.5)
+		texteX = 15 + logoBox + 5
+		largeur = 110 - logoBox - 5
+	}
+
+	p.SetXY(texteX, 9)
 	p.SetTextColor(255, 255, 255)
 	p.SetFont("Helvetica", "B", 15)
-	p.CellFormat(110, 7, d.text(orDefault(s.CompanyName, "Ma Société")), "", 2, "L", false, 0, "")
+	p.CellFormat(largeur, 7, d.text(orDefault(s.CompanyName, "Ma Société")), "", 2, "L", false, 0, "")
 
 	p.SetFont("Helvetica", "", 8)
 	p.SetTextColor(214, 226, 222)
-	p.CellFormat(110, 4.5, d.text(joinNonEmpty(" · ", s.Address, s.City, s.Country)), "", 2, "L", false, 0, "")
-	p.CellFormat(110, 4.5, d.text(joinNonEmpty(" · ",
+	p.CellFormat(largeur, 4.5, d.text(joinNonEmpty(" · ", s.Address, s.City, s.Country)), "", 2, "L", false, 0, "")
+	p.CellFormat(largeur, 4.5, d.text(joinNonEmpty(" · ",
 		prefixed("Tél. ", s.Phone), s.Email, prefixed("NIF ", s.TaxID), prefixed("RCCM ", s.RCCM))),
 		"", 2, "L", false, 0, "")
 

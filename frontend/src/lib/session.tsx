@@ -28,7 +28,7 @@ const empty: State = {
   companyName: 'Comptoir', currencySymbol: 'FCFA', decimals: 0,
   theme: 'light', appVersion: '',
   author: 'SISKO', notice: 'Édité avec Comptoir, un logiciel SISKO',
-  brandingIntact: true,
+  brandingIntact: true, companyLogoFingerprint: '',
 }
 
 const Ctx = createContext<SessionValue | null>(null)

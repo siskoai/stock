@@ -98,7 +98,11 @@ func run() error {
 			reports, documents, export, users, config, backups,
 		},
 		Mac: &mac.Options{
-			TitleBar: mac.TitleBarHiddenInset(),
+			// Barre de titre standard : les boutons fermer, réduire et
+			// agrandir sont ceux du système, à la place où l'utilisateur les
+			// cherche. Une barre dessinée par l'application se comporte
+			// toujours un peu différemment de toutes les autres fenêtres.
+			TitleBar: mac.TitleBarDefault(),
 			About: &mac.AboutInfo{
 				Title:   "Comptoir " + version,
 				Message: "Gestion de boutique hors ligne.\nToutes les données restent sur ce poste.",

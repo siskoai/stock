@@ -3,7 +3,7 @@
 // corrections d'inventaire.
 
 import { useMemo, useState } from 'react'
-import { Catalog, Export, Stock, messageOf } from '../lib/api'
+import { Catalog, Documents, Export, Stock, messageOf } from '../lib/api'
 import { useAsync, useDebounced } from '../lib/useAsync'
 import { useSession } from '../lib/session'
 import { useToast } from '../lib/toast'
@@ -15,7 +15,7 @@ import {
 } from '../components/UI'
 import { ProductPicker } from '../components/ProductPicker'
 import { useDocumentPreview } from '../components/DocumentPreview'
-import { IconDownload } from '../components/Icons'
+import { IconDownload, IconPrint } from '../components/Icons'
 import type { MovementType, ProductView } from '../lib/types'
 import type { PageContext } from '../App'
 
@@ -152,6 +152,20 @@ export function StockPage({ refreshCounters }: PageContext) {
                 ),
               },
               { key: 'user', header: 'Opérateur', width: 130, render: (m) => <span className="small muted">{m.userName}</span> },
+              {
+                key: 'imprimer', header: '', align: 'right', width: 56,
+                render: (m) => (
+                  <button
+                    className="btn btn-sm btn-ghost"
+                    disabled={doc.busy}
+                    title="Imprimer le bon de mouvement"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      doc.open(`Bon de mouvement ${m.ref}`, () => Documents.movement(m.id))
+                    }}
+                  ><IconPrint /></button>
+                ),
+              },
             ]}
           />
         )}

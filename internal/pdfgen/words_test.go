@@ -96,3 +96,59 @@ func TestFormatQuantity(t *testing.T) {
 		}
 	}
 }
+
+// Le logo du commerçant doit apparaître sur ses documents, et un logo abîmé ne
+// doit jamais empêcher d'imprimer une facture.
+func TestLogoDeLaBoutique(t *testing.T) {
+	// PNG 1x1 valide, encodé en base64.
+	const pixel = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+
+	cas := []struct {
+		nom         string
+		dataURL     string
+		attendu     bool
+		commentaire string
+	}{
+		{"logo valide", "data:image/png;base64," + pixel, true, "doit être dessiné"},
+		{"aucun logo", "", false, "en-tête sans logo"},
+		{"base64 illisible", "data:image/png;base64,pas-du-base64", false, "ignoré sans planter"},
+		{"data URL tronquée", "data:image/png;base64", false, "ignoré sans planter"},
+		{"encodage non géré", "data:image/png,%89PNG", false, "ignoré sans planter"},
+	}
+
+	for _, c := range cas {
+		t.Run(c.nom, func(t *testing.T) {
+			settings := reglagesAvecLogo(c.dataURL)
+			d := newDoc(settings)
+			if got := d.registerLogo(); got != c.attendu {
+				t.Errorf("registerLogo() = %v, attendu %v (%s)", got, c.attendu, c.commentaire)
+			}
+			// Dans tous les cas, le document doit se produire.
+			data, err := Invoice(factureMinimale(), settings)
+			if err != nil {
+				t.Fatalf("génération de la facture : %v", err)
+			}
+			if len(data) < 1000 || string(data[:4]) != "%PDF" {
+				t.Errorf("document invalide (%d octets)", len(data))
+			}
+		})
+	}
+}
+
+// Un logo présent doit alourdir le document : c'est la preuve qu'il y est.
+func TestLogoPresentDansLeDocument(t *testing.T) {
+	const pixel = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+
+	sans, err := Invoice(factureMinimale(), reglagesAvecLogo(""))
+	if err != nil {
+		t.Fatal(err)
+	}
+	avec, err := Invoice(factureMinimale(), reglagesAvecLogo("data:image/png;base64,"+pixel))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(avec) <= len(sans) {
+		t.Errorf("document avec logo = %d octets, sans logo = %d : l'image n'a pas été incluse",
+			len(avec), len(sans))
+	}
+}

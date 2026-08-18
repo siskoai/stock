@@ -1,8 +1,11 @@
 package services
 
 import (
+	"strings"
 	"testing"
 	"time"
+
+	"comptoir/internal/models"
 )
 
 func TestIncomeStatement(t *testing.T) {
@@ -255,5 +258,73 @@ func TestExportsEtDocuments(t *testing.T) {
 	}
 	if string(csv.Content[:3]) != "\ufeff" {
 		t.Error("le CSV n'a pas de BOM : Excel l'ouvrira mal")
+	}
+}
+
+// Chaque mouvement de stock doit pouvoir être imprimé et signé.
+func TestBonDeMouvement(t *testing.T) {
+	s := newSuite(t)
+	p := s.product("Onduleur", 800000, 1400000, 10)
+
+	m, err := s.stock.DeclareDefective(MovementInput{
+		ProductID: p.ID, Quantity: 2, Reason: "batterie gonflée au déballage",
+	})
+	if err != nil {
+		t.Fatalf("déclaration de défaut : %v", err)
+	}
+
+	f, err := s.docs.Movement(m.ID)
+	if err != nil {
+		t.Fatalf("bon de mouvement : %v", err)
+	}
+	if len(f.Content) < 1000 || string(f.Content[:4]) != "%PDF" {
+		t.Fatalf("document invalide (%d octets)", len(f.Content))
+	}
+	if !strings.Contains(f.Name, "mouvement") {
+		t.Errorf("nom de fichier inattendu : %s", f.Name)
+	}
+
+	// Tous les types de mouvement doivent produire un document.
+	vente, err := s.sales.CreateInvoice(InvoiceInput{
+		Lines: []InvoiceLineInput{{ProductID: p.ID, Quantity: 1}},
+	})
+	if err != nil {
+		t.Fatalf("vente : %v", err)
+	}
+	sorties := s.db.Movements.Find(func(mv models.Movement) bool {
+		return mv.DocumentID == vente.ID
+	})
+	if len(sorties) == 0 {
+		t.Fatal("la vente n'a produit aucun mouvement de sortie")
+	}
+	if _, err := s.docs.Movement(sorties[0].ID); err != nil {
+		t.Errorf("bon de sortie d'une vente : %v", err)
+	}
+}
+
+// Un vendeur imprime un bon de sortie sans y lire la valeur de la marchandise.
+func TestBonDeMouvement_SansCoutPourUnVendeur(t *testing.T) {
+	s := newSuite(t)
+	p := s.product("Écran", 5000000, 8000000, 10)
+	m, err := s.stock.DeclareDefective(MovementInput{
+		ProductID: p.ID, Quantity: 1, Reason: "dalle fêlée",
+	})
+	if err != nil {
+		t.Fatalf("défaut : %v", err)
+	}
+
+	avecCout, err := s.docs.Movement(m.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	s.loginAs("vendeur", models.RoleSeller)
+	sansCout, err := s.docs.Movement(m.ID)
+	if err != nil {
+		t.Fatalf("un vendeur doit pouvoir imprimer un bon : %v", err)
+	}
+	if len(sansCout.Content) >= len(avecCout.Content) {
+		t.Errorf("le bon d'un vendeur (%d octets) n'est pas plus court que celui d'un gérant (%d) : le bloc de valorisation y figure encore",
+			len(sansCout.Content), len(avecCout.Content))
 	}
 }

@@ -60,6 +60,7 @@ export const Session = {
   state: bind<[], T.State>('services.Session', 'State'),
   setup: bind<[T.SetupInput], T.State>('services.Session', 'Setup'),
   brand: bind<[], T.Attribution>('services.Session', 'Brand'),
+  companyLogo: bind<[], string>('services.Session', 'CompanyLogo'),
   currencies: bind<[], T.CurrencyPreset[]>('services.Session', 'Currencies'),
   defaultCategories: bind<[], string[]>('services.Session', 'DefaultCategoryNames'),
   login: bind<[string, string], T.State>('services.Session', 'Login'),
@@ -155,6 +156,7 @@ export const Documents = {
   incomeStatement: bind<[string, string], T.FileResult>('services.Documents', 'IncomeStatement'),
   stockReport: bind<[T.ProductQuery], T.FileResult>('services.Documents', 'StockReport'),
   partyStatement: bind<[string], T.FileResult>('services.Documents', 'PartyStatement'),
+  movement: bind<[string], T.FileResult>('services.Documents', 'Movement'),
 }
 
 export const Export = {

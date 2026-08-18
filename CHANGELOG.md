@@ -10,6 +10,34 @@ pas la liste des fichiers modifiés.
 
 Rien pour l'instant.
 
+## [1.1.0] (2026-08-18)
+
+### Ajouté
+
+- **Le logo de la boutique apparaît sur ses documents.** Il était téléversable
+  depuis les paramètres, mais n'était affiché nulle part ailleurs. Il figure
+  désormais dans le bandeau de marque des factures, devis, bons d'entrée et
+  rapports, à l'échelle et sur fond blanc pour rester lisible. Un logo illisible
+  ou abîmé est ignoré sans empêcher l'impression.
+- **Le logo apparaît aussi dans l'application** : dans la barre latérale, à côté
+  du nom de la boutique, et sur un bandeau en tête du tableau de bord avec la
+  date du jour et l'encaissé. Le commerçant voit ainsi ce qui partira sur ses
+  factures avant d'en imprimer une.
+- **Bon de mouvement imprimable.** Une sortie de stock qui ne passe pas par une
+  facture laissait une trace dans le journal, mais rien à faire signer. Chaque
+  mouvement produit maintenant son justificatif, dont le titre suit l'opération :
+  bon de sortie, bon de retour client, constat de défaut, mise au rebut, constat
+  d'inventaire. Le document porte deux emplacements de signature, dont les
+  libellés changent selon le sens du mouvement. Un vendeur peut l'imprimer, sans
+  y voir la valorisation.
+
+### Modifié
+
+- **La fenêtre utilise la barre de titre du système.** Les boutons fermer,
+  réduire et agrandir sont ceux de macOS, à la place où on les cherche. La barre
+  dessinée par l'application se comportait toujours un peu différemment de
+  toutes les autres fenêtres.
+
 ## [1.0.1] (2026-08-18)
 
 ### Corrigé
@@ -116,6 +144,7 @@ Première version utilisable de bout en bout.
 - Refus d'ouvrir des données créées par une version plus récente.
 - Protection contre les archives piégées à la restauration.
 
-[Non publié]: https://github.com/siskoai/stock/compare/v1.0.1...HEAD
+[Non publié]: https://github.com/siskoai/stock/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/siskoai/stock/releases/tag/v1.1.0
 [1.0.1]: https://github.com/siskoai/stock/releases/tag/v1.0.1
 [1.0.0]: https://github.com/siskoai/stock/releases/tag/v1.0.0

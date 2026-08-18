@@ -45,6 +45,7 @@ export interface State {
   author: string
   notice: string
   brandingIntact: boolean
+  companyLogoFingerprint: string
 }
 
 /** Identité visuelle de l'auteur, demandée une fois au démarrage. */
