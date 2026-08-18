@@ -6,6 +6,7 @@ import { useState, type FormEvent } from 'react'
 import { Session, messageOf } from '../lib/api'
 import { useSession } from '../lib/session'
 import { Alert, Field, TextInput } from '../components/UI'
+import { Attribution } from '../components/Attribution'
 
 function Shell({ title, subtitle, children, footer }: {
   title: string; subtitle: string; children: React.ReactNode; footer?: React.ReactNode
@@ -18,64 +19,12 @@ function Shell({ title, subtitle, children, footer }: {
         <h1 className="gate-title">{title}</h1>
         <p className="gate-sub">{subtitle}</p>
         {children}
+        <div style={{ marginTop: 20 }}><Attribution compact /></div>
         <div className="gate-foot">
           {footer ?? <>Comptoir {state.appVersion} — vos données restent sur ce poste.</>}
         </div>
       </div>
     </div>
-  )
-}
-
-export function SetupPage() {
-  const { setState } = useSession()
-  const [username, setUsername] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
-
-  async function submit(e: FormEvent) {
-    e.preventDefault()
-    if (password !== confirm) {
-      setError('Les deux mots de passe ne correspondent pas.')
-      return
-    }
-    setBusy(true)
-    setError(null)
-    try {
-      setState(await Session.setup(username, fullName, password))
-    } catch (err) {
-      setError(messageOf(err))
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  return (
-    <Shell
-      title="Premier démarrage"
-      subtitle="Créez le compte administrateur de la boutique. C'est le seul compte qui pourra ensuite en créer d'autres."
-    >
-      <form onSubmit={submit} className="stack-sm" style={{ gap: 13 }}>
-        {error && <Alert tone="danger">{error}</Alert>}
-        <Field label="Nom complet" required>
-          <TextInput value={fullName} onChange={setFullName} placeholder="Aïssata Traoré" autoFocus />
-        </Field>
-        <Field label="Identifiant de connexion" required hint="Au moins 3 caractères, sans espace.">
-          <TextInput value={username} onChange={setUsername} placeholder="aissata" />
-        </Field>
-        <Field label="Mot de passe" required hint="Au moins 8 caractères, dont une lettre et un chiffre.">
-          <TextInput type="password" value={password} onChange={setPassword} />
-        </Field>
-        <Field label="Confirmer le mot de passe" required>
-          <TextInput type="password" value={confirm} onChange={setConfirm} />
-        </Field>
-        <button className="btn btn-primary btn-block" type="submit" disabled={busy} style={{ marginTop: 6 }}>
-          {busy ? 'Création…' : 'Créer le compte et démarrer'}
-        </button>
-      </form>
-    </Shell>
   )
 }
 

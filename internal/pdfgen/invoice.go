@@ -15,6 +15,7 @@ import (
 
 	"github.com/go-pdf/fpdf"
 
+	"comptoir/internal/brand"
 	"comptoir/internal/models"
 )
 
@@ -146,6 +147,14 @@ func (d *doc) footer(terms, note string) {
 			p.SetFont("Helvetica", "I", 7)
 			p.MultiCell(150, 3.2, d.text(note), "", "L", false)
 		}
+		// Mention de paternité, discrète et constante : le document appartient
+		// au commerçant, la mention nomme l'éditeur du logiciel. Elle est prévue
+		// par l'article 3 de la licence — voir internal/brand.
+		p.SetXY(15, -11)
+		p.SetFont("Helvetica", "", 6)
+		d.setColor(mutedRGB)
+		p.CellFormat(120, 4, d.text(brand.Notice), "", 0, "L", false, 0, "")
+
 		p.SetXY(160, -14)
 		p.SetFont("Helvetica", "", 7)
 		p.CellFormat(35, 4, d.text(fmt.Sprintf("Page %d/{nb}", p.PageNo())), "", 0, "R", false, 0, "")

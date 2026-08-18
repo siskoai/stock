@@ -1,5 +1,8 @@
 # Binaires et artefacts de compilation
 /build/bin/
+/build/windows/installer/tmp/
+/build/windows/icon.ico
+/build/darwin/iconfile.icns
 /Comptoir
 /comptoir
 *.exe

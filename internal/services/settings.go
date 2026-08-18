@@ -36,6 +36,18 @@ type CurrencyPreset struct {
 	Label    string `json:"label"`
 }
 
+// Currencies est la liste proposée au paramétrage comme au premier démarrage.
+// Elle vit ici, en un seul endroit : deux listes divergeraient.
+var Currencies = []CurrencyPreset{
+	{"XOF", "FCFA", 0, "Franc CFA (UEMOA)"},
+	{"XAF", "FCFA", 0, "Franc CFA (CEMAC)"},
+	{"GNF", "GNF", 0, "Franc guinéen"},
+	{"MRU", "MRU", 2, "Ouguiya mauritanien"},
+	{"MAD", "DH", 2, "Dirham marocain"},
+	{"EUR", "€", 2, "Euro"},
+	{"USD", "$", 2, "Dollar américain"},
+}
+
 // Presets renvoie les valeurs proposées dans l'écran de paramétrage :
 // monnaies, rubriques de charges et modes de règlement.
 func (s *Config) Presets() (map[string]any, error) {
@@ -43,15 +55,7 @@ func (s *Config) Presets() (map[string]any, error) {
 		return nil, err
 	}
 	return map[string]any{
-		"currencies": []CurrencyPreset{
-			{"XOF", "FCFA", 0, "Franc CFA (UEMOA)"},
-			{"XAF", "FCFA", 0, "Franc CFA (CEMAC)"},
-			{"GNF", "GNF", 0, "Franc guinéen"},
-			{"MRU", "MRU", 2, "Ouguiya mauritanien"},
-			{"MAD", "DH", 2, "Dirham marocain"},
-			{"EUR", "€", 2, "Euro"},
-			{"USD", "$", 2, "Dollar américain"},
-		},
+		"currencies":        Currencies,
 		"expenseCategories": models.ExpenseCategories,
 		"paymentMethods": []map[string]string{
 			{"value": string(models.PayCash), "label": paymentLabel(models.PayCash)},

@@ -9,7 +9,8 @@ import { useSession } from './lib/session'
 import { useToast } from './lib/toast'
 import { Layout, type PageKey } from './components/Layout'
 import { Alert, Loading } from './components/UI'
-import { ChangePasswordGate, LoginPage, SetupPage } from './pages/Gate'
+import { ChangePasswordGate, LoginPage } from './pages/Gate'
+import { Onboarding } from './pages/Onboarding'
 import { DashboardPage } from './pages/Dashboard'
 import { ProductsPage } from './pages/Products'
 import { CategoriesPage } from './pages/Categories'
@@ -106,7 +107,7 @@ export function App() {
     )
   }
 
-  if (state.needsSetup) return <SetupPage />
+  if (state.needsSetup) return <Onboarding />
   if (!state.authenticated) return <LoginPage />
   if (state.user?.mustChangePwd) return <ChangePasswordGate />
 

@@ -42,6 +42,31 @@ export interface State {
   decimals: number
   theme: string
   appVersion: string
+  author: string
+  notice: string
+  brandingIntact: boolean
+}
+
+/** Identité visuelle de l'auteur, demandée une fois au démarrage. */
+export interface Attribution {
+  author: string
+  notice: string
+  logoDataUrl: string
+  licenseRef: string
+  intact: boolean
+  alert?: string
+}
+
+/** Réponses de l'assistant de premier démarrage, envoyées d'un seul bloc. */
+export interface SetupInput {
+  username: string; fullName: string; password: string
+  companyName: string; legalForm: string; taxId: string; rccm: string
+  address: string; city: string; country: string; phone: string; email: string
+  currency: string; currencySymbol: string; decimals: number
+  defaultTaxRate: number; pricesIncludeTax: boolean
+  seedCategories: boolean
+  autoBackup: boolean; backupsToKeep: number
+  theme: string
 }
 
 export interface Category {

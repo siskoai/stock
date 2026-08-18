@@ -58,7 +58,10 @@ export function messageOf(err: unknown): string {
 
 export const Session = {
   state: bind<[], T.State>('services.Session', 'State'),
-  setup: bind<[string, string, string], T.State>('services.Session', 'Setup'),
+  setup: bind<[T.SetupInput], T.State>('services.Session', 'Setup'),
+  brand: bind<[], T.Attribution>('services.Session', 'Brand'),
+  currencies: bind<[], T.CurrencyPreset[]>('services.Session', 'Currencies'),
+  defaultCategories: bind<[], string[]>('services.Session', 'DefaultCategoryNames'),
   login: bind<[string, string], T.State>('services.Session', 'Login'),
   logout: bind<[], T.State>('services.Session', 'Logout'),
   touch: bind<[], T.State>('services.Session', 'Touch'),

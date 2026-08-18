@@ -10,6 +10,7 @@ import { useSession } from '../lib/session'
 import { useToast } from '../lib/toast'
 import { formatDateTime, roleLabel } from '../lib/format'
 import { Alert, Badge, Field, Modal, TextInput } from './UI'
+import { Attribution } from './Attribution'
 
 const SCOPE_LABELS: Record<string, string> = {
   catalog: 'Catalogue et fiches articles',
@@ -129,9 +130,7 @@ export function Account({ onClose }: { onClose: () => void }) {
           </p>
         </div>
 
-        <div className="small muted">
-          Comptoir {state.appVersion} — {state.companyName}
-        </div>
+        <Attribution />
       </div>
     </Modal>
   )

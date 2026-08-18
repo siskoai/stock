@@ -18,6 +18,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 
 	"comptoir/internal/auth"
+	"comptoir/internal/brand"
 	"comptoir/internal/services"
 	"comptoir/internal/storage"
 )
@@ -38,6 +39,12 @@ func main() {
 }
 
 func run() error {
+	// L'identité visuelle de l'auteur est vérifiée avant tout le reste. Un
+	// échec n'empêche pas la boutique de travailler — priver un commerçant de
+	// sa caisse serait disproportionné — mais il est consigné, et l'interface
+	// le signale. Voir internal/brand et l'article 3 de la licence.
+	brandErr := brand.Verify()
+
 	dir, err := storage.DataDir()
 	if err != nil {
 		return err
@@ -52,6 +59,10 @@ func run() error {
 
 	settings := db.Settings()
 	sec := auth.New(db.Users, settings.SessionTimeoutMin)
+	logger := newLogger(dir)
+	if brandErr != nil {
+		logger.Error(brandErr.Error())
+	}
 	services.Version = version
 
 	var (
@@ -97,7 +108,7 @@ func run() error {
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 		},
-		Logger: newLogger(dir),
+		Logger: logger,
 	})
 }
 
