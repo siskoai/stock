@@ -66,14 +66,27 @@ shasum -a 256 -c SHA256SUMS.txt  # macOS
 #### Première ouverture sur macOS
 
 macOS refuse d'ouvrir une application téléchargée dont le développeur n'est pas
-enregistré auprès d'Apple. C'est une règle du système, pas un défaut du fichier.
-L'ouverture se débloque une seule fois, de deux façons :
+enregistré auprès d'Apple. Le message dit qu'Apple « n'a pas pu confirmer que
+l'application ne contenait pas de logiciel malveillant ». C'est une règle du
+système, pas un défaut du fichier, et elle se lève une seule fois.
 
-**Par l'interface.** Clic droit sur l'application, puis « Ouvrir », puis
-« Ouvrir » à nouveau dans la fenêtre d'avertissement. Un double-clic ordinaire
-suffit ensuite.
+**Sur macOS 15 (Sequoia) et suivants**, y compris macOS 26, le contournement par
+clic droit a été retiré par Apple. Il faut passer par les réglages :
 
-**Par le terminal**, si l'avertissement persiste :
+1. Double-cliquez sur l'application. Le refus s'affiche : fermez-le.
+2. Ouvrez **Réglages Système** puis **Confidentialité et sécurité**.
+3. Descendez jusqu'à la section **Sécurité**. Une ligne mentionne Comptoir.
+4. Cliquez sur **Ouvrir quand même**, puis authentifiez-vous.
+
+Cette ligne n'apparaît qu'après une tentative d'ouverture, et disparaît au bout
+d'une heure. Si vous ne la voyez pas, relancez l'application puis retournez dans
+les réglages.
+
+**Sur macOS 14 (Sonoma) et antérieurs** : clic droit sur l'application, puis
+« Ouvrir », puis « Ouvrir » à nouveau dans la fenêtre d'avertissement.
+
+**Par le terminal**, quelle que soit la version, si les étapes ci-dessus
+échouent :
 
 ```sh
 xattr -dr com.apple.quarantine /Applications/Comptoir.app
@@ -81,19 +94,17 @@ xattr -dr com.apple.quarantine /Applications/Comptoir.app
 
 Cette commande retire la marque de quarantaine posée par le navigateur au
 téléchargement. Ne l'appliquez qu'à une application dont vous connaissez la
-provenance, et après avoir vérifié son empreinte SHA-256 ci-dessus.
+provenance, et après avoir vérifié son empreinte SHA-256 ci-dessus. Adaptez le
+chemin si l'application n'est pas encore dans le dossier Applications.
 
-> Si macOS annonce que l'application est **endommagée**, c'est que le fichier a
-> réellement un problème : signalez-le, ce n'est pas le comportement attendu.
-> Le message normal pour une application non enregistrée parle d'un
-> « développeur non identifié ».
+> Si macOS annonce que l'application est **endommagée**, c'est autre chose : le
+> fichier a réellement un problème, signalez-le. Le message décrit ici, celui
+> qui parle de vérification impossible par Apple, est le comportement normal
+> d'une application non enregistrée.
 
 L'enregistrement auprès d'Apple, qui supprimerait cet avertissement, suppose un
 compte Apple Developer payant. Le workflow de publication le prend en charge dès
 que le certificat est fourni en secret du dépôt.
-
-L'application est un fichier unique. Il n'y a ni base de données à installer,
-ni service à démarrer, ni port à ouvrir.
 
 ### Phase 2. Choisir où vivent les données
 
