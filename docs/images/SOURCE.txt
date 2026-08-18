@@ -1,0 +1,13 @@
+Captures d'écran du guide d'utilisation.
+
+Elles sont prises sur l'application réelle, pilotée dans un navigateur sans
+affichage par tools/captures/capture.mjs, branchée sur le moteur Go et sur la
+boutique de démonstration que produit tools/demo.
+
+Aucune n'est reconstituée, retouchée ni recomposée. Les chiffres qu'elles
+montrent sont ceux que le logiciel calcule, et ils sont cohérents entre eux
+d'une capture à l'autre.
+
+Pour les régénérer :
+    make guide
+    make guide-suite

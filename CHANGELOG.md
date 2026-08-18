@@ -8,7 +8,27 @@ pas la liste des fichiers modifiés.
 
 ## [Non publié]
 
-Rien pour l'instant.
+### Ajouté
+
+- **Guide d'utilisation de 57 pages**, en PDF, de l'installation à la lecture
+  des rapports. Ses captures sont prises sur l'application réelle, pilotée dans
+  un navigateur sans affichage et branchée sur une boutique de démonstration
+  produite par le vrai moteur : les chiffres qu'elles montrent sont cohérents
+  entre eux, et rien n'y est reconstitué.
+- Outils de production du guide : `tools/demo` construit la boutique de
+  démonstration, `tools/captures` prend les captures et rend le PDF.
+- La variable d'environnement `COMPTOIR_DATA_DIR` désigne le dossier de données
+  à ouvrir. Elle sert à reprendre une sauvegarde, à tenir un second magasin sur
+  la même machine, ou à travailler sur un jeu de démonstration sans toucher à
+  celui du poste.
+
+### Corrigé
+
+- **L'espace entre un montant et son symbole était trop fine.** La typographie
+  française distingue l'espace fine insécable, qui sépare les milliers, de
+  l'espace insécable ordinaire, qui précède le symbole monétaire. Les deux
+  étaient confondues, et « 228 920 FCFA » se lisait collé, surtout dans les
+  grands chiffres du tableau de bord où le crénage est resserré.
 
 ## [1.1.0] (2026-08-18)
 

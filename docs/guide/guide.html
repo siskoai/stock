@@ -1,0 +1,1647 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Comptoir, guide d'utilisation</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ====================== COUVERTURE ====================== -->
+<section class="page couverture">
+  <div class="couv-haut">
+    <img class="couv-logo" src="../../internal/brand/sisko-logo.png" alt="SISKO">
+    <h1 class="couv-titre">Comptoir</h1>
+    <p class="couv-sous">
+      Guide d'utilisation. Tenir le stock, les ventes, les achats et
+      les comptes de votre boutique, sans connexion et sans abonnement.
+    </p>
+  </div>
+  <div>
+    <div class="couv-filet"></div>
+    <div class="couv-bas">
+      <div class="bloc"><strong>Version 1.1</strong>Août 2026</div>
+      <div class="bloc"><strong>SISKO</strong>Édité au Mali</div>
+      <div class="bloc"><strong>github.com/siskoai/stock</strong>Code source et versions</div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== SOMMAIRE ====================== -->
+<section class="page">
+  <h2>Ce que contient ce guide</h2>
+  <p class="chapeau">
+    Chaque partie se lit seule. Si vous installez Comptoir aujourd'hui, suivez
+    les parties 1 et 2, puis revenez au reste quand le besoin se présente.
+  </p>
+
+  <table>
+    <tr>
+      <td style="width:12mm"><strong>1</strong></td>
+      <td><strong>Installer et configurer</strong><br>
+        <span class="rien">Télécharger, ouvrir la première fois, répondre à l'assistant en sept étapes.</span></td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td><strong>Prendre en main</strong><br>
+        <span class="rien">L'écran principal, les trois rôles, ce que chacun voit.</span></td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td><strong>Remplir le catalogue</strong><br>
+        <span class="rien">Créer un article, importer une liste depuis un tableur, classer par catégories.</span></td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td><strong>Vendre</strong><br>
+        <span class="rien">Encaisser, scanner un code-barres, établir un devis, suivre les impayés, annuler.</span></td>
+    </tr>
+    <tr>
+      <td><strong>5</strong></td>
+      <td><strong>Acheter</strong><br>
+        <span class="rien">Enregistrer une réception, répartir les frais, laisser le coût moyen se calculer.</span></td>
+    </tr>
+    <tr>
+      <td><strong>6</strong></td>
+      <td><strong>Tenir le stock</strong><br>
+        <span class="rien">Défauts, retours, réparations, rebuts, inventaire, bons à faire signer.</span></td>
+    </tr>
+    <tr>
+      <td><strong>7</strong></td>
+      <td><strong>Clients, fournisseurs et charges</strong><br>
+        <span class="rien">Fiches, encours, relevés, dépenses d'exploitation.</span></td>
+    </tr>
+    <tr>
+      <td><strong>8</strong></td>
+      <td><strong>Lire ses chiffres</strong><br>
+        <span class="rien">Tableau de bord, évolution, compte de résultat, situation, statistiques, exports.</span></td>
+    </tr>
+    <tr>
+      <td><strong>9</strong></td>
+      <td><strong>L'équipe et la traçabilité</strong><br>
+        <span class="rien">Créer des comptes, choisir un rôle, relire le journal.</span></td>
+    </tr>
+    <tr>
+      <td><strong>10</strong></td>
+      <td><strong>Protéger ses données</strong><br>
+        <span class="rien">Sauvegardes, restauration, ce qu'il faut faire une fois par mois.</span></td>
+    </tr>
+    <tr>
+      <td><strong>11</strong></td>
+      <td><strong>Aide-mémoire</strong><br>
+        <span class="rien">Raccourcis, questions fréquentes, emplacements des fichiers.</span></td>
+    </tr>
+  </table>
+
+  <h3>Trois principes qui expliquent le reste</h3>
+  <p>
+    Comprendre ces trois règles évite la plupart des questions que l'on se pose
+    en utilisant le logiciel.
+  </p>
+
+  <div class="note">
+    <div class="titre">Rien ne bouge sans laisser de trace</div>
+    <p>
+      Aucune quantité en stock ne change sans qu'un mouvement daté et signé soit
+      écrit. C'est pour cela qu'on ne modifie pas un stock en éditant une fiche
+      article : on passe par une réception, une vente ou un ajustement
+      d'inventaire. Votre stock est ainsi toujours explicable, ligne par ligne.
+    </p>
+  </div>
+
+  <div class="note">
+    <div class="titre">Le coût d'un article n'est pas son dernier prix d'achat</div>
+    <p>
+      Comptoir retient un <strong>coût moyen pondéré</strong> : la moyenne de ce
+      que vous avez réellement payé pour ce qui est en rayon, frais de transport
+      compris. C'est ce chiffre qui sert à calculer vos marges, et il se met à
+      jour tout seul à chaque réception.
+    </p>
+  </div>
+
+  <div class="note">
+    <div class="titre">Chacun voit ce que son rôle autorise</div>
+    <p>
+      Un vendeur enregistre des ventes sans jamais voir un prix d'achat, une
+      marge ou une charge. Ce n'est pas un affichage masqué : le logiciel ne lui
+      envoie tout simplement pas ces chiffres.
+    </p>
+  </div>
+</section>
+
+<!-- ====================== PARTIE 1 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">1</div>
+  <h1 class="ouv-titre">Installer<br>et configurer</h1>
+  <p class="ouv-texte">
+    De l'exécutable téléchargé à la première vente enregistrée. Comptez dix
+    minutes, dont sept pour l'assistant.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>1.1</span>Choisir son fichier</div>
+    <div><span>1.2</span>Ouvrir la première fois</div>
+    <div><span>1.3</span>L'assistant en sept étapes</div>
+    <div><span>1.4</span>Où vivent vos données</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>1.1 Choisir son fichier</h2>
+  <p class="chapeau">
+    Comptoir est un fichier unique. Il n'y a ni base de données à installer, ni
+    service à démarrer, ni port à ouvrir.
+  </p>
+
+  <p>
+    Rendez-vous sur la page des versions publiées, à l'adresse
+    <code>github.com/siskoai/stock/releases</code>, et prenez le fichier qui
+    correspond à votre système.
+  </p>
+
+  <table>
+    <tr>
+      <th style="width:34mm">Système</th>
+      <th>Fichier</th>
+      <th style="width:52mm">Ce qu'il faut de plus</th>
+    </tr>
+    <tr>
+      <td><strong>Windows 10 ou 11</strong></td>
+      <td><code>comptoir-windows-amd64-installer.exe</code></td>
+      <td>Rien. WebView2 est déjà présent sur un Windows à jour ; sinon
+        l'installeur le propose.</td>
+    </tr>
+    <tr>
+      <td><strong>macOS 10.15 et suivants</strong></td>
+      <td><code>comptoir-macos-universal.zip</code></td>
+      <td>Voir la section 1.2. Fonctionne sur les Mac Intel comme sur les Mac
+        Apple Silicon.</td>
+    </tr>
+    <tr>
+      <td><strong>Linux</strong></td>
+      <td><code>comptoir-linux-amd64.tar.gz</code></td>
+      <td><code>libgtk-3-0</code> et <code>libwebkit2gtk-4.0-37</code>, présents
+        sur la plupart des distributions.</td>
+    </tr>
+  </table>
+
+  <h3>Vérifier que le fichier est intact</h3>
+  <p>
+    Chaque version publie un fichier <code>SHA256SUMS.txt</code> qui contient
+    l'empreinte de chaque exécutable. La comparer prend quelques secondes et
+    garantit que le téléchargement n'a pas été altéré.
+  </p>
+<pre><code>shasum -a 256 -c SHA256SUMS.txt   # macOS
+sha256sum -c SHA256SUMS.txt       # Linux</code></pre>
+
+  <h3>Sur Windows</h3>
+  <ol class="etapes">
+    <li><strong>Lancez l'installeur.</strong> Il affiche les conditions
+      d'utilisation, puis vous demande où installer le logiciel.</li>
+    <li><strong>Acceptez l'emplacement proposé</strong> sauf raison particulière,
+      puis laissez l'installation se dérouler.</li>
+    <li><strong>Ouvrez Comptoir</strong> depuis le raccourci créé sur le bureau
+      ou dans le menu Démarrer.</li>
+  </ol>
+
+  <div class="note">
+    <div class="titre">La désinstallation ne touche pas vos données</div>
+    <p>
+      Retirer Comptoir de Windows supprime le programme, jamais vos articles,
+      vos ventes ni vos sauvegardes. Ils restent dans
+      <code>%APPDATA%\Comptoir</code>, prêts à être retrouvés par une
+      réinstallation ou par une version plus récente.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>1.2 Ouvrir la première fois</h2>
+  <p class="chapeau">
+    Sur macOS, le système affiche un avertissement au premier lancement d'une
+    application téléchargée. Il se lève une seule fois.
+  </p>
+
+  <p>
+    Le message dit qu'Apple <em>n'a pas pu confirmer que l'application ne
+    contenait pas de logiciel malveillant</em>. C'est le comportement normal
+    pour tout logiciel dont l'éditeur n'est pas enregistré auprès d'Apple, un
+    enregistrement payant. Le fichier n'a rien d'anormal, et vous venez d'en
+    vérifier l'empreinte.
+  </p>
+
+  <h3>macOS 15 et suivants, y compris macOS 26</h3>
+  <p>
+    Apple a retiré le contournement par clic droit à partir de macOS 15. Le
+    déblocage passe désormais par les réglages du système.
+  </p>
+  <ol class="etapes">
+    <li><strong>Double-cliquez sur Comptoir</strong>, puis fermez le message de
+      refus qui s'affiche.</li>
+    <li><strong>Ouvrez Réglages Système</strong>, rubrique
+      <em>Confidentialité et sécurité</em>.</li>
+    <li><strong>Descendez jusqu'à la section Sécurité.</strong> Une ligne
+      mentionne Comptoir.</li>
+    <li><strong>Cliquez sur « Ouvrir quand même »</strong>, puis
+      authentifiez-vous.</li>
+  </ol>
+
+  <div class="note attention">
+    <div class="titre">Cette ligne est éphémère</div>
+    <p>
+      Elle n'apparaît qu'après une tentative d'ouverture, et disparaît au bout
+      d'une heure. Si vous ne la voyez pas, relancez l'application puis
+      retournez dans les réglages.
+    </p>
+  </div>
+
+  <h3>macOS 14 et antérieurs</h3>
+  <p>
+    Clic droit sur l'application, puis <em>Ouvrir</em>, puis <em>Ouvrir</em> à
+    nouveau dans la fenêtre d'avertissement.
+  </p>
+
+  <h3>En dernier recours, quelle que soit la version</h3>
+<pre><code>xattr -dr com.apple.quarantine /Applications/comptoir.app</code></pre>
+  <p>
+    Cette commande retire la marque que le navigateur a posée au téléchargement.
+    Ne l'appliquez qu'à un fichier dont vous connaissez la provenance.
+  </p>
+
+  <div class="note regle">
+    <div class="titre">Un message différent, un problème différent</div>
+    <p>
+      Si macOS annonce que l'application est <strong>endommagée</strong>, ce
+      n'est pas le même cas. Le fichier a réellement un défaut :
+      retéléchargez-le, et signalez-le si le problème persiste.
+    </p>
+  </div>
+</section>
+<section class="page">
+  <h2>1.3 L'assistant en sept étapes</h2>
+  <p class="chapeau">
+    Il s'ouvre au tout premier lancement et ne se refait pas. Rien n'est
+    enregistré avant la dernière étape : vous pouvez revenir en arrière autant
+    que vous voulez, ou fermer l'application sans laisser un poste à moitié
+    configuré.
+  </p>
+
+  <figure>
+    <img src="../images/01-connexion.png" alt="Écran de connexion">
+    <figcaption>
+      <b>L'écran de connexion</b>, tel qu'il apparaît une fois la configuration
+      terminée. Au tout premier lancement, c'est l'assistant qui s'affiche à sa
+      place.
+    </figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:34mm">Étape</th><th>Ce qu'elle demande</th></tr>
+    <tr><td><strong>1. Bienvenue</strong></td>
+      <td>Rien à saisir. L'écran rappelle où vivront vos données et ce que fait
+        le logiciel.</td></tr>
+    <tr><td><strong>2. Compte</strong></td>
+      <td>Votre nom, un identifiant court, un mot de passe. Ce premier compte est
+        administrateur : lui seul pourra créer les suivants.</td></tr>
+    <tr><td><strong>3. Entreprise</strong></td>
+      <td>Nom commercial, forme juridique, NIF, RCCM, adresse et contact. Tout
+        cela s'imprimera en tête de vos factures.</td></tr>
+    <tr><td><strong>4. Monnaie et taxes</strong></td>
+      <td>La devise, le nombre de décimales, le taux de taxe par défaut, et si
+        vos prix sont affichés hors taxes ou taxe comprise.</td></tr>
+    <tr><td><strong>5. Catalogue</strong></td>
+      <td>Créer ou non un jeu de catégories de départ, que vous pourrez
+        renommer.</td></tr>
+    <tr><td><strong>6. Sauvegardes</strong></td>
+      <td>Sauvegarde automatique quotidienne, nombre d'archives conservées,
+        apparence claire ou sombre.</td></tr>
+    <tr><td><strong>7. Récapitulatif</strong></td>
+      <td>Une relecture, puis l'ouverture de la boutique.</td></tr>
+  </table>
+
+  <div class="note regle">
+    <div class="titre">Notez le mot de passe avant de continuer</div>
+    <p>
+      Il n'est enregistré nulle part en clair et ne peut pas être retrouvé. Si
+      vous le perdez et qu'aucun autre administrateur n'existe, il n'y a aucun
+      moyen de rouvrir la boutique.
+    </p>
+  </div>
+
+  <h3>Le taux de taxe par défaut</h3>
+  <p>
+    Il s'applique à toute ligne de facture dont le taux n'est pas précisé. Vous
+    pourrez toujours saisir <code>0</code> sur une ligne pour une vente
+    exonérée : Comptoir fait la différence entre un taux nul explicite et un
+    taux non renseigné.
+  </p>
+
+  <h3>Hors taxes ou taxe comprise</h3>
+  <p>
+    Si vos étiquettes affichent des prix taxe comprise, cochez la case
+    correspondante. Comptoir extraira alors la base hors taxes du prix affiché,
+    au lieu d'y ajouter la taxe. Le montant que paie le client sera exactement
+    celui de l'étiquette.
+  </p>
+</section>
+
+<section class="page">
+  <h2>1.4 Où vivent vos données</h2>
+  <p class="chapeau">
+    Elles restent sur votre poste, dans des fichiers lisibles, et ne partent
+    nulle part. Comptoir n'ouvre aucune connexion réseau.
+  </p>
+
+  <table>
+    <tr><th style="width:34mm">Système</th><th>Emplacement</th></tr>
+    <tr><td>Windows</td><td><code>%APPDATA%\Comptoir</code></td></tr>
+    <tr><td>macOS</td><td><code>~/Library/Application Support/Comptoir</code></td></tr>
+    <tr><td>Linux</td><td><code>~/.config/Comptoir</code></td></tr>
+  </table>
+
+  <p>Ce dossier contient trois répertoires :</p>
+  <ul>
+    <li><code>data/</code> : vos articles, ventes, clients, mouvements et
+      paramètres, en fichiers JSON lisibles dans n'importe quel éditeur de
+      texte.</li>
+    <li><code>backups/</code> : les archives de sauvegarde.</li>
+    <li><code>exports/</code> : les documents que vous y déposez depuis
+      l'application.</li>
+  </ul>
+
+  <h3>Travailler depuis une clé USB</h3>
+  <p>
+    Placez un fichier vide nommé <code>portable.txt</code> à côté de
+    l'exécutable. Les données vivront alors dans un dossier <code>data</code>
+    voisin, et suivront la clé de poste en poste.
+  </p>
+
+  <div class="note">
+    <div class="titre">Vos données vous survivent au logiciel</div>
+    <p>
+      Le format est ouvert et documenté. Même sans Comptoir, un tableur ou un
+      éditeur de texte permet de retrouver l'intégralité de vos ventes. C'est
+      un choix de conception, inscrit à l'article 2 de la licence.
+    </p>
+  </div>
+
+  <div class="note attention">
+    <div class="titre">Le revers de cette lisibilité</div>
+    <p>
+      Quiconque a accès à ce disque lit ces fichiers. Si le poste est partagé ou
+      transportable, activez le chiffrement du disque fourni par votre système :
+      BitLocker sous Windows, FileVault sous macOS, LUKS sous Linux.
+    </p>
+  </div>
+</section>
+
+<!-- ====================== PARTIE 2 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">2</div>
+  <h1 class="ouv-titre">Prendre<br>en main</h1>
+  <p class="ouv-texte">
+    Un écran, une barre latérale, onze pages. Ce que vous voyez dépend de votre
+    rôle.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>2.1</span>L'écran principal</div>
+    <div><span>2.2</span>Les trois rôles</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>2.1 L'écran principal</h2>
+  <p class="chapeau">
+    La barre latérale ne montre que les pages auxquelles votre rôle donne accès.
+    Deux pastilles y attirent l'œil sur ce qui demande une action.
+  </p>
+
+  <figure>
+    <img src="../images/02-tableau-de-bord.png" alt="Tableau de bord">
+    <figcaption>
+      <b>Le tableau de bord</b> à l'ouverture. En haut, votre logo et
+      l'encaissé du jour. En dessous, les indicateurs du mois, puis la courbe
+      des trente derniers jours.
+    </figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:44mm">Repère</th><th>Ce qu'il indique</th></tr>
+    <tr><td><strong>Pastille sur Ventes</strong></td>
+      <td>Le nombre de factures dont le solde n'est pas réglé. Elle disparaît
+        quand tout est encaissé.</td></tr>
+    <tr><td><strong>Pastille sur Articles</strong></td>
+      <td>Le nombre d'articles au seuil d'alerte ou en rupture. C'est votre
+        liste de réapprovisionnement.</td></tr>
+    <tr><td><strong>Bandeau du haut</strong></td>
+      <td>Votre logo et le nom de votre boutique, tels qu'ils partiront sur vos
+        factures.</td></tr>
+    <tr><td><strong>Votre nom, en bas</strong></td>
+      <td>Ouvre votre fiche : rôle, droits, changement de mot de passe. Le
+        bouton voisin ferme la session.</td></tr>
+  </table>
+
+  <h3>Se déplacer au clavier</h3>
+  <p>
+    Les écrans de saisie sont prévus pour ne pas quitter le clavier :
+    <span class="raccourci">↑</span> <span class="raccourci">↓</span> parcourent
+    les résultats de recherche, <span class="raccourci">Entrée</span> ajoute
+    l'article sélectionné, <span class="raccourci">Échap</span> efface la
+    recherche puis ferme la fenêtre.
+  </p>
+
+  <div class="note">
+    <div class="titre">La session se ferme seule</div>
+    <p>
+      Après une heure sans activité par défaut, réglable dans les paramètres.
+      C'est ce qui protège la caisse quand on s'absente du comptoir.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>2.2 Les trois rôles</h2>
+  <p class="chapeau">
+    Le rôle détermine ce que la personne peut faire, et surtout ce qu'elle peut
+    voir. Le filtrage est appliqué par le moteur, pas par l'affichage.
+  </p>
+
+  <table>
+    <tr>
+      <th>Ce qui est permis</th>
+      <th class="num" style="width:26mm">Administrateur</th>
+      <th class="num" style="width:20mm">Gérant</th>
+      <th class="num" style="width:20mm">Vendeur</th>
+    </tr>
+    <tr><td>Consulter le catalogue et le stock</td><td class="num">oui</td><td class="num">oui</td><td class="num">oui</td></tr>
+    <tr><td>Enregistrer des ventes</td><td class="num">oui</td><td class="num">oui</td><td class="num">oui</td></tr>
+    <tr><td>Créer un client pendant la vente</td><td class="num">oui</td><td class="num">oui</td><td class="num">oui</td></tr>
+    <tr><td>Modifier articles et catégories</td><td class="num">oui</td><td class="num">oui</td><td class="num rien">non</td></tr>
+    <tr><td>Mouvements de stock et inventaire</td><td class="num">oui</td><td class="num">oui</td><td class="num rien">non</td></tr>
+    <tr><td>Réceptions fournisseur</td><td class="num">oui</td><td class="num">oui</td><td class="num rien">non</td></tr>
+    <tr><td>Charges d'exploitation</td><td class="num">oui</td><td class="num">oui</td><td class="num rien">non</td></tr>
+    <tr><td>Prix d'achat, marges, rapports financiers</td><td class="num">oui</td><td class="num">oui</td><td class="num rien">non</td></tr>
+    <tr><td>Sauvegardes et restauration</td><td class="num">oui</td><td class="num">oui</td><td class="num rien">non</td></tr>
+    <tr><td>Suppressions définitives</td><td class="num">oui</td><td class="num">oui</td><td class="num rien">non</td></tr>
+    <tr><td>Comptes et journal d'audit</td><td class="num">oui</td><td class="num rien">non</td><td class="num rien">non</td></tr>
+    <tr><td>Paramètres de l'application</td><td class="num">oui</td><td class="num rien">non</td><td class="num rien">non</td></tr>
+  </table>
+
+  <h3>Ce qu'un vendeur ne voit jamais</h3>
+  <p>
+    Ni prix d'achat, ni marge, ni valeur du stock, ni charges. Sur son écran, la
+    colonne n'est pas grisée : la donnée ne lui est pas transmise. Il voit en
+    revanche tout ce dont il a besoin pour vendre, y compris le montant total de
+    ses factures et le reste dû de ses clients.
+  </p>
+
+  <div class="note">
+    <div class="titre">Deux garde-fous</div>
+    <p>
+      On ne peut pas désactiver son propre compte, ni retirer son rôle au
+      dernier administrateur actif. Personne ne peut donc se verrouiller dehors
+      par inadvertance.
+    </p>
+  </div>
+</section>
+<!-- ====================== PARTIE 3 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">3</div>
+  <h1 class="ouv-titre">Remplir<br>le catalogue</h1>
+  <p class="ouv-texte">
+    Article par article, ou d'un seul coup depuis le tableur que vous tenez
+    déjà.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>3.1</span>Créer un article</div>
+    <div><span>3.2</span>Importer une liste</div>
+    <div><span>3.3</span>Classer par catégories</div>
+    <div><span>3.4</span>Archiver plutôt que supprimer</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>3.1 Créer un article</h2>
+  <p class="chapeau">
+    Depuis <em>Articles</em>, bouton <em>Nouvel article</em>. Seules la
+    désignation et le prix de vente sont obligatoires.
+  </p>
+
+  <figure>
+    <img src="../images/17-fiche-article.png" alt="Fiche article">
+    <figcaption>
+      <b>La fiche article.</b> Le taux de marge se met à jour pendant la saisie
+      des prix : c'est le chiffre qui décide de la rentabilité de la ligne.
+    </figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:44mm">Champ</th><th>À quoi il sert</th></tr>
+    <tr><td><strong>Référence</strong></td>
+      <td>Votre code interne. Laissée vide, elle est générée à partir de la
+        désignation.</td></tr>
+    <tr><td><strong>Code-barres</strong></td>
+      <td>Permet de retrouver l'article d'un coup de douchette au comptoir.</td></tr>
+    <tr><td><strong>Coût d'achat</strong></td>
+      <td>Le prix de revient de départ. Il sera ensuite recalculé tout seul à
+        chaque réception.</td></tr>
+    <tr><td><strong>Seuil d'alerte</strong></td>
+      <td>En dessous de ce nombre, l'article remonte dans la liste de
+        réapprovisionnement. Zéro désactive l'alerte.</td></tr>
+    <tr><td><strong>Stock initial</strong></td>
+      <td>À la création seulement. Il produit un mouvement d'inventaire, pour
+        que l'historique soit complet dès le premier jour.</td></tr>
+    <tr><td><strong>Suivi par numéro de série</strong></td>
+      <td>Pour les articles de valeur. Les numéros se saisissent sur la ligne de
+        facture et s'impriment sur le document.</td></tr>
+  </table>
+
+  <div class="note regle">
+    <div class="titre">On ne modifie pas un stock depuis la fiche</div>
+    <p>
+      La quantité n'apparaît pas en modification, et c'est volontaire. Un stock
+      change par une réception, une vente, un retour ou un ajustement
+      d'inventaire. C'est ce qui rend votre inventaire vérifiable, et vos écarts
+      explicables.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>3.2 Importer une liste</h2>
+  <p class="chapeau">
+    Reprendre trois cents articles à la main, personne ne le fait. Exportez
+    votre liste en CSV depuis Excel ou LibreOffice, et laissez Comptoir la lire.
+  </p>
+
+  <figure>
+    <img src="../images/18-import-catalogue.png" alt="Import de catalogue">
+    <figcaption>
+      <b>L'écran d'import</b> avant le choix du fichier. Un modèle vierge se
+      télécharge depuis le même écran si vous partez de zéro.
+    </figcaption>
+  </figure>
+
+  <h3>Les colonnes reconnues</h3>
+  <p>
+    Elles sont identifiées par leur intitulé, dans n'importe quel ordre. Les
+    colonnes que Comptoir ne comprend pas sont ignorées, et il vous dit
+    lesquelles.
+  </p>
+
+  <div class="deux-colonnes">
+    <p class="serre"><strong>Désignation</strong> <span class="rien">obligatoire</span></p>
+    <p class="serre">Référence, Réf., SKU, Code</p>
+    <p class="serre">Catégorie, Famille, Rayon</p>
+    <p class="serre">Prix de vente, Prix, Tarif, PV</p>
+    <p class="serre">Coût d'achat, Prix d'achat, PA</p>
+    <p class="serre">Stock, Quantité, Qté</p>
+    <p class="serre">Seuil, Seuil d'alerte, Stock mini</p>
+    <p class="serre">Marque, Modèle, Unité</p>
+    <p class="serre">Code-barres, EAN, Gencod</p>
+    <p class="serre">Emplacement, Garantie</p>
+  </div>
+
+  <h3>Ce qui se passe ensuite</h3>
+  <ol class="etapes">
+    <li><strong>Comptoir analyse le fichier</strong> sans rien écrire. Le
+      séparateur est deviné, qu'il s'agisse du point-virgule, de la virgule ou
+      de la tabulation.</li>
+    <li><strong>Un aperçu ligne par ligne s'affiche</strong> : ce qui sera créé,
+      ce qui sera mis à jour, et ce qui sera écarté, avec le motif.</li>
+    <li><strong>Vous confirmez, ou vous changez de fichier.</strong> Rien n'est
+      enregistré avant ce clic.</li>
+  </ol>
+
+  <div class="note">
+    <div class="titre">Un import ne touche jamais un stock existant</div>
+    <p>
+      Si la référence existe déjà, la fiche est mise à jour : désignation, prix
+      de vente, catégorie, seuil. Mais ni la quantité en stock, ni le coût
+      moyen. Ces deux valeurs découlent des mouvements enregistrés, pas d'un
+      fichier.
+    </p>
+  </div>
+
+  <div class="note attention">
+    <div class="titre">Deux fois la même référence</div>
+    <p>
+      Seule la première ligne est retenue. Les suivantes sont écartées, avec la
+      mention du numéro de ligne en conflit, pour que vous puissiez corriger
+      votre fichier.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>3.3 Classer par catégories</h2>
+  <p class="chapeau">
+    Les catégories servent à ranger le catalogue, mais surtout à lire vos ventes
+    par famille de produits.
+  </p>
+
+  <figure>
+    <img src="../images/06-categories.png" alt="Catégories">
+    <figcaption>
+      <b>Les catégories</b>, avec le nombre d'articles, les unités en stock et
+      la valeur immobilisée dans chacune.
+    </figcaption>
+  </figure>
+
+  <p>
+    Chaque catégorie porte une couleur, qui se retrouve sur les badges du
+    catalogue. Une catégorie contenant des articles ne peut pas être supprimée :
+    déplacez d'abord ses articles.
+  </p>
+
+  <h3>3.4 Archiver plutôt que supprimer</h3>
+  <p>
+    Un article que vous ne vendez plus se <strong>archive</strong> : il
+    disparaît des écrans de vente, mais son historique reste intact et ses
+    ventes passées continuent de compter dans vos rapports.
+  </p>
+  <p>
+    La suppression définitive n'est possible que si l'article n'a aucun stock et
+    n'apparaît dans aucun mouvement. Autrement dit, une fiche créée par erreur
+    se supprime, un article qui a vécu s'archive.
+  </p>
+</section>
+
+<!-- ====================== PARTIE 4 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">4</div>
+  <h1 class="ouv-titre">Vendre</h1>
+  <p class="ouv-texte">
+    Le geste le plus répété du logiciel. Il est pensé pour se faire au clavier,
+    sans lâcher la douchette.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>4.1</span>Enregistrer une vente</div>
+    <div><span>4.2</span>Scanner un code-barres</div>
+    <div><span>4.3</span>Établir un devis</div>
+    <div><span>4.4</span>Encaisser un règlement</div>
+    <div><span>4.5</span>Annuler une facture</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>4.1 Enregistrer une vente</h2>
+  <p class="chapeau">
+    Depuis <em>Ventes</em>, bouton <em>Nouvelle vente</em>. Le stock est déduit
+    à l'enregistrement, et la facture devient consultable et imprimable.
+  </p>
+
+  <figure>
+    <img src="../images/13-nouvelle-vente-vide.png" alt="Nouvelle vente">
+    <figcaption>
+      <b>L'écran de vente à l'ouverture.</b> Le curseur est déjà dans le champ
+      de recherche : vous pouvez scanner ou taper immédiatement.
+    </figcaption>
+  </figure>
+
+  <ol class="etapes">
+    <li><strong>Cherchez l'article</strong> par sa désignation, sa référence ou
+      son code-barres.</li>
+    <li><strong>Ajoutez-le</strong> avec <span class="raccourci">Entrée</span>
+      ou d'un clic. Ajouter deux fois le même article incrémente sa quantité.</li>
+    <li><strong>Ajustez si besoin</strong> la quantité, le prix unitaire, une
+      remise de ligne ou le taux de taxe.</li>
+    <li><strong>Renseignez le client</strong>, ou laissez vide pour une vente au
+      comptoir.</li>
+    <li><strong>Saisissez le montant reçu.</strong> Le champ suit le total :
+      pour un règlement comptant intégral, il n'y a rien à taper.</li>
+    <li><strong>Encaissez.</strong> Le bouton affiche le montant, pour éviter
+      l'erreur de dernière seconde.</li>
+  </ol>
+
+  <figure>
+    <img src="../images/15-vente-remplie.png" alt="Vente en cours de saisie">
+    <figcaption>
+      <b>Une vente de deux lignes.</b> À droite, les totaux se recalculent à
+      chaque frappe, et le montant à rendre s'affiche dès que le montant reçu
+      dépasse le net à payer.
+    </figcaption>
+  </figure>
+</section>
+<section class="page">
+  <h2>4.2 Scanner un code-barres</h2>
+  <p class="chapeau">
+    Une douchette se comporte comme un clavier très rapide qui termine par la
+    touche Entrée. Il n'y a rien à configurer.
+  </p>
+
+  <figure>
+    <img src="../images/14-recherche-article.png" alt="Recherche d'article">
+    <figcaption>
+      <b>La recherche pendant la frappe.</b> Le stock disponible s'affiche à
+      droite de chaque résultat : on voit tout de suite si l'article suit.
+    </figcaption>
+  </figure>
+
+  <p>
+    Placez le curseur dans le champ de recherche et scannez. L'article s'ajoute
+    seul, et le champ reste actif pour le suivant. Vous pouvez enchaîner un
+    panier entier sans toucher la souris.
+  </p>
+
+  <div class="note">
+    <div class="titre">Un détail qui compte</div>
+    <p>
+      La douchette envoie la touche Entrée souvent avant que la recherche ait
+      répondu. Comptoir retient alors la validation et l'exécute dès l'arrivée
+      des résultats, en donnant la priorité à la correspondance exacte du
+      code-barres. Sans cela, un scan sur deux ne ferait rien.
+    </p>
+  </div>
+
+  <h3>Les numéros de série</h3>
+  <p>
+    Si l'article est suivi à l'unité, un champ apparaît sous la ligne. Saisissez
+    autant de numéros que d'unités vendues, séparés par des virgules. Ils
+    s'impriment sur la facture et deviennent cherchables : taper un numéro de
+    série dans la recherche des ventes retrouve la facture correspondante.
+  </p>
+
+  <h2 style="margin-top:12mm">4.3 Établir un devis</h2>
+  <p class="chapeau">
+    Cochez <em>Enregistrer comme devis</em> en bas de l'écran de vente. Rien
+    n'est déduit du stock, et aucun chiffre d'affaires n'est comptabilisé.
+  </p>
+
+  <p>
+    Le devis porte les mêmes montants qu'une facture, taxes comprises : un devis
+    sans taxe n'engagerait à rien. Il apparaît dans la liste des ventes avec le
+    statut <em>Devis</em>, et s'imprime pour être remis au client.
+  </p>
+
+  <p>
+    Quand le client confirme, ouvrez le devis et cliquez sur <em>Émettre la
+    facture</em>. Le stock est alors déduit et la vente devient effective.
+  </p>
+
+  <div class="note">
+    <div class="titre">Les prix tiennent, les coûts se réajustent</div>
+    <p>
+      À l'émission, les prix de vente restent ceux du devis : c'est un
+      engagement pris envers le client. En revanche, le coût des marchandises
+      est réaligné sur le coût moyen du jour, pour que votre marge reflète ce
+      que la marchandise a réellement coûté.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>4.4 Encaisser un règlement</h2>
+  <p class="chapeau">
+    Une facture peut être réglée en plusieurs fois. Le solde et le statut se
+    mettent à jour à chaque versement.
+  </p>
+
+  <figure>
+    <img src="../images/16-detail-facture.png" alt="Détail d'une facture">
+    <figcaption>
+      <b>Le détail d'une facture.</b> Les boutons du bas dépendent de son état :
+      un devis s'émet ou se supprime, une facture impayée s'encaisse, une
+      facture émise s'annule.
+    </figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:44mm">Statut</th><th>Ce qu'il signifie</th></tr>
+    <tr><td><strong>Devis</strong></td><td>Aucun stock engagé, aucun chiffre d'affaires.</td></tr>
+    <tr><td><strong>Émise</strong></td><td>Stock déduit, rien d'encaissé.</td></tr>
+    <tr><td><strong>Partiellement réglée</strong></td><td>Un acompte a été versé, un solde reste dû.</td></tr>
+    <tr><td><strong>Réglée</strong></td><td>Le solde est à zéro.</td></tr>
+    <tr><td><strong>Annulée</strong></td><td>Marchandise remise en stock, document conservé.</td></tr>
+  </table>
+
+  <p>
+    Le bouton <em>Impayées</em> de la liste, et la pastille de la barre latérale,
+    donnent à tout moment la liste de ce qui reste à encaisser.
+  </p>
+
+  <h2 style="margin-top:12mm">4.5 Annuler une facture</h2>
+  <p class="chapeau">
+    Une facture émise ne se supprime jamais. Elle s'annule, et le document reste.
+  </p>
+
+  <p>
+    L'annulation demande un motif, obligatoire, qui est inscrit sur le document
+    et dans le journal d'audit. La marchandise revient en stock, et la facture
+    conserve son numéro avec le statut <em>Annulée</em>.
+  </p>
+
+  <div class="note regle">
+    <div class="titre">Pourquoi conserver une facture annulée</div>
+    <p>
+      Une numérotation de factures ne doit comporter aucun trou. Un numéro
+      manquant est ce qu'un contrôle regarde en premier. En conservant le
+      document annulé, votre séquence reste continue et justifiable.
+    </p>
+  </div>
+
+  <div class="note attention">
+    <div class="titre">Si un acompte avait été encaissé</div>
+    <p>
+      Il n'est pas effacé en silence : la facture affiche un montant
+      <em>à rembourser</em>, visible dans la liste. Le remboursement lui-même se
+      fait hors du logiciel, mais vous ne l'oublierez pas.
+    </p>
+  </div>
+</section>
+
+<!-- ====================== PARTIE 5 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">5</div>
+  <h1 class="ouv-titre">Acheter</h1>
+  <p class="ouv-texte">
+    C'est le seul écran qui fait entrer de la marchandise et qui recalcule vos
+    coûts de revient.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>5.1</span>Enregistrer une réception</div>
+    <div><span>5.2</span>Les frais annexes</div>
+    <div><span>5.3</span>Le coût moyen pondéré</div>
+    <div><span>5.4</span>Annuler un bon d'entrée</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>5.1 Enregistrer une réception</h2>
+  <p class="chapeau">
+    Depuis <em>Achats</em>, bouton <em>Nouvelle réception</em>. À enregistrer au
+    moment où la marchandise arrive, pas quand la facture fournisseur est payée.
+  </p>
+
+  <figure>
+    <img src="../images/04-achats.png" alt="Liste des réceptions">
+    <figcaption>
+      <b>Les bons d'entrée</b>, du plus récent au plus ancien, avec le montant
+      des frais annexes de chacun.
+    </figcaption>
+  </figure>
+
+  <ol class="etapes">
+    <li><strong>Choisissez le fournisseur</strong> et reportez sa référence de
+      facture ou de bon de livraison.</li>
+    <li><strong>Ajoutez les lignes</strong> : article, quantité reçue, prix
+      d'achat unitaire.</li>
+    <li><strong>Saisissez les frais annexes</strong> : transport, douane,
+      manutention.</li>
+    <li><strong>Enregistrez.</strong> Le stock augmente et les coûts de revient
+      sont recalculés.</li>
+  </ol>
+
+  <div class="note">
+    <div class="titre">Un même article sur plusieurs lignes</div>
+    <p>
+      C'est permis, et les quantités s'additionnent correctement. Utile quand un
+      fournisseur facture deux lots du même article à des prix différents.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>5.2 Les frais annexes</h2>
+  <p class="chapeau">
+    Le transport et la douane font partie de ce que la marchandise vous a coûté.
+    Les oublier revient à surestimer vos bénéfices.
+  </p>
+
+  <p>
+    Saisissez le montant global des frais de la réception. Comptoir le répartit
+    sur les lignes <strong>au prorata de leur valeur</strong>, puis l'intègre au
+    coût de revient de chaque article.
+  </p>
+
+  <table>
+    <tr><th>Ligne</th><th class="num">Valeur</th><th class="num">Quote-part</th><th class="num">Coût de revient</th></tr>
+    <tr><td>Article A, 2 unités à 10 000</td><td class="num">20 000</td><td class="num">2 000</td><td class="num"><strong>11 000</strong> l'unité</td></tr>
+    <tr><td>Article B, 1 unité à 10 000</td><td class="num">10 000</td><td class="num">1 000</td><td class="num"><strong>11 000</strong> l'unité</td></tr>
+    <tr><td colspan="2"><strong>Frais de transport</strong></td><td class="num"><strong>3 000</strong></td><td></td></tr>
+  </table>
+
+  <h2 style="margin-top:12mm">5.3 Le coût moyen pondéré</h2>
+  <p class="chapeau">
+    Le coût d'un article n'est pas le prix de son dernier achat, mais la moyenne
+    de ce que vous avez payé pour ce qui est en rayon.
+  </p>
+
+<pre><code>nouveau coût = (ancienne quantité × ancien coût + reçu × coût de revient)
+               ÷ (ancienne quantité + reçu)</code></pre>
+
+  <p>
+    Exemple : vous avez 6 portables achetés 320 000 pièce. Vous en recevez 4 à
+    345 000 frais compris. Le coût moyen devient
+    <strong>330 000</strong>, et c'est ce chiffre qui servira à calculer la
+    marge de vos prochaines ventes.
+  </p>
+
+  <h3>La marge cible</h3>
+  <p>
+    Si vous appliquez une marge fixe, saisissez-la à la réception. Comptoir
+    recalcule alors les prix de vente des articles reçus, coût de revient
+    compris. Laissée à zéro, vos prix de vente ne bougent pas.
+  </p>
+
+  <h2 style="margin-top:12mm">5.4 Annuler un bon d'entrée</h2>
+  <p>
+    L'annulation retire la marchandise du stock. Elle est <strong>refusée</strong>
+    si une partie a déjà été vendue, car elle retirerait un stock qui n'existe
+    plus.
+  </p>
+
+  <div class="note attention">
+    <div class="titre">Le coût moyen ne revient pas en arrière</div>
+    <p>
+      Il refléterait un historique d'achats qui n'existe plus. Il se réaligne
+      naturellement à la réception suivante. C'est une limite assumée, décrite
+      dans la documentation comptable du logiciel.
+    </p>
+  </div>
+</section>
+<!-- ====================== PARTIE 6 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">6</div>
+  <h1 class="ouv-titre">Tenir<br>le stock</h1>
+  <p class="ouv-texte">
+    Tout ce qui arrive à la marchandise entre son entrée et sa sortie : casse,
+    retours, réparations, comptages.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>6.1</span>Les six opérations</div>
+    <div><span>6.2</span>Corriger un inventaire</div>
+    <div><span>6.3</span>Le journal</div>
+    <div><span>6.4</span>Les bons à faire signer</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>6.1 Les six opérations</h2>
+  <p class="chapeau">
+    Depuis <em>Mouvements</em>. Chacune laisse une trace datée, signée, et
+    consultable pour toujours.
+  </p>
+
+  <figure>
+    <img src="../images/07-mouvements.png" alt="Journal des mouvements">
+    <figcaption>
+      <b>Le journal des mouvements.</b> Les six opérations sont accessibles en
+      haut, le journal complet en dessous, filtrable par type et par période.
+    </figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:46mm">Opération</th><th>Effet sur le stock</th></tr>
+    <tr><td><strong>Déclarer défectueux</strong></td>
+      <td>Sort du stock vendable vers le stock défectueux. Le total ne change
+        pas, sa composition si.</td></tr>
+    <tr><td><strong>Remettre en vente</strong></td>
+      <td>Un article défectueux réparé retourne au stock vendable.</td></tr>
+    <tr><td><strong>Mettre au rebut</strong></td>
+      <td>L'article quitte définitivement le stock. Sa valeur devient une perte,
+        reprise au compte de résultat.</td></tr>
+    <tr><td><strong>Retour client</strong></td>
+      <td>La marchandise revient. Selon son état, elle rejoint le stock vendable
+        ou le stock défectueux.</td></tr>
+    <tr><td><strong>Retour fournisseur</strong></td>
+      <td>La marchandise repart. Le stock défectueux est prélevé en premier.</td></tr>
+    <tr><td><strong>Corriger l'inventaire</strong></td>
+      <td>Aligne le stock théorique sur le comptage physique. L'écart est tracé.</td></tr>
+  </table>
+
+  <figure>
+    <img src="../images/19-operation-stock.png" alt="Déclarer un article défectueux">
+    <figcaption>
+      <b>Une opération de stock.</b> L'article se cherche comme à la vente, et
+      le motif est obligatoire pour tout ce qui retire de la valeur.
+    </figcaption>
+  </figure>
+
+  <div class="note">
+    <div class="titre">Le stock défectueux n'est jamais vendable</div>
+    <p>
+      Il est compté à part, apparaît séparément sur les écrans et dans les
+      rapports, et ne peut pas être ajouté à une facture. Il ne quitte cet état
+      que par une réparation, un retour fournisseur ou un rebut.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>6.2 Corriger un inventaire</h2>
+  <p class="chapeau">
+    C'est la seule façon de changer une quantité sans passer par un achat ou une
+    vente. L'écart est enregistré, jamais effacé.
+  </p>
+
+  <ol class="etapes">
+    <li><strong>Comptez physiquement</strong> l'article, stock sain et stock
+      défectueux séparément.</li>
+    <li><strong>Saisissez les deux nombres comptés.</strong> Comptoir affiche le
+      théorique en regard.</li>
+    <li><strong>Expliquez l'écart.</strong> Le motif est obligatoire : c'est lui
+      qui rendra la correction compréhensible dans six mois.</li>
+  </ol>
+
+  <p>
+    Si le comptage correspond déjà au stock enregistré, l'ajustement est refusé :
+    il n'y a rien à corriger, et un mouvement à zéro n'apprendrait rien à
+    personne.
+  </p>
+
+  <h2 style="margin-top:12mm">6.3 Le journal</h2>
+  <p>
+    Chaque mouvement porte une référence unique de la forme
+    <code>MVT-2026-000123</code>, la date, l'article, la quantité, le stock
+    résultant, le motif et l'opérateur. Le journal se filtre par type, par
+    période et par recherche libre, et s'exporte vers un tableur.
+  </p>
+
+  <div class="note">
+    <div class="titre">Vérifier son stock</div>
+    <p>
+      La somme des mouvements d'un article doit toujours égaler sa quantité en
+      fiche. C'est ce qui vous permet, devant un écart, de remonter exactement à
+      l'opération qui l'a produit.
+    </p>
+  </div>
+
+  <h2 style="margin-top:12mm">6.4 Les bons à faire signer</h2>
+  <p class="chapeau">
+    Une sortie de stock sans facture laisse une trace informatique, mais rien à
+    classer. Chaque mouvement s'imprime.
+  </p>
+
+  <p>
+    Le bouton d'impression figure sur chaque ligne du journal. Le titre du
+    document suit l'opération, et les emplacements de signature aussi.
+  </p>
+
+  <table>
+    <tr><th style="width:50mm">Mouvement</th><th>Document</th><th>Signatures</th></tr>
+    <tr><td>Sortie</td><td>Bon de sortie</td><td>Remis par / Reçu par le client</td></tr>
+    <tr><td>Retour client</td><td>Bon de retour client</td><td>Rapporté par / Repris par</td></tr>
+    <tr><td>Retour fournisseur</td><td>Bon de retour fournisseur</td><td>Renvoyé par / Repris par</td></tr>
+    <tr><td>Défaut</td><td>Constat de défaut</td><td>Constaté par / Visa</td></tr>
+    <tr><td>Rebut</td><td>Bon de mise au rebut</td><td>Mis au rebut par / Visa</td></tr>
+    <tr><td>Inventaire</td><td>Constat d'inventaire</td><td>Compté par / Visa</td></tr>
+  </table>
+</section>
+
+<!-- ====================== PARTIE 7 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">7</div>
+  <h1 class="ouv-titre">Clients,<br>fournisseurs<br>et charges</h1>
+  <p class="ouv-texte">
+    Qui vous achète, qui vous fournit, et ce que la boutique coûte à faire
+    tourner.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>7.1</span>Les fiches de tiers</div>
+    <div><span>7.2</span>Suivre les encours</div>
+    <div><span>7.3</span>Enregistrer une charge</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>7.1 Les fiches de tiers</h2>
+  <p class="chapeau">
+    Clients et fournisseurs partagent le même écran, séparés par un sélecteur.
+    Une vente au comptoir n'exige aucune fiche.
+  </p>
+
+  <figure>
+    <img src="../images/08-tiers.png" alt="Clients et fournisseurs">
+    <figcaption>
+      <b>La liste des clients</b>, avec le nombre de documents, le total
+      facturé et surtout les impayés de chacun.
+    </figcaption>
+  </figure>
+
+  <p>
+    Créez une fiche pour les clients qui reviennent, ceux qui achètent à crédit,
+    et ceux qui ont besoin de leur NIF sur la facture. Un vendeur peut créer un
+    client pendant une vente, sans quitter l'écran d'encaissement.
+  </p>
+
+  <h2 style="margin-top:12mm">7.2 Suivre les encours</h2>
+  <p>
+    La colonne <em>Impayés</em> donne, pour chaque client, ce qu'il vous doit
+    toutes factures confondues. Le bouton <em>Relevé</em> imprime le détail :
+    toutes ses factures, ce qu'il a réglé, ce qui reste dû. C'est le document à
+    lui présenter pour une relance.
+  </p>
+
+  <p>
+    Le bouton <em>Ventes</em> filtre la liste des factures sur ce client.
+  </p>
+
+  <div class="note">
+    <div class="titre">Une fiche liée à des documents ne se supprime pas</div>
+    <p>
+      Elle se désactive. Son nom figure sur des factures : l'effacer laisserait
+      des documents orphelins. Une fiche désactivée reste consultable mais n'est
+      plus proposée à la vente.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>7.3 Enregistrer une charge</h2>
+  <p class="chapeau">
+    Loyer, salaires, électricité, transport. Tout ce que la boutique coûte, sauf
+    l'achat de la marchandise, qui passe par les réceptions.
+  </p>
+
+  <figure>
+    <img src="../images/09-charges.png" alt="Charges d'exploitation">
+    <figcaption>
+      <b>Les charges de la période</b>, à gauche, et leur répartition par
+      rubrique à droite. C'est cette répartition qui montre où part l'argent.
+    </figcaption>
+  </figure>
+
+  <p>
+    Chaque charge porte une date, une rubrique, un libellé, un montant et un
+    mode de règlement. Les rubriques proposées couvrent les cas courants, et
+    vous pouvez en saisir d'autres.
+  </p>
+
+  <div class="note regle">
+    <div class="titre">La différence entre la marge et le résultat</div>
+    <p>
+      La marge brute, c'est ce que rapporte la revente de la marchandise. Le
+      résultat, c'est ce qui reste une fois le loyer, les salaires et
+      l'électricité payés. Une boutique peut afficher une belle marge et perdre
+      de l'argent. Sans charges saisies, Comptoir ne peut pas vous le dire.
+    </p>
+  </div>
+</section>
+<!-- ====================== PARTIE 8 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">8</div>
+  <h1 class="ouv-titre">Lire<br>ses chiffres</h1>
+  <p class="ouv-texte">
+    Ce que la boutique a vendu, ce qu'elle a gagné, et ce qu'elle immobilise.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>8.1</span>Le tableau de bord</div>
+    <div><span>8.2</span>L'évolution</div>
+    <div><span>8.3</span>Le compte de résultat</div>
+    <div><span>8.4</span>La situation</div>
+    <div><span>8.5</span>Les statistiques</div>
+    <div><span>8.6</span>Imprimer et exporter</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>8.1 Le tableau de bord</h2>
+  <p class="chapeau">
+    Ce qu'il faut savoir en ouvrant la boutique le matin. Les variations se
+    comparent à la période précédente de même durée.
+  </p>
+
+  <table>
+    <tr><th style="width:46mm">Indicateur</th><th>Ce qu'il compte</th></tr>
+    <tr><td><strong>Ventes du jour</strong></td>
+      <td>Chiffre d'affaires hors taxes, comparé à hier.</td></tr>
+    <tr><td><strong>Ventes du mois</strong></td>
+      <td>Depuis le premier du mois, comparé au mois précédent complet.</td></tr>
+    <tr><td><strong>Marge du mois</strong></td>
+      <td>Chiffre d'affaires net moins le coût des marchandises vendues.</td></tr>
+    <tr><td><strong>Impayés</strong></td>
+      <td>La somme des soldes restant dus, toutes factures confondues.</td></tr>
+    <tr><td><strong>Résultat du mois</strong></td>
+      <td>Marge moins charges moins pertes sur rebuts.</td></tr>
+    <tr><td><strong>Valeur du stock</strong></td>
+      <td>Au coût moyen pondéré. C'est l'argent immobilisé en rayon.</td></tr>
+  </table>
+
+  <p>
+    Plus bas, la courbe des trente derniers jours, celle des douze derniers
+    mois, les meilleures ventes, les articles à surveiller et les derniers
+    mouvements.
+  </p>
+
+  <div class="note">
+    <div class="titre">Un vendeur voit son activité</div>
+    <p>
+      Son tableau de bord affiche les ventes du jour, du mois et les impayés,
+      avec les courbes correspondantes. La marge, les charges, le résultat et la
+      valeur du stock n'y figurent pas.
+    </p>
+  </div>
+
+  <h2 style="margin-top:12mm">8.2 L'évolution</h2>
+  <p>
+    Le premier onglet des rapports. Choisissez une période en haut à droite, puis
+    un pas d'agrégation : jour, semaine, mois ou trimestre. Le tableau donne,
+    pour chaque intervalle, le chiffre d'affaires, le coût, la marge, son taux,
+    les charges et le résultat.
+  </p>
+
+  <p>
+    Les périodes sans activité apparaissent à zéro plutôt que d'être omises :
+    une courbe avec des trous ment sur la régularité des ventes.
+  </p>
+</section>
+
+<section class="page">
+  <h2>8.3 Le compte de résultat</h2>
+  <p class="chapeau">
+    Ce que la boutique a gagné sur une période, produits d'un côté, charges de
+    l'autre.
+  </p>
+
+  <figure>
+    <img src="../images/20-compte-de-resultat.png" alt="Compte de résultat">
+    <figcaption>
+      <b>Le compte de résultat.</b> Les taxes facturées apparaissent séparément :
+      elles sont collectées pour l'État, ce ne sont pas des produits.
+    </figcaption>
+  </figure>
+
+<pre><code>chiffre d'affaires net hors taxes
+− coût des marchandises vendues
+= marge brute
+
+− charges d'exploitation
+− pertes sur rebuts
+= résultat d'exploitation</code></pre>
+
+  <p>
+    Seules les factures émises comptent. Les devis n'ont aucun effet, et les
+    factures annulées sont exclues du chiffre d'affaires tout en restant
+    conservées.
+  </p>
+
+  <div class="note attention">
+    <div class="titre">La trésorerie affichée est une estimation</div>
+    <p>
+      Elle suppose que les achats fournisseurs sont réglés à la réception, ce
+      qui est le cas courant en commerce de détail. Comptoir ne suit pas les
+      échéances fournisseurs et ne peut donc pas le vérifier. Ce chiffre situe
+      une tendance, il n'arrête pas une trésorerie.
+    </p>
+  </div>
+
+  <h2 style="margin-top:10mm">8.4 La situation</h2>
+  <p>
+    Un arrêté à une date : valeur du stock sain et du stock défectueux, créances
+    clients, résultat cumulé depuis l'ouverture, et taxes facturées restant à
+    reverser.
+  </p>
+
+  <div class="note regle">
+    <div class="titre">Ce n'est pas un bilan</div>
+    <p>
+      Comptoir ne tient ni comptes bancaires, ni caisse, ni immobilisations, ni
+      dettes fournisseurs, ni capital. Les rubriques absentes le sont
+      volontairement : mieux vaut un état partiel et honnête qu'un bilan
+      d'apparence complète mais faux. Comptoir est un outil de gestion, pas un
+      logiciel comptable certifié.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>8.5 Les statistiques</h2>
+  <p class="chapeau">
+    Les répartitions qui font apparaître ce qu'un total masque.
+  </p>
+
+  <figure>
+    <img src="../images/21-statistiques.png" alt="Statistiques">
+    <figcaption>
+      <b>Les répartitions de la période</b> : par catégorie, par mode de
+      règlement, par client, et par jour de la semaine.
+    </figcaption>
+  </figure>
+
+  <p>
+    Plus bas, deux tableaux se répondent : les articles les plus vendus, et les
+    <strong>articles dormants</strong>, c'est-à-dire ceux qui sont en stock mais
+    n'ont rien vendu sur la période, avec le capital qu'ils immobilisent. C'est
+    souvent l'information la plus actionnable de tout le logiciel.
+  </p>
+
+  <h2 style="margin-top:12mm">8.6 Imprimer et exporter</h2>
+
+  <table>
+    <tr><th style="width:50mm">Depuis</th><th>Vous obtenez</th></tr>
+    <tr><td>Une facture ou un devis</td><td>Le document PDF, avec votre logo et vos mentions légales.</td></tr>
+    <tr><td>Un bon d'entrée</td><td>Le justificatif de réception.</td></tr>
+    <tr><td>Un mouvement de stock</td><td>Le bon à faire signer.</td></tr>
+    <tr><td>Une fiche client</td><td>Son relevé de compte.</td></tr>
+    <tr><td>Le catalogue</td><td>L'état du stock, valorisé si votre rôle le permet.</td></tr>
+    <tr><td>Les rapports</td><td>Le rapport de ventes ou le compte de résultat.</td></tr>
+    <tr><td>Toutes les listes</td><td>Un fichier CSV, lisible d'un double-clic dans Excel.</td></tr>
+  </table>
+
+  <p>
+    Chaque document s'affiche avant d'être enregistré : ce que vous voyez est
+    exactement le fichier. Deux boutons le classent, soit à l'endroit de votre
+    choix, soit directement dans le dossier <code>exports</code> de Comptoir.
+  </p>
+
+  <div class="note">
+    <div class="titre">Les exports respectent votre rôle</div>
+    <p>
+      Un vendeur qui exporte le catalogue obtient un fichier sans les colonnes
+      de coût ni de marge. Un export ne contourne jamais ce que l'écran masque.
+    </p>
+  </div>
+</section>
+
+<!-- ====================== PARTIE 9 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">9</div>
+  <h1 class="ouv-titre">L'équipe et<br>la traçabilité</h1>
+  <p class="ouv-texte">
+    Donner un accès à quelqu'un, choisir ce qu'il peut voir, et savoir qui a
+    fait quoi.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>9.1</span>Créer un compte</div>
+    <div><span>9.2</span>Réinitialiser un mot de passe</div>
+    <div><span>9.3</span>Le journal d'audit</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>9.1 Créer un compte</h2>
+  <p class="chapeau">
+    Depuis <em>Comptes &amp; journal</em>, réservé aux administrateurs.
+  </p>
+
+  <figure>
+    <img src="../images/11-comptes.png" alt="Gestion des comptes">
+    <figcaption>
+      <b>Les comptes du poste</b>, avec le rôle de chacun, sa dernière
+      connexion et son activité commerciale.
+    </figcaption>
+  </figure>
+
+  <p>
+    Donnez à chacun son propre compte. Un compte partagé rend le journal d'audit
+    inutile : savoir qu'une remise a été accordée sans savoir par qui n'apprend
+    rien.
+  </p>
+
+  <h2 style="margin-top:10mm">9.2 Réinitialiser un mot de passe</h2>
+  <p>
+    Deux façons : saisir un mot de passe vous-même, ou en faire générer un
+    provisoire. Dans les deux cas, le titulaire devra le remplacer à sa
+    prochaine connexion.
+  </p>
+
+  <div class="note">
+    <div class="titre">Un mot de passe provisoire n'ouvre rien</div>
+    <p>
+      Il permet d'ouvrir la session, et rien d'autre : toute action est refusée
+      tant que le titulaire n'a pas choisi son propre mot de passe. Un mot de
+      passe transmis de vive voix ne doit pas rester une clé utilisable
+      indéfiniment.
+    </p>
+  </div>
+
+  <p>
+    Chacun change son propre mot de passe depuis sa fiche, en cliquant sur son
+    nom en bas de la barre latérale.
+  </p>
+
+  <h2 style="margin-top:10mm">9.3 Le journal d'audit</h2>
+  <p>
+    Second onglet de la même page. Il enregistre chaque action sensible avec son
+    auteur et son horodatage : créations, modifications, suppressions,
+    annulations, connexions, réinitialisations.
+  </p>
+
+  <div class="note">
+    <div class="titre">Le journal est en ajout seul</div>
+    <p>
+      Aucune fonction du logiciel ne permet de l'effacer ni de le modifier, pas
+      même pour un administrateur. C'est ce qui lui donne sa valeur.
+    </p>
+  </div>
+</section>
+<!-- ====================== PARTIE 10 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">10</div>
+  <h1 class="ouv-titre">Protéger<br>ses données</h1>
+  <p class="ouv-texte">
+    Deux minutes par mois qui évitent de tout reperdre le jour où le disque
+    lâche.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>10.1</span>La sauvegarde automatique</div>
+    <div><span>10.2</span>Restaurer</div>
+    <div><span>10.3</span>Ce qu'il faut faire une fois par mois</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>10.1 La sauvegarde automatique</h2>
+  <p class="chapeau">
+    Une archive complète est créée au premier démarrage de chaque journée. Elle
+    reflète donc la veille entière.
+  </p>
+
+  <figure>
+    <img src="../images/23-sauvegardes.png" alt="Sauvegardes">
+    <figcaption>
+      <b>Les archives disponibles.</b> Les trente plus récentes sont conservées
+      par défaut, les plus anciennes sont supprimées au-delà.
+    </figcaption>
+  </figure>
+
+  <p>
+    Une archive contient l'intégralité de vos données : articles, ventes,
+    clients, mouvements, charges, comptes et paramètres. C'est un fichier ZIP
+    ordinaire, que n'importe quel outil sait ouvrir.
+  </p>
+
+  <h2 style="margin-top:10mm">10.2 Restaurer</h2>
+  <ol class="etapes">
+    <li><strong>Choisissez l'archive</strong> dans la liste, ou un fichier
+      externe si vous revenez d'une clé USB.</li>
+    <li><strong>Confirmez.</strong> Comptoir prend d'abord une sauvegarde de
+      sécurité de l'état actuel, avant toute écriture.</li>
+    <li><strong>L'application se ferme.</strong> Rouvrez-la : elle repart sur
+      les données restaurées.</li>
+  </ol>
+
+  <div class="note">
+    <div class="titre">Une archive étrangère est refusée</div>
+    <p>
+      Comptoir vérifie qu'il s'agit bien d'une de ses sauvegardes, et refuse
+      toute archive dont une entrée tenterait d'écrire hors du dossier prévu.
+      Une restauration ne peut pas devenir un moyen de déposer des fichiers
+      ailleurs sur le disque.
+    </p>
+  </div>
+
+  <h2 style="margin-top:10mm">10.3 Ce qu'il faut faire une fois par mois</h2>
+
+  <div class="note regle">
+    <div class="titre">Copiez une archive sur un support externe</div>
+    <p>
+      Une sauvegarde qui vit sur le même disque que les données ne protège pas
+      d'une panne de ce disque, ni d'un vol de l'ordinateur. Branchez une clé
+      USB, ouvrez le dossier des sauvegardes depuis les paramètres, copiez la
+      dernière archive. Deux minutes.
+    </p>
+  </div>
+
+  <p>
+    Profitez-en pour vérifier trois choses :
+  </p>
+  <ul>
+    <li>la sauvegarde automatique est bien active dans les paramètres ;</li>
+    <li>la liste des archives contient bien celle d'hier ;</li>
+    <li>le chiffrement du disque est activé, si le poste est transportable.</li>
+  </ul>
+</section>
+
+<!-- ====================== PARTIE 11 ====================== -->
+<section class="page ouverture">
+  <div class="ouv-numero">11</div>
+  <h1 class="ouv-titre">Aide-mémoire</h1>
+  <p class="ouv-texte">
+    Ce qu'on cherche vite, un jour où l'on n'a pas le temps de lire.
+  </p>
+  <div class="ouv-sommaire">
+    <div><span>11.1</span>Au clavier</div>
+    <div><span>11.2</span>Questions fréquentes</div>
+    <div><span>11.3</span>Emplacements et support</div>
+  </div>
+</section>
+
+<section class="page">
+  <h2>11.1 Au clavier</h2>
+
+  <table>
+    <tr><th style="width:44mm">Touche</th><th>Effet</th></tr>
+    <tr><td><span class="raccourci">Entrée</span></td>
+      <td>Dans une recherche d'article : ajoute le résultat sélectionné. C'est
+        aussi ce que fait une douchette code-barres.</td></tr>
+    <tr><td><span class="raccourci">↑</span> <span class="raccourci">↓</span></td>
+      <td>Parcourent les résultats de recherche.</td></tr>
+    <tr><td><span class="raccourci">Échap</span></td>
+      <td>Efface la recherche en cours ; si elle est vide, ferme la fenêtre.</td></tr>
+    <tr><td><span class="raccourci">Tab</span></td>
+      <td>Passe au champ suivant, dans l'ordre de saisie.</td></tr>
+  </table>
+
+  <h2 style="margin-top:10mm">11.2 Questions fréquentes</h2>
+
+  <h4>Je me suis trompé de quantité sur une facture déjà enregistrée.</h4>
+  <p>
+    Annulez la facture avec pour motif l'erreur de saisie, puis refaites-la. La
+    marchandise revient en stock, l'ancien document reste conservé et numéroté.
+  </p>
+
+  <h4>Un article n'apparaît pas dans la recherche de vente.</h4>
+  <p>
+    Il est probablement archivé. Ouvrez <em>Articles</em>, cochez
+    <em>Avec les archivés</em>, puis réactivez-le depuis sa fiche.
+  </p>
+
+  <h4>Mon stock affiché ne correspond pas au rayon.</h4>
+  <p>
+    Comptez, puis passez par <em>Mouvements</em>, <em>Corriger l'inventaire</em>.
+    L'écart sera enregistré avec votre motif, ce qui vous permettra plus tard de
+    comprendre d'où il venait.
+  </p>
+
+  <h4>La marge affichée me paraît trop faible.</h4>
+  <p>
+    Vérifiez que les frais de transport et de douane sont bien saisis à la
+    réception. Sans eux, le coût de revient est sous-estimé et la marge paraît
+    meilleure qu'elle ne l'est. Vérifiez ensuite les charges du mois : une marge
+    correcte peut donner un résultat négatif.
+  </p>
+
+  <h4>Un vendeur me dit qu'il ne voit pas les prix d'achat.</h4>
+  <p>
+    C'est le comportement prévu. Si cette personne doit les voir, passez son
+    compte en <em>Gérant</em> depuis la page des comptes.
+  </p>
+
+  <h4>J'ai oublié le mot de passe administrateur.</h4>
+  <p>
+    S'il existe un autre administrateur, il peut le réinitialiser. Sinon, il n'y
+    a aucun moyen de rouvrir la boutique : les mots de passe ne sont jamais
+    stockés en clair. Vos données restent lisibles dans leurs fichiers, mais
+    l'application ne s'ouvrira pas.
+  </p>
+
+  <h4>Puis-je utiliser Comptoir sur deux postes ?</h4>
+  <p>
+    Chaque poste tient ses propres données, il n'y a pas de synchronisation. Pour
+    un poste unique déplacé entre deux lieux, utilisez le mode portable sur clé
+    USB décrit en section 1.4.
+  </p>
+</section>
+
+<section class="page">
+  <h2>11.3 Emplacements et support</h2>
+
+  <table>
+    <tr><th style="width:44mm">Quoi</th><th>Où</th></tr>
+    <tr><td>Vos données</td><td><code>%APPDATA%\Comptoir</code>,
+      <code>~/Library/Application Support/Comptoir</code> ou
+      <code>~/.config/Comptoir</code></td></tr>
+    <tr><td>Vos sauvegardes</td><td>Le sous-dossier <code>backups</code></td></tr>
+    <tr><td>Vos exports</td><td>Le sous-dossier <code>exports</code></td></tr>
+    <tr><td>Le journal technique</td><td><code>comptoir.log</code>, à joindre à
+      tout signalement de problème</td></tr>
+    <tr><td>Code source et versions</td><td><code>github.com/siskoai/stock</code></td></tr>
+  </table>
+
+  <h3>Signaler un problème</h3>
+  <p>
+    Ouvrez une issue sur le dépôt, en indiquant votre version, votre système, ce
+    que vous attendiez et ce qui s'est produit. Si un chiffre est faux, donnez
+    les montants exacts qui l'ont produit : c'est ce qui permet de reproduire le
+    calcul.
+  </p>
+
+  <div class="note attention">
+    <div class="titre">Une faille de sécurité ne se signale pas publiquement</div>
+    <p>
+      Passez par <em>Security</em>, puis <em>Report a vulnerability</em> sur le
+      dépôt. Le signalement reste privé jusqu'à la publication d'un correctif.
+    </p>
+  </div>
+
+  <h3>Ce que Comptoir ne fait pas</h3>
+  <p>
+    Ces limites sont assumées, et il vaut mieux les connaître avant d'en avoir
+    besoin.
+  </p>
+  <ul>
+    <li>Pas de comptabilité en partie double, ni d'états certifiés. Comptoir ne
+      remplace pas un expert-comptable.</li>
+    <li>Pas de suivi des échéances fournisseurs : la trésorerie affichée est une
+      estimation.</li>
+    <li>Pas de multi-boutique ni de synchronisation réseau.</li>
+    <li>Le coût moyen n'est pas recalculé à rebours lors de l'annulation d'un
+      bon d'entrée ; il se réaligne à la réception suivante.</li>
+  </ul>
+
+  <div style="margin-top:16mm;padding-top:6mm;border-top:.5mm solid var(--filet);display:flex;align-items:center;gap:6mm">
+    <img src="../../internal/brand/sisko-logo.png" alt="SISKO" style="width:20mm;height:20mm;object-fit:contain">
+    <div style="font-size:9.4pt;line-height:1.55">
+      <strong style="font-size:11pt">Comptoir est un logiciel SISKO.</strong><br>
+      <span class="rien">
+        Distribué sous licence Comptoir : usage, modification et redistribution
+        libres, y compris commerciaux, en contrepartie du maintien de la
+        paternité de son éditeur. Le texte complet accompagne le logiciel.
+      </span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

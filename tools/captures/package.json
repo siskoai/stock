@@ -1,0 +1,12 @@
+{
+  "name": "comptoir-captures",
+  "private": true,
+  "description": "Captures d'écran du guide d'utilisation, prises sur l'application réelle",
+  "type": "module",
+  "scripts": {
+    "captures": "node capture.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}

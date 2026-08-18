@@ -4,8 +4,16 @@
 // 150000. La conversion se fait ici, et nulle part ailleurs, pour qu'aucun
 // composant n'ait à se demander dans quelle unité il manipule un nombre.
 
-/** Espace fine insécable, la convention francophone pour les milliers. */
-const THIN_SPACE = ' '
+/** Espace fine insécable : la convention francophone pour les milliers. */
+const ESPACE_FINE = ' '
+
+/**
+ * Espace insécable ordinaire, plus large, qui sépare le montant de son symbole.
+ * La typographie française distingue les deux, et la nuance se voit : avec une
+ * espace fine, « 228 920 FCFA » se lit collé, surtout dans les gros chiffres du
+ * tableau de bord où le crénage est resserré.
+ */
+const ESPACE_INSECABLE = ' '
 
 /**
  * formatMoney rend un montant en centièmes sous forme lisible.
@@ -17,14 +25,14 @@ export function formatMoney(amount: number, decimals = 0): string {
   const units = Math.floor(abs / 100)
   const cents = abs % 100
 
-  let out = String(units).replace(/\B(?=(\d{3})+(?!\d))/g, THIN_SPACE)
+  let out = String(units).replace(/\B(?=(\d{3})+(?!\d))/g, ESPACE_FINE)
   if (decimals > 0) out += ',' + String(cents).padStart(2, '0').slice(0, decimals)
   return negative ? '-' + out : out
 }
 
 /** formatWithSymbol ajoute le symbole monétaire : « 1 500 FCFA ». */
 export function formatWithSymbol(amount: number, decimals: number, symbol: string): string {
-  return `${formatMoney(amount, decimals)}${THIN_SPACE}${symbol}`
+  return `${formatMoney(amount, decimals)}${ESPACE_INSECABLE}${symbol}`
 }
 
 /**
@@ -77,12 +85,12 @@ export function toInput(amount: number, decimals = 0): string {
 
 /** formatPercent rend un taux avec une décimale : « 34,2 % ». */
 export function formatPercent(value: number, decimals = 1): string {
-  return `${value.toFixed(decimals).replace('.', ',')}${THIN_SPACE}%`
+  return `${value.toFixed(decimals).replace('.', ',')}${ESPACE_INSECABLE}%`
 }
 
 /** formatNumber groupe les milliers d'un entier simple (quantités). */
 export function formatNumber(value: number): string {
-  return String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, THIN_SPACE)
+  return String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, ESPACE_FINE)
 }
 
 /** formatBytes rend une taille de fichier lisible. */

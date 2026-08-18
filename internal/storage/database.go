@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"comptoir/internal/models"
@@ -42,7 +43,15 @@ type metaFile struct {
 // Windows : %APPDATA%\Comptoir, macOS : ~/Library/Application Support/Comptoir
 // Un fichier portable.txt placé à côté de l'exécutable bascule en mode
 // portable : les données vivent alors dans .\data (clé USB, dossier partagé).
+//
+// La variable d'environnement COMPTOIR_DATA_DIR l'emporte sur tout le reste.
+// Elle sert à ouvrir un jeu de données précis sans toucher à celui du poste :
+// reprise d'une sauvegarde, second magasin sur la même machine, ou capture
+// d'écran sur des données de démonstration.
 func DataDir() (string, error) {
+	if choisi := strings.TrimSpace(os.Getenv("COMPTOIR_DATA_DIR")); choisi != "" {
+		return choisi, nil
+	}
 	if exe, err := os.Executable(); err == nil {
 		root := filepath.Dir(exe)
 		if _, err := os.Stat(filepath.Join(root, "portable.txt")); err == nil {

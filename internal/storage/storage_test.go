@@ -355,3 +355,25 @@ func TestOpen_RefuseUnSchemaPlusRecent(t *testing.T) {
 		t.Errorf("message peu explicite : %v", err)
 	}
 }
+
+// La variable d'environnement doit l'emporter : c'est ce qui permet d'ouvrir un
+// jeu de données précis sans toucher à celui du poste.
+func TestDataDir_VariableEnvironnement(t *testing.T) {
+	t.Setenv("COMPTOIR_DATA_DIR", "/tmp/comptoir-essai")
+	dir, err := DataDir()
+	if err != nil {
+		t.Fatalf("DataDir : %v", err)
+	}
+	if dir != "/tmp/comptoir-essai" {
+		t.Errorf("DataDir = %q, attendu le chemin de la variable", dir)
+	}
+
+	t.Setenv("COMPTOIR_DATA_DIR", "   ")
+	dir, err = DataDir()
+	if err != nil {
+		t.Fatalf("DataDir : %v", err)
+	}
+	if dir == "   " || dir == "" {
+		t.Errorf("une variable vide doit être ignorée, obtenu %q", dir)
+	}
+}

@@ -1,0 +1,243 @@
+/* Feuille de style du guide d'utilisation.
+   Pensée pour le papier : A4, marges généreuses, coupures de page maîtrisées.
+   Les couleurs reprennent celles de l'application et des factures. */
+
+@page { size: A4; margin: 0; }
+
+:root {
+  --brand: #0E3B34;
+  --brand-clair: #12564A;
+  --accent: #B05A26;
+  --encre: #14171A;
+  --encre-2: #3C444B;
+  --gris: #6E767D;
+  --filet: #E0E3E0;
+  --fond: #F4F6F4;
+  --vert: #17663F;
+  --rouge: #A32A22;
+
+  --marge: 20mm;
+  --colonne: 170mm;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 10.2pt;
+  line-height: 1.62;
+  color: var(--encre);
+  font-kerning: normal;
+  font-variant-numeric: proportional-nums;
+}
+
+/* --- Pages ---------------------------------------------------------------- */
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: var(--marge) var(--marge) 24mm;
+  position: relative;
+  break-after: page;
+}
+.page:last-child { break-after: auto; }
+
+/* --- Couverture ----------------------------------------------------------- */
+
+.couverture {
+  background: var(--brand);
+  color: #fff;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.couv-haut { padding: 58mm var(--marge) 0; }
+.couv-logo {
+  width: 34mm; height: 34mm; object-fit: contain;
+  background: #fff; border-radius: 8mm; padding: 3mm;
+}
+.couv-titre {
+  font-size: 44pt; font-weight: 700; letter-spacing: -.03em;
+  line-height: 1.02; margin: 22mm 0 0;
+}
+.couv-sous {
+  font-size: 15pt; font-weight: 400; opacity: .82;
+  margin-top: 5mm; max-width: 120mm; line-height: 1.45;
+}
+.couv-bas {
+  padding: 0 var(--marge) 26mm;
+  display: flex; align-items: flex-end; gap: 10mm;
+  font-size: 9.5pt;
+}
+.couv-bas .bloc:first-child { flex: 0 0 34mm; }
+.couv-bas .bloc:nth-child(2) { flex: 0 0 34mm; }
+.couv-bas .bloc:last-child { flex: 1; }
+.couv-bas .bloc:last-child strong { font-size: 10pt; }
+.couv-bas .bloc { opacity: .72; }
+.couv-bas .bloc strong { display: block; opacity: 1; font-size: 11pt; font-weight: 600; margin-bottom: 1mm; }
+.couv-filet { height: .6mm; background: rgba(255,255,255,.22); margin: 0 var(--marge) 8mm; }
+
+/* --- Ouverture de partie -------------------------------------------------- */
+
+.ouverture { display: flex; flex-direction: column; justify-content: center; }
+.ouv-numero {
+  font-size: 78pt; font-weight: 700; letter-spacing: -.05em;
+  color: var(--fond); line-height: .8; margin-bottom: 6mm;
+}
+.ouv-titre { font-size: 30pt; font-weight: 660; letter-spacing: -.025em; line-height: 1.1; }
+.ouv-texte {
+  font-size: 12pt; color: var(--gris); line-height: 1.6;
+  max-width: 130mm; margin-top: 6mm;
+}
+.ouv-sommaire {
+  margin-top: 14mm; padding-top: 6mm; border-top: .4mm solid var(--filet);
+  columns: 2; column-gap: 12mm; font-size: 9.6pt; color: var(--encre-2);
+}
+.ouv-sommaire div { break-inside: avoid; padding: 1.2mm 0; }
+.ouv-sommaire span { color: var(--accent); font-weight: 600; margin-right: 2mm; }
+
+/* --- Titres --------------------------------------------------------------- */
+
+h1, h2, h3, h4 { margin: 0; font-weight: 640; letter-spacing: -.018em; }
+
+h2 {
+  font-size: 19pt; line-height: 1.2; margin: 0 0 4mm;
+  padding-bottom: 3mm; border-bottom: .5mm solid var(--brand);
+}
+h3 {
+  font-size: 13pt; margin: 9mm 0 3mm; color: var(--brand);
+  break-after: avoid;
+}
+h4 {
+  font-size: 10.6pt; margin: 6mm 0 2mm; color: var(--encre);
+  break-after: avoid;
+}
+h2 + h3, h3 + h4 { margin-top: 4mm; }
+
+p { margin: 0 0 3.4mm; }
+p.chapeau {
+  font-size: 11.4pt; color: var(--encre-2); line-height: 1.55;
+  margin-bottom: 6mm;
+}
+strong { font-weight: 640; }
+em { font-style: normal; color: var(--accent); font-weight: 600; }
+
+ul, ol { margin: 0 0 4mm; padding-left: 5.5mm; }
+li { margin-bottom: 1.6mm; }
+li::marker { color: var(--gris); }
+
+code {
+  font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+  font-size: .88em; background: var(--fond);
+  padding: .4mm 1.2mm; border-radius: 1mm;
+}
+pre {
+  background: var(--encre); color: #E8EDEA;
+  padding: 4mm 5mm; border-radius: 2mm;
+  font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+  font-size: 8.6pt; line-height: 1.55; overflow: hidden;
+  margin: 0 0 4mm; break-inside: avoid;
+}
+pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+/* --- Figures -------------------------------------------------------------- */
+
+figure { margin: 0 0 6mm; break-inside: avoid; }
+figure img {
+  width: 100%; display: block;
+  border: .3mm solid var(--filet); border-radius: 2mm;
+  box-shadow: 0 1mm 3mm rgba(20,23,26,.07);
+}
+figcaption {
+  font-size: 8.8pt; color: var(--gris); margin-top: 2.2mm;
+  line-height: 1.45; padding-left: 1mm;
+  border-left: .8mm solid var(--filet);
+  padding-left: 3mm;
+}
+figcaption b { color: var(--encre-2); font-weight: 600; }
+
+/* --- Encadrés ------------------------------------------------------------- */
+
+.note {
+  border-left: 1mm solid var(--brand);
+  background: var(--fond);
+  padding: 3.6mm 5mm; margin: 0 0 4.5mm;
+  border-radius: 0 2mm 2mm 0;
+  break-inside: avoid;
+  font-size: 9.6pt; line-height: 1.55;
+}
+.note .titre {
+  font-weight: 660; font-size: 8.4pt; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--brand); margin-bottom: 1.4mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.attention { border-left-color: var(--accent); background: #FBF2EA; }
+.note.attention .titre { color: var(--accent); }
+.note.regle { border-left-color: var(--rouge); background: #FBEDEB; }
+.note.regle .titre { color: var(--rouge); }
+
+/* --- Tableaux ------------------------------------------------------------- */
+
+table {
+  width: 100%; border-collapse: collapse; margin: 0 0 5mm;
+  font-size: 9.4pt; break-inside: avoid;
+}
+th {
+  text-align: left; font-size: 8.2pt; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--gris); font-weight: 640;
+  padding: 2.4mm 3mm; border-bottom: .5mm solid var(--encre);
+}
+td {
+  padding: 2.6mm 3mm; border-bottom: .3mm solid var(--filet);
+  vertical-align: top; line-height: 1.5;
+}
+tr:last-child td { border-bottom: none; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+td strong { color: var(--encre); }
+
+/* --- Étapes numérotées ---------------------------------------------------- */
+
+.etapes { counter-reset: etape; margin: 0 0 5mm; padding: 0; list-style: none; }
+.etapes > li {
+  counter-increment: etape;
+  position: relative; padding-left: 9mm; margin-bottom: 3.6mm;
+  break-inside: avoid;
+}
+.etapes > li::before {
+  content: counter(etape);
+  position: absolute; left: 0; top: -.3mm;
+  width: 6mm; height: 6mm; border-radius: 50%;
+  background: var(--brand); color: #fff;
+  font-size: 8pt; font-weight: 660;
+  display: flex; align-items: center; justify-content: center;
+}
+/* Le gras reste en ligne : les étapes sont rédigées comme des phrases
+   continues, un retour à la ligne les couperait en deux. */
+.etapes strong { font-weight: 640; }
+
+/* --- Pied de page --------------------------------------------------------- */
+
+.pied {
+  position: absolute; left: var(--marge); right: var(--marge); bottom: 12mm;
+  display: flex; justify-content: space-between;
+  font-size: 8pt; color: var(--gris);
+  border-top: .3mm solid var(--filet); padding-top: 2.5mm;
+}
+.couverture .pied, .ouverture .pied { display: none; }
+
+/* --- Divers --------------------------------------------------------------- */
+
+.deux-colonnes { columns: 2; column-gap: 9mm; }
+.deux-colonnes > * { break-inside: avoid; }
+.raccourci {
+  display: inline-block; font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 8.4pt; background: #fff; border: .3mm solid var(--filet);
+  border-bottom-width: .8mm; border-radius: 1.4mm; padding: .6mm 1.8mm;
+  color: var(--encre);
+}
+.serre { margin-bottom: 1.5mm; }
+.rien { color: var(--gris); }

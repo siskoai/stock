@@ -231,6 +231,22 @@ menace.
 
 ---
 
+## Guide d'utilisation
+
+Un guide complet de 57 pages accompagne le logiciel, de l'installation à la
+lecture des rapports : **[Comptoir-guide-utilisation.pdf](docs/Comptoir-guide-utilisation.pdf)**.
+
+Ses captures sont prises sur l'application réelle, pilotée dans un navigateur
+sans affichage et branchée sur une boutique de démonstration produite par le
+vrai moteur. Rien n'y est reconstitué. Pour le régénérer :
+
+```sh
+make guide          # crée la boutique de démonstration
+make guide-suite    # captures puis PDF, l'application de démonstration ouverte
+```
+
+---
+
 ## Vos données restent chez vous
 
 Comptoir n'ouvre **aucune connexion réseau**. Pas de télémétrie, pas de mise à

@@ -17,6 +17,9 @@
 /frontend/wailsjs/
 /frontend/package.json.md5
 
+# Outils de documentation : dépendances installées à la demande
+/tools/captures/node_modules/
+
 # Données locales, jamais versionnées
 /data/
 /backups/

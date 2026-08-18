@@ -5,9 +5,10 @@
 #     go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
+DEMO    ?= /tmp/comptoir-demo
 LDFLAGS := -X main.version=$(VERSION)
 
-.PHONY: help dev build build-windows test check fmt tidy frontend clean
+.PHONY: help dev build build-windows test check fmt tidy frontend clean guide
 
 help: ## Affiche cette aide
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -38,6 +39,17 @@ tidy: ## Nettoie les dépendances Go
 
 frontend: ## Compile seulement l'interface
 	cd frontend && npm install && npm run build
+
+guide: ## Régénère le guide d'utilisation, captures comprises
+	@echo "1. boutique de démonstration"
+	go run ./tools/demo -dir $(DEMO)
+	@echo "2. lancez dans un autre terminal :"
+	@echo "     COMPTOIR_DATA_DIR=$(DEMO) wails dev -s"
+	@echo "   puis, une fois l'application ouverte :"
+	@echo "     make guide-suite"
+
+guide-suite: ## Captures et PDF, l'application de démonstration devant tourner
+	cd tools/captures && npm install --silent && node capture.mjs && node pdf.mjs
 
 clean: ## Supprime les artefacts de compilation
 	rm -rf build/bin frontend/dist/assets frontend/dist/index.html
