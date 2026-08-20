@@ -20,7 +20,7 @@ export function UsersPage(_: PageContext) {
   const [tab, setTab] = useState<Tab>('accounts')
   return (
     <div className="stack">
-      <div className="tabs">
+      <div className="tabs" style={{ flexWrap: 'wrap' }}>
         <button className={`tab ${tab === 'accounts' ? 'active' : ''}`} onClick={() => setTab('accounts')}>Comptes</button>
         <button className={`tab ${tab === 'audit' ? 'active' : ''}`} onClick={() => setTab('audit')}>Journal d'audit</button>
       </div>

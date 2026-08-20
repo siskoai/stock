@@ -393,10 +393,10 @@ function InvoiceDetail(props: {
 
 function SummaryRow(props: { label: string; value: string; strong?: boolean; accent?: boolean; muted?: boolean }) {
   return (
-    <div className="row" style={{ justifyContent: 'space-between', padding: '3px 0' }}>
-      <span className={props.muted ? 'muted small' : 'small'}>{props.label}</span>
+    <div className="ligne-total" style={{ padding: '3px 0' }}>
+      <span className={`ligne-total-libelle ${props.muted ? 'muted small' : 'small'}`}>{props.label}</span>
       <span
-        className="tabular"
+        className="ligne-total-valeur"
         style={{
           fontWeight: props.strong ? 650 : 400,
           fontSize: props.strong ? 14 : 13,

@@ -8,7 +8,42 @@ pas la liste des fichiers modifiés.
 
 ## [Non publié]
 
+Rien pour l'instant.
+
+## [1.2.0] (2026-08-20)
+
+### Corrigé
+
+- **« Ouvrir le dossier » ne faisait rien.** L'application confiait une URL
+  `file://` au navigateur, qui affichait une liste de fichiers dans un onglet au
+  lieu d'ouvrir le Finder ou l'Explorateur, quand il ne l'ignorait pas
+  simplement. Chaque système a sa commande, et c'est elle qui est appelée
+  désormais.
+- **Les textes se chevauchaient dans les rapports** dès que la fenêtre se
+  resserrait. Trois défauts distincts : un libellé long venait toucher son
+  montant faute d'écart imposé, les onglets se cassaient en deux lignes contre
+  le sélecteur de période, et les graphiques placés en demi-carte étaient étirés
+  horizontalement, ce qui déformait leurs étiquettes. Les lignes libellé et
+  montant partagent maintenant une mise en forme commune, utilisée aussi sur les
+  totaux de facture et de réception.
+
 ### Ajouté
+
+- **Reprise d'un accès administrateur perdu.** Un mot de passe haché ne se
+  retrouve pas : si le dernier administrateur oublie le sien, plus personne
+  n'ouvre la boutique alors que les données restent lisibles sur le disque. Un
+  fichier déposé dans le dossier de données déclenche au démarrage la
+  réinitialisation, et le mot de passe provisoire est écrit à côté. La reprise
+  est inscrite au journal d'audit, ne rejoue pas, et n'autorise rien d'autre que
+  le choix d'un nouveau mot de passe. L'écran de connexion affiche la marche à
+  suivre avec le chemin exact.
+- **Effacement de toutes les données du poste**, depuis un nouvel onglet
+  « Ce poste » des paramètres. L'opération demande de saisir le nom de
+  l'entreprise, prend une dernière sauvegarde par défaut, et laisse le logiciel
+  dans l'état d'un premier démarrage. Décocher la sauvegarde supprime aussi les
+  archives et les exports, pour céder un poste sans rien y laisser.
+- Le même onglet rassemble l'emplacement des données et la marche à suivre pour
+  désinstaller sur chaque système.
 
 - **Guide d'utilisation de 57 pages**, en PDF, de l'installation à la lecture
   des rapports. Ses captures sont prises sur l'application réelle, pilotée dans
@@ -164,7 +199,8 @@ Première version utilisable de bout en bout.
 - Refus d'ouvrir des données créées par une version plus récente.
 - Protection contre les archives piégées à la restauration.
 
-[Non publié]: https://github.com/siskoai/stock/compare/v1.1.0...HEAD
+[Non publié]: https://github.com/siskoai/stock/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/siskoai/stock/releases/tag/v1.2.0
 [1.1.0]: https://github.com/siskoai/stock/releases/tag/v1.1.0
 [1.0.1]: https://github.com/siskoai/stock/releases/tag/v1.0.1
 [1.0.0]: https://github.com/siskoai/stock/releases/tag/v1.0.0

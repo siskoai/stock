@@ -483,11 +483,12 @@ function PurchaseDetail(props: {
 
 function Row(props: { label: string; value: string; strong?: boolean }) {
   return (
-    <div className="row" style={{ justifyContent: 'space-between', padding: '4px 0' }}>
-      <span className="small">{props.label}</span>
-      <span className="tabular" style={{ fontWeight: props.strong ? 650 : 400, fontSize: props.strong ? 15 : 13 }}>
-        {props.value}
-      </span>
+    <div className="ligne-total" style={{ padding: '4px 0' }}>
+      <span className="ligne-total-libelle small">{props.label}</span>
+      <span className="ligne-total-valeur" style={{
+        fontWeight: props.strong ? 650 : 400,
+        fontSize: props.strong ? 15 : 13,
+      }}>{props.value}</span>
     </div>
   )
 }

@@ -65,6 +65,17 @@ func run() error {
 	}
 	services.Version = version
 
+	// Reprise d'un accès administrateur perdu, si le fichier de demande est
+	// présent. Avant toute session : c'est justement parce qu'aucune ne peut
+	// s'ouvrir que la procédure existe.
+	if reprise, err := services.RepriseAdministrateur(db, sec); err != nil {
+		logger.Error("reprise d'accès : " + err.Error())
+	} else if reprise.Effectuee {
+		logger.Info(fmt.Sprintf(
+			"reprise d'accès effectuée pour le compte « %s », mot de passe provisoire dans %s",
+			reprise.Compte, reprise.Fichier))
+	}
+
 	var (
 		session   = services.NewSession(db, sec)
 		catalog   = services.NewCatalog(db, sec)

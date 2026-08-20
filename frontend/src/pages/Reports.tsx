@@ -35,7 +35,9 @@ export function ReportsPage(_: PageContext) {
   return (
     <div className="stack">
       <div className="row row-wrap">
-        <div className="tabs" style={{ marginBottom: 0, flex: 1 }}>
+        {/* La base de 420 px force le sélecteur de période à passer sous les
+            onglets quand la fenêtre se resserre, au lieu de les rogner. */}
+        <div className="tabs" style={{ marginBottom: 0, flex: '1 1 420px', minWidth: 0 }}>
           <button className={`tab ${tab === 'evolution' ? 'active' : ''}`} onClick={() => setTab('evolution')}>Évolution</button>
           <button className={`tab ${tab === 'result' ? 'active' : ''}`} onClick={() => setTab('result')}>Compte de résultat</button>
           <button className={`tab ${tab === 'situation' ? 'active' : ''}`} onClick={() => setTab('situation')}>Situation</button>
@@ -344,7 +346,8 @@ function Stats({ from, to }: { from: string; to: string }) {
 
         <Card title="Ventes par jour de la semaine">
           <BarChart
-            height={160}
+            height={170}
+            viewWidth={460}
             points={s.byWeekday.map((d) => ({ label: d.label.slice(0, 3), value: d.amount }))}
             format={amount}
           />
@@ -429,12 +432,12 @@ function Line(props: {
   strong?: boolean; muted?: boolean; accent?: boolean; hint?: string
 }) {
   return (
-    <div className="row" style={{ justifyContent: 'space-between', padding: '5px 0', alignItems: 'baseline' }}>
-      <span className={props.muted ? 'small muted' : 'small'}>
+    <div className="ligne-total">
+      <span className={`ligne-total-libelle ${props.muted ? 'small muted' : 'small'}`}>
         {props.label}
         {props.hint && <span className="muted"> · {props.hint}</span>}
       </span>
-      <span className="tabular" style={{
+      <span className="ligne-total-valeur" style={{
         fontWeight: props.strong ? 650 : 400,
         fontSize: props.strong ? 15 : 13,
         color: props.accent ? 'var(--red)' : undefined,

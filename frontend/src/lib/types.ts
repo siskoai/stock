@@ -383,6 +383,20 @@ export interface ImportReport {
   columns: string[]; ignored: string[]
 }
 
+/** Marche à suivre pour reprendre un accès administrateur perdu. */
+export interface InstructionsReprise {
+  dossier: string
+  fichier: string
+  resultat: string
+}
+
+export interface EffacementInput {
+  confirmation: string
+  garderUneSauvegarde: boolean
+}
+
+export interface Effacement { sauvegarde?: string }
+
 export interface CurrencyPreset {
   code: string; symbol: string; decimals: number; label: string
 }

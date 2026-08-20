@@ -1437,6 +1437,8 @@ sha256sum -c SHA256SUMS.txt       # Linux</code></pre>
     <div><span>10.1</span>La sauvegarde automatique</div>
     <div><span>10.2</span>Restaurer</div>
     <div><span>10.3</span>Ce qu'il faut faire une fois par mois</div>
+    <div><span>10.4</span>Reprendre un accès perdu</div>
+    <div><span>10.5</span>Désinstaller et effacer</div>
   </div>
 </section>
 
@@ -1501,6 +1503,93 @@ sha256sum -c SHA256SUMS.txt       # Linux</code></pre>
     <li>la liste des archives contient bien celle d'hier ;</li>
     <li>le chiffrement du disque est activé, si le poste est transportable.</li>
   </ul>
+</section>
+
+<section class="page">
+  <h2>10.4 Reprendre un accès perdu</h2>
+  <p class="chapeau">
+    Les mots de passe sont hachés : ils ne se retrouvent pas. Si le dernier
+    administrateur oublie le sien, une procédure permet de rouvrir la boutique.
+  </p>
+
+  <p>
+    Le lien <em>Mot de passe oublié</em> de l'écran de connexion affiche la
+    marche à suivre, avec le chemin exact du dossier concerné sur votre poste.
+  </p>
+
+  <ol class="etapes">
+    <li><strong>Ouvrez le dossier de données</strong> indiqué par ce lien.</li>
+    <li><strong>Créez-y un fichier vide</strong> nommé
+      <code>REINITIALISER-MOT-DE-PASSE.txt</code>. Vous pouvez y écrire
+      l'identifiant du compte à reprendre ; laissé vide, c'est le premier
+      administrateur qui est retenu.</li>
+    <li><strong>Relancez Comptoir.</strong> Le mot de passe provisoire vous
+      attend dans <code>MOT-DE-PASSE-PROVISOIRE.txt</code>, au même endroit.</li>
+    <li><strong>Connectez-vous</strong> avec ce mot de passe, puis choisissez-en
+      un nouveau. C'est la seule action que le provisoire autorise.</li>
+  </ol>
+
+  <div class="note attention">
+    <div class="titre">Supprimez le fichier une fois le mot de passe retenu</div>
+    <p>
+      Toute personne qui le lit peut ouvrir votre boutique. La reprise est par
+      ailleurs inscrite dans le journal d'audit, avec sa date.
+    </p>
+  </div>
+
+  <div class="note">
+    <div class="titre">Pourquoi cette porte existe</div>
+    <p>
+      Quiconque peut créer ce fichier peut déjà lire toutes vos ventes et tous
+      vos clients : les données sont en clair sur le disque, par choix. La
+      reprise ne donne donc rien de plus. La protection contre un accès physique
+      au poste relève du chiffrement du disque, décrit en section 1.4.
+    </p>
+  </div>
+
+  <h2 style="margin-top:12mm">10.5 Désinstaller et effacer</h2>
+  <p class="chapeau">
+    Deux gestes distincts. Désinstaller retire le programme, effacer supprime
+    les données.
+  </p>
+
+  <table>
+    <tr><th style="width:34mm">Système</th><th>Désinstallation</th></tr>
+    <tr><td><strong>Windows</strong></td>
+      <td>Paramètres, Applications, Applications installées, Comptoir,
+        Désinstaller.</td></tr>
+    <tr><td><strong>macOS</strong></td>
+      <td>Glissez Comptoir du dossier Applications vers la corbeille.</td></tr>
+    <tr><td><strong>Linux</strong></td>
+      <td>Supprimez l'exécutable et le raccourci que vous aviez créés.</td></tr>
+  </table>
+
+  <div class="note">
+    <div class="titre">La désinstallation ne touche pas vos données</div>
+    <p>
+      Elles restent dans leur dossier, prêtes à être retrouvées par une
+      réinstallation ou par une version plus récente. C'est ce qui rend une mise
+      à jour sans risque.
+    </p>
+  </div>
+
+  <h3>Effacer toutes les données</h3>
+  <p>
+    Depuis <em>Paramètres</em>, onglet <em>Ce poste</em>. L'opération demande de
+    saisir le nom de votre entreprise, prend une dernière sauvegarde par défaut,
+    et laisse le logiciel dans l'état d'un premier démarrage.
+  </p>
+
+  <div class="note regle">
+    <div class="titre">Pour céder un ordinateur</div>
+    <p>
+      Décochez la conservation de la sauvegarde : les archives et les exports
+      sont alors supprimés aussi. Sur un disque non chiffré, une suppression de
+      fichiers ne garantit pas l'effacement physique des secteurs. Pour une
+      cession définitive, utilisez l'effacement sécurisé fourni par votre
+      système.
+    </p>
+  </div>
 </section>
 
 <!-- ====================== PARTIE 11 ====================== -->
@@ -1570,10 +1659,13 @@ sha256sum -c SHA256SUMS.txt       # Linux</code></pre>
 
   <h4>J'ai oublié le mot de passe administrateur.</h4>
   <p>
-    S'il existe un autre administrateur, il peut le réinitialiser. Sinon, il n'y
-    a aucun moyen de rouvrir la boutique : les mots de passe ne sont jamais
-    stockés en clair. Vos données restent lisibles dans leurs fichiers, mais
-    l'application ne s'ouvrira pas.
+    S'il existe un autre administrateur, demandez-lui de le réinitialiser depuis
+    la page des comptes : c'est le chemin le plus simple.
+  </p>
+  <p>
+    Sinon, utilisez la reprise décrite en section 10.4. Le lien
+    <em>Mot de passe oublié</em> de l'écran de connexion affiche la marche à
+    suivre avec le chemin exact du dossier.
   </p>
 
   <h4>Puis-je utiliser Comptoir sur deux postes ?</h4>

@@ -221,8 +221,11 @@ func (a *App) OpenDataFolder(which string) error {
 	case "exports":
 		target = filepath.Join(a.db.Dir, "exports")
 	}
-	runtime.BrowserOpenURL(a.ctx, "file://"+filepath.ToSlash(target))
-	return nil
+	// Le dossier peut ne pas exister si rien n'y a encore été déposé.
+	if err := os.MkdirAll(target, 0o750); err != nil {
+		return fmt.Errorf("ouverture du dossier : %w", err)
+	}
+	return revelerDansExplorateur(target)
 }
 
 // ---------------------------------------------------------------------------

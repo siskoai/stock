@@ -62,6 +62,7 @@ export const Session = {
   brand: bind<[], T.Attribution>('services.Session', 'Brand'),
   companyLogo: bind<[], string>('services.Session', 'CompanyLogo'),
   currencies: bind<[], T.CurrencyPreset[]>('services.Session', 'Currencies'),
+  instructions: bind<[], T.InstructionsReprise>('services.Session', 'Instructions'),
   defaultCategories: bind<[], string[]>('services.Session', 'DefaultCategoryNames'),
   login: bind<[string, string], T.State>('services.Session', 'Login'),
   logout: bind<[], T.State>('services.Session', 'Logout'),
@@ -190,6 +191,7 @@ export const Config = {
   presets: bind<[], T.Presets>('services.Config', 'Presets'),
   resetCounters: bind<[], T.Settings>('services.Config', 'ResetCounters'),
   dataLocation: bind<[], Record<string, string>>('services.Config', 'DataLocation'),
+  eraseAllData: bind<[T.EffacementInput], T.Effacement>('services.Config', 'EraseAllData'),
 }
 
 export const Backups = {

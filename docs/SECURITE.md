@@ -119,6 +119,48 @@ Une sauvegarde est prise avant toute migration de format.
 
 ---
 
+## Reprendre un accès administrateur perdu
+
+Les mots de passe sont hachés : ils ne peuvent pas être retrouvés. Si le dernier
+administrateur oublie le sien, plus personne n'ouvre la boutique, alors que les
+données restent lisibles sur le disque. Une procédure de reprise existe donc.
+
+**Marche à suivre.** Déposer un fichier vide nommé
+`REINITIALISER-MOT-DE-PASSE.txt` dans le dossier de données, puis relancer
+Comptoir. Au démarrage, l'application réinitialise le mot de passe du premier
+administrateur et dépose le nouveau dans `MOT-DE-PASSE-PROVISOIRE.txt`, au même
+endroit. Le fichier de demande est supprimé, que la reprise réussisse ou échoue.
+
+Le fichier de demande peut nommer le compte à reprendre. Seuls les comptes
+administrateurs sont concernés : pour un vendeur, il suffit de le demander à son
+responsable.
+
+**Pourquoi cela n'affaiblit pas le modèle de menace.** Quiconque peut créer ce
+fichier peut déjà lire l'intégralité des ventes, des clients et des marges : les
+données sont du JSON en clair, par choix. La protection contre un accès au
+disque relève du chiffrement du système, pas de l'application. La reprise ne
+donne donc rien que cette personne n'ait déjà.
+
+**Ce que la procédure garantit malgré tout :**
+
+* elle est inscrite au journal d'audit, avec sa date ;
+* le mot de passe obtenu est marqué à changer, il n'ouvre que la session
+  pendant laquelle il sera remplacé ;
+* elle ne rejoue pas : le fichier de demande est consommé.
+
+## Effacer toutes les données
+
+Depuis **Paramètres, Ce poste**, un administrateur peut supprimer
+définitivement l'intégralité des données du poste. L'opération demande de
+saisir le nom de l'entreprise, prend une dernière sauvegarde par défaut, et
+laisse le logiciel dans l'état d'un premier démarrage.
+
+Pour céder ou mettre au rebut un ordinateur, décocher la conservation de la
+sauvegarde : les dossiers `data`, `backups` et `exports` sont alors tous
+supprimés. Sur un disque non chiffré, une suppression de fichiers ne garantit
+pas l'effacement physique des secteurs ; pour une cession définitive, un
+effacement sécurisé du disque par l'outil du système reste préférable.
+
 ## Signaler un problème
 
 Une faille dans un logiciel qui tient la caisse d'un commerce mérite d'être

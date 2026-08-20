@@ -10,13 +10,13 @@ import { formatDateTime } from '../lib/format'
 import { formatBytes } from '../lib/money'
 import {
   Alert, Card, Checkbox, ConfirmDialog, DataTable, Empty, Field,
-  Loading, NumberInput, Select, TextArea, TextInput,
+  Loading, Modal, NumberInput, Select, TextArea, TextInput,
 } from '../components/UI'
 import { IconFolder, IconRefresh, IconTrash } from '../components/Icons'
 import type { Settings } from '../lib/types'
 import type { PageContext } from '../App'
 
-type Tab = 'company' | 'money' | 'documents' | 'backups'
+type Tab = 'company' | 'money' | 'documents' | 'backups' | 'poste'
 
 export function SettingsPage(_: PageContext) {
   const [tab, setTab] = useState<Tab>('company')
@@ -29,15 +29,16 @@ export function SettingsPage(_: PageContext) {
 
   return (
     <div className="content-narrow stack">
-      <div className="tabs">
+      <div className="tabs" style={{ flexWrap: 'wrap' }}>
         <button className={`tab ${tab === 'company' ? 'active' : ''}`} onClick={() => setTab('company')}>Entreprise</button>
         <button className={`tab ${tab === 'money' ? 'active' : ''}`} onClick={() => setTab('money')}>Monnaie et taxes</button>
         <button className={`tab ${tab === 'documents' ? 'active' : ''}`} onClick={() => setTab('documents')}>Documents</button>
         <button className={`tab ${tab === 'backups' ? 'active' : ''}`} onClick={() => setTab('backups')}>Sauvegardes</button>
+        <button className={`tab ${tab === 'poste' ? 'active' : ''}`} onClick={() => setTab('poste')}>Ce poste</button>
       </div>
 
-      {tab === 'backups'
-        ? <BackupsTab />
+      {tab === 'backups' ? <BackupsTab />
+        : tab === 'poste' ? <PosteTab />
         : <SettingsForm
             key={settings.data.updatedAt}
             initial={settings.data}
@@ -295,7 +296,6 @@ function SettingsForm(props: {
 function BackupsTab() {
   const toast = useToast()
   const backups = useAsync(() => Backups.list(), [])
-  const location = useAsync(() => Config.dataLocation(), [])
   const settings = useAsync(() => Config.get(), [])
   const [busy, setBusy] = useState(false)
   const [restoring, setRestoring] = useState<string | null>(null)
@@ -446,23 +446,6 @@ function BackupsTab() {
         </Card>
       )}
 
-      {location.data && (
-        <Card title="Emplacement des données">
-          <div className="stack" style={{ gap: 8 }}>
-            {Object.entries(location.data).map(([key, path]) => (
-              <div className="row" key={key} style={{ justifyContent: 'space-between' }}>
-                <span className="small muted" style={{ textTransform: 'capitalize' }}>{key}</span>
-                <span className="mono small truncate" data-selectable style={{ maxWidth: 520 }}>{path}</span>
-              </div>
-            ))}
-            <p className="small muted" style={{ marginTop: 6, lineHeight: 1.5 }}>
-              Les données sont des fichiers JSON lisibles : elles restent récupérables même sans
-              Comptoir. Le chiffrement du disque relève du système d'exploitation.
-            </p>
-          </div>
-        </Card>
-      )}
-
       {restoring && (
         <ConfirmDialog
           title="Restaurer cette sauvegarde ?"
@@ -491,5 +474,180 @@ function BackupsTab() {
         />
       )}
     </div>
+  )
+}
+
+// --- Ce poste ---------------------------------------------------------------
+
+/**
+ * Emplacement des données, désinstallation, effacement.
+ *
+ * Ces trois sujets tiennent ensemble : ils répondent tous à la question
+ * « comment je m'en vais ». Ils vivent dans leur propre onglet plutôt qu'au bas
+ * des sauvegardes, pour qu'on ne tombe pas sur le bouton d'effacement en
+ * cherchant à restaurer.
+ */
+const EMPLACEMENTS: { cle: string; libelle: string }[] = [
+  { cle: 'root', libelle: 'Dossier principal' },
+  { cle: 'data', libelle: 'Données' },
+  { cle: 'backups', libelle: 'Sauvegardes' },
+  { cle: 'exports', libelle: 'Exports' },
+]
+
+function PosteTab() {
+  const { state } = useSession()
+  const toast = useToast()
+  const location = useAsync(() => Config.dataLocation(), [])
+  const [effacer, setEffacer] = useState(false)
+
+  return (
+    <div className="stack">
+      <Card title="Emplacement des données">
+        <div className="stack" style={{ gap: 8 }}>
+          {EMPLACEMENTS.map(({ cle, libelle }) => (
+            <div className="ligne-total" key={cle}>
+              <span className="ligne-total-libelle small muted">{libelle}</span>
+              <span className="mono small truncate" data-selectable
+                title={location.data?.[cle]} style={{ maxWidth: 460, direction: 'rtl', textAlign: 'right' }}>
+                {location.data?.[cle] ?? '…'}
+              </span>
+            </div>
+          ))}
+          <div className="row" style={{ marginTop: 6 }}>
+            <button className="btn btn-sm" onClick={() => Host.openDataFolder('root').catch((e) => toast.error(messageOf(e)))}>
+              <IconFolder />Ouvrir le dossier
+            </button>
+          </div>
+          <p className="small muted" style={{ marginTop: 4, lineHeight: 1.5 }}>
+            Les données sont des fichiers lisibles : elles restent exploitables
+            même sans Comptoir. Le chiffrement du disque relève du système
+            d'exploitation.
+          </p>
+        </div>
+      </Card>
+
+      <Card title="Désinstaller l'application">
+        <div className="stack" style={{ gap: 12 }}>
+          <Alert tone="info">
+            Désinstaller Comptoir retire le programme, jamais vos données. Elles
+            restent dans le dossier ci-dessus, prêtes à être retrouvées par une
+            réinstallation ou par une version plus récente.
+          </Alert>
+          <div>
+            <div className="section-title">Windows</div>
+            <p className="small">
+              Paramètres, Applications, Applications installées, Comptoir,
+              Désinstaller. Ou depuis le Panneau de configuration.
+            </p>
+          </div>
+          <div>
+            <div className="section-title">macOS</div>
+            <p className="small">
+              Glissez Comptoir depuis le dossier Applications vers la corbeille.
+            </p>
+          </div>
+          <div>
+            <div className="section-title">Linux</div>
+            <p className="small">
+              Supprimez l'exécutable et le raccourci que vous aviez créés.
+            </p>
+          </div>
+          <p className="small muted" style={{ lineHeight: 1.5 }}>
+            Pour partir sans rien laisser, effacez d'abord les données ci-dessous,
+            puis désinstallez.
+          </p>
+        </div>
+      </Card>
+
+      <Card title="Effacer toutes les données de ce poste">
+        <div className="stack" style={{ gap: 12 }}>
+          <Alert tone="danger">
+            Articles, ventes, clients, mouvements, charges et comptes sont
+            supprimés définitivement. Comptoir repartira sur un premier
+            démarrage, comme au premier jour.
+          </Alert>
+          <p className="small">
+            À faire pour repartir d'une base propre après une période d'essai, ou
+            pour céder cet ordinateur sans y laisser le fichier de vos clients.
+          </p>
+          <div className="row">
+            <button className="btn btn-danger" onClick={() => setEffacer(true)}>
+              <IconTrash />Effacer toutes les données
+            </button>
+          </div>
+        </div>
+      </Card>
+
+      {effacer && (
+        <EffacementModal
+          companyName={state.companyName}
+          onClose={() => setEffacer(false)}
+        />
+      )}
+    </div>
+  )
+}
+
+function EffacementModal(props: { companyName: string; onClose: () => void }) {
+  const toast = useToast()
+  const [confirmation, setConfirmation] = useState('')
+  const [garder, setGarder] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  const correspond = confirmation.trim().toLowerCase() === props.companyName.trim().toLowerCase()
+
+  async function effacer() {
+    setBusy(true)
+    setError(null)
+    try {
+      const resultat = await Config.eraseAllData({
+        confirmation, garderUneSauvegarde: garder,
+      })
+      toast.success(resultat.sauvegarde
+        ? `Données effacées. Une dernière sauvegarde a été conservée dans ${resultat.sauvegarde}`
+        : 'Toutes les données ont été effacées.')
+      window.setTimeout(() => { Host.quit().catch(() => {}) }, 3000)
+    } catch (err) {
+      setError(messageOf(err))
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Modal
+      title="Effacer toutes les données"
+      subtitle="Cette opération est irréversible"
+      onClose={props.onClose}
+      footer={
+        <>
+          <button className="btn" onClick={props.onClose} disabled={busy}>Annuler</button>
+          <button className="btn btn-danger" onClick={effacer} disabled={busy || !correspond}>
+            {busy ? 'Effacement…' : 'Effacer définitivement'}
+          </button>
+        </>
+      }
+    >
+      <div className="stack" style={{ gap: 14 }}>
+        {error && <Alert tone="danger">{error}</Alert>}
+        <Alert tone="danger">
+          Tout sera supprimé : articles, stock, factures, clients, charges,
+          comptes et journal d'audit. Il n'y a pas de retour en arrière.
+        </Alert>
+        <Checkbox
+          checked={garder}
+          onChange={setGarder}
+          label="Conserver une dernière sauvegarde"
+          hint="Décochez seulement pour céder ou mettre au rebut cet ordinateur : il ne resterait alors plus rien à récupérer."
+        />
+        <Field
+          label="Saisissez le nom de votre entreprise pour confirmer"
+          required
+          hint={`Exactement : ${props.companyName}`}
+        >
+          <TextInput value={confirmation} onChange={setConfirmation} autoFocus />
+        </Field>
+      </div>
+    </Modal>
   )
 }

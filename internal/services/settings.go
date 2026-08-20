@@ -2,6 +2,8 @@ package services
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"comptoir/internal/auth"
@@ -158,6 +160,75 @@ func (s *Config) ResetCounters() (models.Settings, error) {
 	}
 	s.log(u, "UPDATE", "settings", "settings", "Numérotation des factures et bons d'entrée remise à zéro")
 	return next, nil
+}
+
+// EffacementInput porte la confirmation d'un effacement total.
+type EffacementInput struct {
+	// Confirmation doit reproduire le nom de l'entreprise, à la casse près.
+	// Taper un nom entier laisse le temps de changer d'avis, ce qu'une case à
+	// cocher ne fait pas.
+	Confirmation string `json:"confirmation"`
+
+	// GarderUneSauvegarde conserve une dernière archive avant l'effacement.
+	// À décocher seulement pour céder ou mettre au rebut le poste : il ne
+	// resterait alors plus rien à récupérer.
+	GarderUneSauvegarde bool `json:"garderUneSauvegarde"`
+}
+
+// Effacement rend compte de ce qui a été supprimé.
+type Effacement struct {
+	Sauvegarde string `json:"sauvegarde,omitempty"`
+}
+
+// EraseAllData efface l'intégralité des données de ce poste.
+//
+// L'opération est irréversible et laisse le logiciel dans l'état d'un premier
+// démarrage. Elle existe pour deux situations : repartir d'une base propre après
+// une période d'essai, et céder ou mettre au rebut l'ordinateur sans y laisser
+// le fichier de ses clients.
+//
+// L'application doit être redémarrée ensuite : les collections chargées en
+// mémoire ne correspondent plus à rien.
+func (s *Config) EraseAllData(in EffacementInput) (Effacement, error) {
+	u, err := s.guard("settings")
+	if err != nil {
+		return Effacement{}, err
+	}
+	attendu := trim(s.db.Settings().CompanyName)
+	if !strings.EqualFold(trim(in.Confirmation), attendu) {
+		return Effacement{}, fmt.Errorf(
+			"pour confirmer, saisissez exactement le nom de l'entreprise : « %s »", attendu)
+	}
+
+	resultat := Effacement{}
+	if in.GarderUneSauvegarde {
+		info, err := s.db.Backup("avant-effacement")
+		if err != nil {
+			return Effacement{}, fmt.Errorf(
+				"la sauvegarde préalable a échoué, l'effacement est annulé : %w", err)
+		}
+		resultat.Sauvegarde = info.Path
+	}
+
+	// La trace est écrite avant la suppression : elle disparaîtra avec le
+	// reste, mais elle figurera dans l'archive que l'on vient de prendre.
+	s.log(u, "ERASE", "settings", "settings",
+		"Effacement de toutes les données du poste demandé par « %s », sauvegarde conservée : %t",
+		u.Username, in.GarderUneSauvegarde)
+
+	if err := os.RemoveAll(filepath.Join(s.db.Dir, "data")); err != nil {
+		return Effacement{}, fmt.Errorf("suppression des données : %w", err)
+	}
+	if !in.GarderUneSauvegarde {
+		if err := os.RemoveAll(s.db.BackupDir()); err != nil {
+			return Effacement{}, fmt.Errorf("suppression des sauvegardes : %w", err)
+		}
+		if err := os.RemoveAll(filepath.Join(s.db.Dir, "exports")); err != nil {
+			return Effacement{}, fmt.Errorf("suppression des exports : %w", err)
+		}
+	}
+	s.auth.Logout()
+	return resultat, nil
 }
 
 // DataLocation renvoie le chemin du dossier de données, affiché dans l'écran

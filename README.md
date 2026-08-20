@@ -233,7 +233,7 @@ menace.
 
 ## Guide d'utilisation
 
-Un guide complet de 57 pages accompagne le logiciel, de l'installation à la
+Un guide complet de 59 pages accompagne le logiciel, de l'installation à la
 lecture des rapports : **[Comptoir-guide-utilisation.pdf](docs/Comptoir-guide-utilisation.pdf)**.
 
 Ses captures sont prises sur l'application réelle, pilotée dans un navigateur
@@ -262,6 +262,26 @@ disque est la bonne couche pour s'en protéger, BitLocker, FileVault, LUKS.
 Voir [docs/SECURITE.md](docs/SECURITE.md).
 
 ---
+
+## Désinstaller, effacer, reprendre la main
+
+**Désinstaller** retire le programme, jamais les données. Elles restent dans le
+dossier indiqué plus haut, prêtes à être retrouvées par une réinstallation.
+
+**Effacer les données** se fait depuis *Paramètres, Ce poste*. L'opération
+demande de saisir le nom de l'entreprise, prend une dernière sauvegarde par
+défaut, et laisse le logiciel dans l'état d'un premier démarrage. Décocher la
+sauvegarde supprime aussi les archives et les exports, pour céder un poste sans
+rien y laisser.
+
+**Mot de passe administrateur oublié.** Les mots de passe sont hachés et ne se
+retrouvent pas. Déposez un fichier vide nommé `REINITIALISER-MOT-DE-PASSE.txt`
+dans le dossier de données, relancez Comptoir, et lisez le mot de passe
+provisoire dans `MOT-DE-PASSE-PROVISOIRE.txt`. L'écran de connexion rappelle la
+marche à suivre avec le chemin exact. La reprise est inscrite au journal
+d'audit, et le mot de passe obtenu doit être changé immédiatement. Voir
+[docs/SECURITE.md](docs/SECURITE.md) pour la raison pour laquelle cela
+n'affaiblit pas le modèle de menace.
 
 ## Sauvegardes
 

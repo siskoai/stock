@@ -4,8 +4,9 @@
 
 import { useState, type FormEvent } from 'react'
 import { Session, messageOf } from '../lib/api'
+import { useAsync } from '../lib/useAsync'
 import { useSession } from '../lib/session'
-import { Alert, Field, TextInput } from '../components/UI'
+import { Alert, Field, Modal, TextInput } from '../components/UI'
 import { Attribution } from '../components/Attribution'
 
 function Shell({ title, subtitle, children, footer }: {
@@ -34,6 +35,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [oublie, setOublie] = useState(false)
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -62,8 +64,83 @@ export function LoginPage() {
         <button className="btn btn-primary btn-block" type="submit" disabled={busy} style={{ marginTop: 6 }}>
           {busy ? 'Connexion…' : 'Se connecter'}
         </button>
+        <button
+          type="button"
+          className="btn btn-ghost btn-block"
+          style={{ fontSize: 12.5, color: 'var(--muted)' }}
+          onClick={() => setOublie(true)}
+        >Mot de passe oublié ?</button>
       </form>
+      {oublie && <MotDePasseOublie onClose={() => setOublie(false)} />}
     </Shell>
+  )
+}
+
+/**
+ * Marche à suivre quand plus personne ne peut ouvrir la boutique.
+ *
+ * Le chemin exact est affiché plutôt que décrit : à ce moment précis,
+ * l'utilisateur n'a pas le manuel sous les yeux, et une explication vague ne
+ * lui servirait à rien.
+ */
+function MotDePasseOublie({ onClose }: { onClose: () => void }) {
+  const { data } = useAsync(() => Session.instructions(), [])
+
+  return (
+    <Modal
+      title="Mot de passe oublié"
+      subtitle="Reprendre la main sur un compte administrateur"
+      onClose={onClose}
+      footer={<button className="btn btn-primary" onClick={onClose}>J'ai compris</button>}
+    >
+      <div className="stack" style={{ gap: 14 }}>
+        <Alert tone="info">
+          Si un autre administrateur existe sur ce poste, demandez-lui de
+          réinitialiser votre mot de passe : c'est plus simple et plus sûr que la
+          procédure ci-dessous.
+        </Alert>
+
+        <p className="small">
+          Sinon, déposez un fichier vide dans le dossier de données de Comptoir.
+          Au prochain démarrage, l'application y déposera un mot de passe
+          provisoire.
+        </p>
+
+        <div className="stack-sm">
+          <div className="section-title">1. Ouvrez ce dossier</div>
+          <div className="mono small" data-selectable style={{
+            padding: '8px 10px', background: 'var(--wash)',
+            borderRadius: 'var(--radius-sm)', wordBreak: 'break-all',
+          }}>{data?.dossier ?? '…'}</div>
+        </div>
+
+        <div className="stack-sm">
+          <div className="section-title">2. Créez-y un fichier vide nommé</div>
+          <div className="mono small" data-selectable style={{
+            padding: '8px 10px', background: 'var(--wash)', borderRadius: 'var(--radius-sm)',
+          }}>{data?.fichier ?? '…'}</div>
+          <span className="field-hint">
+            Vous pouvez y écrire l'identifiant du compte à reprendre. Laissé
+            vide, c'est le premier administrateur qui est retenu.
+          </span>
+        </div>
+
+        <div className="stack-sm">
+          <div className="section-title">3. Relancez Comptoir</div>
+          <span className="small">
+            Le mot de passe provisoire vous attendra dans le fichier{' '}
+            <span className="mono">{data?.resultat ?? '…'}</span>, au même
+            endroit. Il ouvre la session, et rien d'autre : Comptoir vous
+            demandera aussitôt d'en choisir un nouveau.
+          </span>
+        </div>
+
+        <Alert tone="warn">
+          Supprimez le fichier du mot de passe provisoire dès que vous l'avez
+          retenu. Cette reprise est inscrite dans le journal d'audit.
+        </Alert>
+      </div>
+    </Modal>
   )
 }
 

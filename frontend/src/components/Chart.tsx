@@ -26,12 +26,18 @@ interface ChartProps {
   format: (v: number) => string
   /** Nombre maximum d'étiquettes sur l'axe horizontal. */
   maxLabels?: number
+  /**
+   * Largeur du repère de dessin. Une carte étroite mérite un repère plus
+   * étroit : à largeur constante, le graphe serait réduit et ses étiquettes
+   * deviendraient illisibles.
+   */
+  viewWidth?: number
 }
 
-export function LineChart({ points, height = 190, format, maxLabels = 8 }: ChartProps) {
+export function LineChart({ points, height = 190, format, maxLabels = 8, viewWidth = 720 }: ChartProps) {
   const gradientId = useId()
   const [hover, setHover] = useState<number | null>(null)
-  const width = 720
+  const width = viewWidth
   const innerW = width - PAD.left - PAD.right
   const innerH = height - PAD.top - PAD.bottom
 
@@ -51,7 +57,7 @@ export function LineChart({ points, height = 190, format, maxLabels = 8 }: Chart
 
   return (
     <div style={{ position: 'relative' }}>
-      <svg className="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img"
+      <svg className="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet" role="img"
         aria-label="Évolution sur la période">
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
@@ -108,9 +114,9 @@ export function LineChart({ points, height = 190, format, maxLabels = 8 }: Chart
   )
 }
 
-export function BarChart({ points, height = 190, format, maxLabels = 12 }: ChartProps) {
+export function BarChart({ points, height = 190, format, maxLabels = 12, viewWidth = 720 }: ChartProps) {
   const [hover, setHover] = useState<number | null>(null)
-  const width = 720
+  const width = viewWidth
   const innerW = width - PAD.left - PAD.right
   const innerH = height - PAD.top - PAD.bottom
 
@@ -126,7 +132,7 @@ export function BarChart({ points, height = 190, format, maxLabels = 12 }: Chart
 
   return (
     <div style={{ position: 'relative' }}>
-      <svg className="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img"
+      <svg className="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet" role="img"
         aria-label="Répartition sur la période">
         {[0, 0.5, 1].map((r) => (
           <g key={r}>

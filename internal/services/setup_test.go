@@ -1,11 +1,14 @@
 package services
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"comptoir/internal/auth"
 	"comptoir/internal/brand"
+	"comptoir/internal/models"
 	"comptoir/internal/storage"
 )
 
@@ -175,5 +178,83 @@ func TestSetup_MonnaiesProposees(t *testing.T) {
 	}
 	if len(session.DefaultCategoryNames()) == 0 {
 		t.Error("aucune catégorie de départ n'est proposée")
+	}
+}
+
+// L'effacement total est irréversible : il exige une confirmation qui ne peut
+// pas se donner par inadvertance.
+func TestEffacementTotal(t *testing.T) {
+	s := newSuite(t)
+	s.product("Article témoin", 100000, 200000, 5)
+	reglages := s.db.Settings()
+	reglages.CompanyName = "Sahel Informatique"
+	if err := s.db.SaveSettings(reglages); err != nil {
+		t.Fatal(err)
+	}
+
+	// Une confirmation approximative ne suffit pas.
+	for _, mauvaise := range []string{"", "oui", "Sahel", "sahel informatiqu"} {
+		if _, err := s.config.EraseAllData(EffacementInput{Confirmation: mauvaise}); err == nil {
+			t.Fatalf("la confirmation %q aurait dû être refusée", mauvaise)
+		}
+	}
+	if s.db.Products.Count() == 0 {
+		t.Fatal("des données ont été effacées malgré un refus")
+	}
+
+	// La casse est tolérée : c'est la vigilance qui compte, pas la dactylo.
+	resultat, err := s.config.EraseAllData(EffacementInput{
+		Confirmation: "sahel informatique", GarderUneSauvegarde: true,
+	})
+	if err != nil {
+		t.Fatalf("effacement : %v", err)
+	}
+	if resultat.Sauvegarde == "" {
+		t.Fatal("aucune sauvegarde conservée alors qu'elle était demandée")
+	}
+	if _, err := os.Stat(resultat.Sauvegarde); err != nil {
+		t.Errorf("la sauvegarde annoncée n'existe pas : %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(s.db.Dir, "data")); !os.IsNotExist(err) {
+		t.Error("le dossier de données est encore là")
+	}
+
+	// La session est fermée : plus rien ne doit répondre.
+	if _, err := s.catalog.ListProducts(ProductQuery{}); err == nil {
+		t.Error("les services répondent encore après effacement")
+	}
+}
+
+func TestEffacementTotal_SansRienGarder(t *testing.T) {
+	s := newSuite(t)
+	if _, err := NewBackups(s.db, s.sec).Create("essai"); err != nil {
+		t.Fatal(err)
+	}
+	reglages := s.db.Settings()
+	reglages.CompanyName = "Ma Boutique"
+	if err := s.db.SaveSettings(reglages); err != nil {
+		t.Fatal(err)
+	}
+
+	resultat, err := s.config.EraseAllData(EffacementInput{Confirmation: "Ma Boutique"})
+	if err != nil {
+		t.Fatalf("effacement : %v", err)
+	}
+	if resultat.Sauvegarde != "" {
+		t.Errorf("une sauvegarde a été conservée alors qu'elle n'était pas demandée : %s", resultat.Sauvegarde)
+	}
+	for _, dossier := range []string{"data", "backups", "exports"} {
+		if _, err := os.Stat(filepath.Join(s.db.Dir, dossier)); !os.IsNotExist(err) {
+			t.Errorf("le dossier %q subsiste", dossier)
+		}
+	}
+}
+
+// Seul un administrateur efface. Un gérant tient la boutique, il ne la ferme pas.
+func TestEffacementTotal_ReserveALAdministrateur(t *testing.T) {
+	s := newSuite(t)
+	s.loginAs("gerant", models.RoleManager)
+	if _, err := s.config.EraseAllData(EffacementInput{Confirmation: "Ma Société"}); err == nil {
+		t.Error("un gérant a pu effacer les données du poste")
 	}
 }

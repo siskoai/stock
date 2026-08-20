@@ -335,9 +335,9 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
 
 function Row(props: { label: string; value: string; strong?: boolean; accent?: boolean }) {
   return (
-    <div className="row" style={{ justifyContent: 'space-between', padding: '4px 0' }}>
-      <span className="small">{props.label}</span>
-      <span className="tabular" style={{
+    <div className="ligne-total" style={{ padding: '4px 0' }}>
+      <span className="ligne-total-libelle small">{props.label}</span>
+      <span className="ligne-total-valeur" style={{
         fontWeight: props.strong ? 650 : 400,
         fontSize: props.strong ? 15 : 13,
         color: props.accent ? 'var(--accent)' : undefined,

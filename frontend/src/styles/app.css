@@ -471,7 +471,7 @@ select { appearance: none; background-image: none; padding-right: 26px; cursor: 
 /* --- Graphiques --------------------------------------------------------- */
 
 .chart { width: 100%; display: block; overflow: visible; }
-.chart-axis { font-size: 10px; fill: var(--muted); }
+.chart-axis { font-size: 11px; fill: var(--muted); }
 .chart-grid { stroke: var(--rule); stroke-width: 1; }
 .chart-bar { fill: var(--brand); }
 .chart-bar.secondary { fill: var(--rule); }
@@ -485,11 +485,34 @@ select { appearance: none; background-image: none; padding-right: 26px; cursor: 
 .legend-item { display: inline-flex; align-items: center; gap: 5px; }
 .legend-swatch { width: 9px; height: 9px; border-radius: 2px; }
 
-.bar-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
-.bar-label { flex: 0 0 130px; font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.bar-track { flex: 1; height: 7px; background: var(--wash); border-radius: 4px; overflow: hidden; }
+.bar-row { display: flex; align-items: center; gap: 14px; padding: 6px 0; }
+/* Le libellé peut se réduire mais garde une largeur plancher : en dessous,
+   « Ordinateurs portables » deviendrait « Ord... » et n'apprendrait plus rien. */
+.bar-label {
+  flex: 1 1 130px; min-width: 84px; max-width: 190px;
+  font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bar-track { flex: 1 1 60px; min-width: 40px; height: 7px; background: var(--wash); border-radius: 4px; overflow: hidden; }
 .bar-fill { height: 100%; background: var(--brand); border-radius: 4px; }
-.bar-value { flex: 0 0 auto; font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--ink-2); min-width: 78px; text-align: right; }
+.bar-value {
+  flex: 0 0 auto; font-size: 12.5px; font-variant-numeric: tabular-nums;
+  color: var(--ink-2); text-align: right; white-space: nowrap;
+}
+
+/* --- Lignes libellé / montant -------------------------------------------- */
+
+/* Le motif revient dans les totaux de facture, de réception et de rapport.
+   L'écart est imposé plutôt que laissé à « space-between » : un libellé long
+   qui passe à la ligne viendrait sinon toucher le chiffre. */
+.ligne-total {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 18px; padding: 5px 0;
+}
+.ligne-total-libelle { flex: 1 1 auto; min-width: 0; line-height: 1.45; }
+.ligne-total-valeur {
+  flex: 0 0 auto; white-space: nowrap;
+  font-variant-numeric: tabular-nums; text-align: right;
+}
 
 /* --- Divers ------------------------------------------------------------- */
 
@@ -506,10 +529,15 @@ select { appearance: none; background-image: none; padding-right: 26px; cursor: 
   color: var(--muted); font-weight: 620; margin-bottom: 9px;
 }
 .pdf-frame { width: 100%; height: 66vh; border: 1px solid var(--rule); border-radius: var(--radius-sm); background: var(--wash); }
-.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
+.tabs {
+  display: flex; gap: 2px; border-bottom: 1px solid var(--rule);
+  margin-bottom: 16px; overflow-x: auto; scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   padding: 8px 13px; background: none; border: 0; border-bottom: 2px solid transparent;
   font: inherit; font-size: 13px; color: var(--muted); cursor: pointer; margin-bottom: -1px;
+  white-space: nowrap; flex: 0 0 auto;
 }
 .tab:hover { color: var(--ink); }
 .tab.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 570; }
