@@ -56,6 +56,10 @@ type InvoiceInput struct {
 	PaymentMethod  models.PaymentMethod `json:"paymentMethod"`
 	Notes          string               `json:"notes"`
 
+	// DueDate fixe l'échéance du solde laissé à crédit, au format AAAA-MM-JJ.
+	// Vide, le délai de règlement des paramètres s'applique.
+	DueDate string `json:"dueDate"`
+
 	// Draft enregistre un devis : rien n'est déduit du stock, aucun chiffre
 	// d'affaires n'est comptabilisé tant que la facture n'est pas émise. Les
 	// montants, eux, sont calculés comme sur une facture, un devis sans TVA
@@ -353,6 +357,33 @@ func (s *Sales) CreateInvoice(in InvoiceInput) (models.Invoice, error) {
 		status = models.StatusPartial
 	}
 
+	solde := total - paid
+
+	// Vendre à crédit suppose que l'on sache à qui réclamer : « Client comptoir »
+	// ne se relance pas. L'exigence ne porte que sur ce mode de règlement, qui
+	// traduit l'intention de laisser partir la marchandise sans encaisser. Une
+	// facture créée puis encaissée dans la foulée reste possible sans fiche.
+	if !in.Draft && solde > 0 && in.PaymentMethod == models.PayCredit &&
+		in.CustomerID == "" && trim(in.CustomerName) == "" {
+		return models.Invoice{}, fmt.Errorf(
+			"une vente laissée à crédit doit nommer son client : choisissez un client enregistré, ou saisissez au moins son nom")
+	}
+
+	// Échéance : celle qui est demandée, sinon le délai des paramètres.
+	var echeance *time.Time
+	if solde > 0 && !in.Draft {
+		if trim(in.DueDate) != "" {
+			d, err := parseDate(in.DueDate)
+			if err != nil {
+				return models.Invoice{}, fmt.Errorf("échéance invalide : %w", err)
+			}
+			echeance = &d
+		} else if jours := settings.DefaultPaymentTermDays; jours > 0 {
+			d := util.EndOfDay(date.AddDate(0, 0, jours))
+			echeance = &d
+		}
+	}
+
 	number, err := s.db.NextInvoiceNumber()
 	if err != nil {
 		return models.Invoice{}, err
@@ -369,7 +400,8 @@ func (s *Sales) CreateInvoice(in InvoiceInput) (models.Invoice, error) {
 	inv.TaxTotal = taxTotal
 	inv.Total = total
 	inv.AmountPaid = paid
-	inv.Balance = total - paid
+	inv.Balance = solde
+	inv.DueDate = echeance
 	inv.CostTotal = costTotal
 	inv.Margin = subtotalHT - in.GlobalDiscount - costTotal
 	inv.PaymentMethod = defaultPayment(in.PaymentMethod)
@@ -495,6 +527,7 @@ func (s *Sales) RegisterPayment(in PaymentInput) (models.Invoice, error) {
 	if inv.Balance <= 0 {
 		inv.Status = models.StatusPaid
 		inv.Balance = 0
+		inv.DueDate = nil // plus rien à échoir
 	} else {
 		inv.Status = models.StatusPartial
 	}
@@ -561,6 +594,7 @@ func (s *Sales) CancelInvoice(id, reason string) error {
 	inv.Status = models.StatusCancelled
 	inv.CancelledAt = &now
 	inv.Balance = 0
+	inv.DueDate = nil
 	inv.RefundDue = refund
 	inv.UpdatedAt = now
 	inv.Notes = appendNote(inv.Notes, fmt.Sprintf("Annulée le %s par %s, %s",

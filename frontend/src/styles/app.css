@@ -678,3 +678,12 @@ select { appearance: none; background-image: none; padding-right: 26px; cursor: 
   font-size: 21px; font-weight: 660; margin-top: 3px;
   font-variant-numeric: tabular-nums; letter-spacing: -.02em;
 }
+
+/* --- Ancienneté des créances --------------------------------------------- */
+
+.tranches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.tranche { display: flex; flex-direction: column; gap: 5px; }
+.tranche-montant { font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -.015em; }
+.tranche-detail { font-size: 11.5px; color: var(--muted); }
+.tranche-barre { height: 4px; background: var(--wash); border-radius: 3px; overflow: hidden; }
+.tranche-barre > div { height: 100%; background: var(--accent); border-radius: 3px; }

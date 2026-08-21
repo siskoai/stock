@@ -680,6 +680,8 @@ sha256sum -c SHA256SUMS.txt       # Linux</code></pre>
     <div><span>4.3</span>Établir un devis</div>
     <div><span>4.4</span>Encaisser un règlement</div>
     <div><span>4.5</span>Annuler une facture</div>
+    <div><span>4.6</span>Vendre à crédit</div>
+    <div><span>4.7</span>Suivre les créances</div>
   </div>
 </section>
 
@@ -845,6 +847,98 @@ sha256sum -c SHA256SUMS.txt       # Linux</code></pre>
       Il n'est pas effacé en silence : la facture affiche un montant
       <em>à rembourser</em>, visible dans la liste. Le remboursement lui-même se
       fait hors du logiciel, mais vous ne l'oublierez pas.
+    </p>
+  </div>
+</section>
+
+<section class="page">
+  <h2>4.6 Vendre à crédit</h2>
+  <p class="chapeau">
+    Laisser partir la marchandise sans encaisser, c'est ouvrir une dette. Le
+    logiciel la traite comme telle : elle a un débiteur, une échéance, et elle
+    se retrouve dans les créances.
+  </p>
+
+  <ol class="etapes">
+    <li><strong>Choisissez « Crédit »</strong> comme mode de règlement. Le
+      montant reçu passe alors à zéro : c'est l'inverse d'une vente comptant, où
+      il suit le total.</li>
+    <li><strong>Nommez le client.</strong> Le champ devient obligatoire : on ne
+      relance pas « Client comptoir ». Choisissez une fiche existante, ou
+      saisissez au moins un nom et un téléphone.</li>
+    <li><strong>Convenez d'une échéance.</strong> Elle est proposée à partir du
+      délai de règlement réglé dans les paramètres, et reste modifiable.</li>
+    <li><strong>Enregistrez.</strong> Le bouton annonce le montant qui reste dû,
+      pas celui qui rentre en caisse.</li>
+  </ol>
+
+  <div class="note">
+    <div class="titre">Ce que porte la facture</div>
+    <p>
+      Un bandeau en tête du document indique « Vente à crédit », le montant
+      restant dû et l'échéance. Le client repart avec un papier qui dit ce qu'il
+      doit et quand, ce qui évite la plupart des discussions ultérieures.
+    </p>
+  </div>
+
+  <div class="note attention">
+    <div class="titre">Un acompte reste possible</div>
+    <p>
+      Saisissez le montant versé à l'enlèvement : la facture passe en
+      « partiellement réglée », et seul le solde entre dans les créances.
+    </p>
+  </div>
+
+  <h2 style="margin-top:12mm">4.7 Suivre les créances</h2>
+  <p class="chapeau">
+    L'écran <em>Créances</em> répond à deux questions : combien on attend, et
+    depuis combien de temps.
+  </p>
+
+  <figure>
+    <img src="../images/24-creances.png" alt="Écran des créances">
+    <figcaption>
+      <b>L'ancienneté des créances.</b> Le total est une information de
+      surveillance, l'ancienneté une information d'action : mille francs dus
+      depuis trois mois ne valent pas mille francs dus depuis trois jours.
+    </figcaption>
+  </figure>
+
+  <table>
+    <tr><th style="width:44mm">Tranche</th><th>Ce qu'elle contient</th></tr>
+    <tr><td><strong>Non échu</strong></td>
+      <td>L'échéance n'est pas encore passée. Rien à faire.</td></tr>
+    <tr><td><strong>Sans échéance</strong></td>
+      <td>Aucune date n'a été convenue. Ces créances ne sont jamais comptées en
+        retard, mais elles méritent qu'on leur fixe un terme.</td></tr>
+    <tr><td><strong>1 à 30 jours</strong></td>
+      <td>Un simple rappel suffit le plus souvent.</td></tr>
+    <tr><td><strong>31 à 60 jours</strong></td>
+      <td>Une relance écrite s'impose.</td></tr>
+    <tr><td><strong>61 à 90 jours</strong></td>
+      <td>Le recouvrement devient incertain.</td></tr>
+    <tr><td><strong>Plus de 90 jours</strong></td>
+      <td>À traiter comme une créance douteuse.</td></tr>
+  </table>
+
+  <h3>Ce que vous pouvez faire depuis cet écran</h3>
+  <ul>
+    <li><strong>Encaisser</strong> un règlement, total ou partiel, sans passer
+      par la facture.</li>
+    <li><strong>Convenir d'une échéance</strong>, ou la reporter. Le motif du
+      report est inscrit sur la facture et dans le journal : la trace survit au
+      changement de vendeur.</li>
+    <li><strong>Imprimer une relance</strong>, depuis la vue par client. La
+      lettre reprend chaque facture, sa date, son échéance et son solde. Un
+      client conteste rarement un tableau ; il conteste souvent un total annoncé
+      sans détail.</li>
+  </ul>
+
+  <div class="note regle">
+    <div class="titre">Vendre à crédit engage la trésorerie de la boutique</div>
+    <p>
+      Une marge confortable ne paie pas le loyer si elle dort chez les clients.
+      Regardez la part en retard aussi souvent que le chiffre d'affaires.
     </p>
   </div>
 </section>

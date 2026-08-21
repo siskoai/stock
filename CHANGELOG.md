@@ -10,6 +10,40 @@ pas la liste des fichiers modifiés.
 
 Rien pour l'instant.
 
+## [1.3.0] (2026-08-21)
+
+### Corrigé
+
+- **Une vente à crédit s'enregistrait comme réglée.** Le champ « montant reçu »
+  suivait le total tant qu'on n'y touchait pas, ce qui est juste pour un
+  règlement comptant et faux pour un crédit : la facture sortait soldée, et la
+  dette n'existait nulle part. Choisir « Crédit » met désormais ce champ à zéro,
+  et le bouton d'enregistrement annonce ce qui reste dû plutôt que ce qui rentre
+  en caisse.
+- **Les onglets des rapports ne répondaient plus** quand la fenêtre se
+  resserrait : le sélecteur de période recouvrait le dernier onglet, et le clic
+  atterrissait sur le bouton au lieu de l'onglet. Corrigé avec les marges des
+  rapports en 1.2.0, mais il fallait une version pour en profiter.
+- **La colonne « Désignation » de l'état du stock était coupée.** Avec les
+  colonnes de coût, il ne lui restait que 13 mm, soit sept caractères. La
+  répartition des largeurs garantit maintenant un plancher aux colonnes libres,
+  quitte à resserrer les colonnes chiffrées, et la troncature mesure le texte
+  avec la police en cours au lieu de compter les caractères.
+
+### Ajouté
+
+- **Vente à crédit et gestion des dettes.** Une vente laissée impayée porte une
+  échéance, proposée à partir d'un délai de règlement réglable, et exige de
+  nommer son client : on ne relance pas « Client comptoir ». La facture affiche
+  un bandeau « Vente à crédit » avec le reste dû et l'échéance.
+- **Écran Créances** : total dû, échéances dépassées, part en retard, et
+  classement par ancienneté en six tranches, du non échu au plus de quatre-vingt-dix
+  jours. Vue par facture ou par client, encaissement direct, report d'échéance
+  motivé et journalisé.
+- **Lettre de relance imprimable**, qui reprend chaque facture, sa date, son
+  échéance et son solde.
+- Le tableau de bord distingue les impayés de ce qui est réellement en retard.
+
 ## [1.2.0] (2026-08-20)
 
 ### Corrigé
@@ -199,7 +233,8 @@ Première version utilisable de bout en bout.
 - Refus d'ouvrir des données créées par une version plus récente.
 - Protection contre les archives piégées à la restauration.
 
-[Non publié]: https://github.com/siskoai/stock/compare/v1.2.0...HEAD
+[Non publié]: https://github.com/siskoai/stock/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/siskoai/stock/releases/tag/v1.3.0
 [1.2.0]: https://github.com/siskoai/stock/releases/tag/v1.2.0
 [1.1.0]: https://github.com/siskoai/stock/releases/tag/v1.1.0
 [1.0.1]: https://github.com/siskoai/stock/releases/tag/v1.0.1

@@ -285,6 +285,43 @@ func construire(dir string) error {
 		}
 	}
 
+	// --- Ventes à crédit, à divers stades de retard --------------------------
+	// Elles peuplent l'écran des créances : sans elles, le classement par
+	// ancienneté n'aurait rien à montrer.
+	credits := []struct {
+		client   string
+		sku      string
+		quantite int
+		jours    int  // échéance, en jours par rapport à aujourd'hui
+		acompte  bool // un versement partiel a déjà été fait
+	}{
+		{"Cabinet Diallo & Associés", "PC-HP-250", 2, 12, false},
+		{"Lycée Askia Mohamed", "IMP-EPS-L32", 3, -8, true},
+		{"Pharmacie du Fleuve", "PC-LEN-V15", 1, -34, false},
+		{"Bureau Conseil Sanogo", "CON-HP-106A", 6, -67, true},
+		{"Mariam Keïta", "ACC-ULT-650", 2, -103, false},
+	}
+	for i, c := range credits {
+		facture, err := ventes.CreateInvoice(services.InvoiceInput{
+			CustomerID: clients[c.client], PaymentMethod: models.PayCredit,
+			Date:    jour(maintenant, -(20 + i*9)),
+			DueDate: jour(maintenant, c.jours),
+			Lines:   []services.InvoiceLineInput{{ProductID: ids[c.sku], Quantity: c.quantite}},
+			Notes:   "Enlèvement immédiat, règlement convenu à l'échéance.",
+		})
+		if err != nil {
+			continue // stock épuisé sur cet article
+		}
+		if c.acompte {
+			if _, err := ventes.RegisterPayment(services.PaymentInput{
+				InvoiceID: facture.ID, Amount: facture.Total / 3,
+				Method: models.PayMobile, Note: "acompte à l'enlèvement",
+			}); err != nil {
+				return err
+			}
+		}
+	}
+
 	// --- Un devis en cours ---------------------------------------------------
 	if _, err := ventes.CreateInvoice(services.InvoiceInput{
 		Draft: true, Date: jour(maintenant, -2),

@@ -31,7 +31,7 @@ const empty: SetupInput = {
   companyName: '', legalForm: '', taxId: '', rccm: '',
   address: '', city: '', country: 'Mali', phone: '', email: '',
   currency: 'XOF', currencySymbol: 'FCFA', decimals: 0,
-  defaultTaxRate: 18, pricesIncludeTax: false,
+  defaultTaxRate: 18, pricesIncludeTax: false, defaultPaymentTermDays: 30,
   seedCategories: true,
   autoBackup: true, backupsToKeep: 30,
   theme: 'light',
@@ -297,6 +297,14 @@ export function Onboarding() {
                   label="Mes prix de vente sont affichés taxe comprise"
                   hint="La base hors taxe est alors extraite du prix, au lieu d'y être ajoutée."
                 />
+                <Field
+                  label="Délai de règlement d'une vente à crédit (jours)"
+                  hint="Sert à proposer une échéance quand un client emporte sans payer. Zéro pour n'en proposer aucune."
+                >
+                  <input className="num" type="number" min={0} max={365}
+                    value={form.defaultPaymentTermDays}
+                    onChange={(e) => set('defaultPaymentTermDays', parseInt(e.target.value, 10) || 0)} />
+                </Field>
                 <div className="wizard-preview">
                   <span className="muted small">Un article à 1 500 s'affichera</span>
                   <strong className="tabular">

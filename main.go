@@ -81,6 +81,7 @@ func run() error {
 		catalog   = services.NewCatalog(db, sec)
 		stock     = services.NewStock(db, sec)
 		sales     = services.NewSales(db, sec)
+		creances  = services.NewCreances(db, sec)
 		purchases = services.NewPurchases(db, sec)
 		expenses  = services.NewExpenses(db, sec)
 		reports   = services.NewReports(db, sec)
@@ -105,7 +106,7 @@ func run() error {
 		BackgroundColour: &options.RGBA{R: 249, G: 250, B: 249, A: 1},
 		Bind: []any{
 			app,
-			session, catalog, stock, sales, purchases, expenses,
+			session, catalog, stock, sales, creances, purchases, expenses,
 			reports, documents, export, users, config, backups,
 		},
 		Mac: &mac.Options{

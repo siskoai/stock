@@ -46,6 +46,7 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
   const [amountPaid, setAmountPaid] = useState(0)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('CASH')
   const [notes, setNotes] = useState('')
+  const [dueDate, setDueDate] = useState('')
   const [draft, setDraft] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -97,13 +98,31 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
     setLines((current) => current.filter((l) => l.key !== key))
   }
 
-  // Tant que l'utilisateur n'a pas saisi de montant reçu, le champ suit le
-  // total : le cas courant est un règlement comptant intégral.
-  const effectivePaid = paidTouched.current ? amountPaid : (draft ? 0 : totals.total)
+  // Le champ de montant reçu suit le total tant que l'utilisateur n'y a pas
+  // touché : le cas courant est un règlement comptant intégral. Une vente à
+  // crédit est l'exception exacte, et part donc de zéro.
+  const aCredit = paymentMethod === 'CREDIT'
+  const effectivePaid = paidTouched.current
+    ? amountPaid
+    : (draft || aCredit ? 0 : totals.total)
+  const resteDu = Math.max(0, totals.total - effectivePaid)
+
+  // L'échéance proposée découle du délai de règlement des paramètres.
+  const echeanceProposee = useMemo(() => {
+    const jours = settings.data?.defaultPaymentTermDays ?? 0
+    if (jours <= 0) return ''
+    const d = new Date(date)
+    d.setDate(d.getDate() + jours)
+    return isoDate(d)
+  }, [settings.data, date])
 
   async function save() {
     if (lines.length === 0) {
       setError('Ajoutez au moins un article.')
+      return
+    }
+    if (!draft && resteDu > 0 && aCredit && !customerId && customerName.trim() === '') {
+      setError("Une vente laissée à crédit doit nommer son client : choisissez un client enregistré, ou saisissez au moins son nom.")
       return
     }
     setBusy(true)
@@ -118,6 +137,7 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
       amountPaid: draft ? 0 : effectivePaid,
       paymentMethod,
       notes,
+      dueDate: resteDu > 0 && !draft ? (dueDate || echeanceProposee) : undefined,
       lines: lines.map((l) => ({
         productId: l.product.id,
         quantity: l.quantity,
@@ -153,7 +173,11 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
           <div className="spacer" />
           <button className="btn" onClick={props.onClose} disabled={busy}>Annuler</button>
           <button className="btn btn-primary" onClick={save} disabled={busy || lines.length === 0}>
-            {busy ? 'Enregistrement…' : draft ? 'Enregistrer le devis' : `Encaisser ${money(totals.total)}`}
+            {busy
+              ? 'Enregistrement…'
+              : draft ? 'Enregistrer le devis'
+              : resteDu > 0 ? `Vendre à crédit, ${money(resteDu)} dû`
+              : `Encaisser ${money(totals.total)}`}
           </button>
         </>
       }
@@ -258,7 +282,13 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
         <div className="row" style={{ alignItems: 'flex-start', gap: 20 }}>
           <div className="stack" style={{ flex: 1, gap: 12 }}>
             <div className="section-title">Client</div>
-            <Field label="Client enregistré" hint="Laissez vide pour une vente au comptoir.">
+            <Field
+              label="Client enregistré"
+              required={aCredit && resteDu > 0}
+              hint={aCredit && resteDu > 0
+                ? 'Une vente à crédit doit nommer son client : sans nom, la créance ne peut pas être relancée.'
+                : 'Laissez vide pour une vente au comptoir.'}
+            >
               <Select
                 value={customerId}
                 onChange={setCustomerId}
@@ -316,6 +346,25 @@ export function NewInvoice(props: { onClose: () => void; onCreated: (invoice: In
                     value={amount(Math.abs(totals.total - effectivePaid))}
                     accent={effectivePaid < totals.total}
                   />
+
+                  {/* Une dette sans date convenue ne se relance pas : dès qu'un
+                      solde subsiste, l'échéance se saisit ici. */}
+                  {resteDu > 0 && (
+                    <div style={{ marginTop: 10 }}>
+                      <Field
+                        label="À régler avant le"
+                        hint={echeanceProposee && !dueDate
+                          ? `Proposé : ${new Date(echeanceProposee).toLocaleDateString('fr-FR')}`
+                          : 'Laissez vide pour ne convenir d\'aucune date.'}
+                      >
+                        <input
+                          type="date"
+                          value={dueDate || echeanceProposee}
+                          onChange={(e) => setDueDate(e.target.value)}
+                        />
+                      </Field>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

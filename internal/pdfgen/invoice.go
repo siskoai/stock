@@ -30,6 +30,10 @@ var (
 	ruleRGB   = [3]int{224, 227, 224} // #E0E3E0
 	washRGB   = [3]int{244, 246, 244} // #F4F6F4
 	accentRGB = [3]int{176, 90, 38}   // #B05A26, cuivre, réservé au net à payer
+
+	// Fond du bandeau de vente à crédit : assez clair pour que le texte cuivre
+	// y reste lisible, assez marqué pour se voir en noir et blanc.
+	accentWashRGB = [3]int{251, 242, 234}
 )
 
 // Document est le contexte de rendu partagé par tous les documents.
@@ -285,11 +289,38 @@ func Invoice(inv models.Invoice, settings models.Settings) ([]byte, error) {
 	d.setColor(inkRGB)
 	p.CellFormat(90, 4.5, d.text("Règlement : "+paymentLabel(inv.PaymentMethod)), "", 2, "L", false, 0, "")
 	p.CellFormat(90, 4.5, d.text("Statut : "+statusLabel(inv.Status)), "", 2, "L", false, 0, "")
+	if inv.DueDate != nil {
+		// L'échéance est la mention que le client vient relire : elle porte la
+		// couleur d'accent, comme le net à payer.
+		p.SetFont("Helvetica", "B", 8.5)
+		d.setColor(accentRGB)
+		p.CellFormat(90, 4.5, d.text("À régler avant le "+inv.DueDate.Format("02/01/2006")), "", 2, "L", false, 0, "")
+		p.SetFont("Helvetica", "", 8.5)
+		d.setColor(inkRGB)
+	}
 	if inv.UserName != "" {
 		p.CellFormat(90, 4.5, d.text("Établie par : "+inv.UserName), "", 2, "L", false, 0, "")
 	}
 
 	p.SetY(y + 36)
+
+	// Une vente à crédit doit se lire au premier coup d'œil, sur l'exemplaire du
+	// client comme sur celui du commerçant. Le statut seul ne suffit pas : « émise »
+	// ne dit pas qu'il reste à payer.
+	if inv.Balance > 0 && inv.Status != models.StatusDraft {
+		yc := p.GetY()
+		d.setFill(accentWashRGB)
+		p.Rect(15, yc, 180, 9, "F")
+		p.SetXY(18, yc+1.6)
+		p.SetFont("Helvetica", "B", 9)
+		d.setColor(accentRGB)
+		mention := "VENTE À CRÉDIT, reste dû " + d.money(inv.Balance)
+		if inv.DueDate != nil {
+			mention += ", échéance le " + inv.DueDate.Format("02/01/2006")
+		}
+		p.CellFormat(174, 6, d.text(mention), "", 0, "L", false, 0, "")
+		p.SetY(yc + 13)
+	}
 
 	// --- Tableau des lignes ------------------------------------------------
 	widths := []float64{78, 16, 28, 20, 38}
@@ -328,7 +359,7 @@ func Invoice(inv models.Invoice, settings models.Settings) ([]byte, error) {
 		rowY := p.GetY()
 
 		d.setColor(inkRGB)
-		p.CellFormat(widths[0], 6.5, d.text(truncate(l.ProductName, 52)), "", 0, "L", fill, 0, "")
+		p.CellFormat(widths[0], 6.5, d.text(d.ajuster(l.ProductName, widths[0])), "", 0, "L", fill, 0, "")
 		p.CellFormat(widths[1], 6.5, d.text(fmt.Sprintf("%d", l.Quantity)), "", 0, "C", fill, 0, "")
 		p.CellFormat(widths[2], 6.5, d.text(d.money(l.UnitPrice)), "", 0, "R", fill, 0, "")
 		if l.Discount > 0 {
@@ -494,7 +525,7 @@ func PurchaseNote(pu models.Purchase, settings models.Settings) ([]byte, error) 
 			d.setFill(washRGB)
 		}
 		d.setColor(inkRGB)
-		p.CellFormat(widths[0], 6.5, d.text(truncate(l.ProductName, 58)), "", 0, "L", fill, 0, "")
+		p.CellFormat(widths[0], 6.5, d.text(d.ajuster(l.ProductName, widths[0])), "", 0, "L", fill, 0, "")
 		p.CellFormat(widths[1], 6.5, d.text(fmt.Sprintf("%d", l.Quantity)), "", 0, "C", fill, 0, "")
 		p.CellFormat(widths[2], 6.5, d.text(d.money(l.UnitPrice)), "", 0, "R", fill, 0, "")
 		p.SetFont("Helvetica", "B", 9)

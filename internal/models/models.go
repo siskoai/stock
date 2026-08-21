@@ -281,6 +281,11 @@ type Invoice struct {
 	// de la facture. Nul dans tous les autres cas.
 	RefundDue int64 `json:"refundDue"`
 
+	// DueDate est l'échéance convenue pour le solde. Elle n'est renseignée que
+	// sur les ventes laissées à crédit : une facture réglée comptant n'a pas
+	// d'échéance, et une échéance sans dette n'aurait aucun sens.
+	DueDate *time.Time `json:"dueDate,omitempty"`
+
 	PaymentMethod PaymentMethod `json:"paymentMethod"`
 	Status        DocStatus     `json:"status"`
 	Notes         string        `json:"notes"`
@@ -400,6 +405,10 @@ type Settings struct {
 	DefaultTaxRate   float64 `json:"defaultTaxRate"` // TVA appliquée par défaut
 	PricesIncludeTax bool    `json:"pricesIncludeTax"`
 
+	// DefaultPaymentTermDays est le délai de règlement proposé sur une vente à
+	// crédit, en jours. Zéro laisse l'échéance à la discrétion du vendeur.
+	DefaultPaymentTermDays int `json:"defaultPaymentTermDays"`
+
 	InvoicePrefix   string `json:"invoicePrefix"`
 	InvoiceCounter  int    `json:"invoiceCounter"`
 	PurchasePrefix  string `json:"purchasePrefix"`
@@ -423,23 +432,24 @@ func (s Settings) GetID() string { return s.ID }
 // de matériel informatique en zone UEMOA.
 func DefaultSettings() Settings {
 	return Settings{
-		ID:                   "settings",
-		CompanyName:          "Ma Société",
-		Country:              "Mali",
-		Currency:             "XOF",
-		CurrencySymbol:       "FCFA",
-		Decimals:             0,
-		DefaultTaxRate:       18,
-		InvoicePrefix:        "FA",
-		PurchasePrefix:       "BE",
-		InvoiceTerms:         "Marchandise vendue ne peut être ni reprise ni échangée, sauf défaut constaté sous 7 jours.",
-		InvoiceFooter:        "Merci de votre confiance.",
-		FiscalYearStartMonth: 1,
-		AutoBackup:           true,
-		BackupsToKeep:        30,
-		SessionTimeoutMin:    60,
-		Theme:                "light",
-		UpdatedAt:            time.Now(),
+		ID:                     "settings",
+		CompanyName:            "Ma Société",
+		Country:                "Mali",
+		Currency:               "XOF",
+		CurrencySymbol:         "FCFA",
+		Decimals:               0,
+		DefaultTaxRate:         18,
+		InvoicePrefix:          "FA",
+		PurchasePrefix:         "BE",
+		InvoiceTerms:           "Marchandise vendue ne peut être ni reprise ni échangée, sauf défaut constaté sous 7 jours.",
+		InvoiceFooter:          "Merci de votre confiance.",
+		FiscalYearStartMonth:   1,
+		DefaultPaymentTermDays: 30,
+		AutoBackup:             true,
+		BackupsToKeep:          30,
+		SessionTimeoutMin:      60,
+		Theme:                  "light",
+		UpdatedAt:              time.Now(),
 	}
 }
 

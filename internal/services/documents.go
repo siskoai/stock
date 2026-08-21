@@ -254,18 +254,20 @@ func (s *Documents) StockReport(q ProductQuery) (File, error) {
 	showCost := s.canSeeCost(u)
 	sym := s.db.Settings().CurrencySymbol
 
+	// Les largeurs laissent délibérément de la place à la désignation : c'est
+	// la colonne qu'on lit, les autres se devinent à leur format.
 	cols := []pdfgen.ReportColumn{
-		{Header: "Référence", Width: 30, Align: "L"},
+		{Header: "Référence", Width: 26, Align: "L"},
 		{Header: "Désignation", Align: "L"},
-		{Header: "Catégorie", Width: 34, Align: "L"},
-		{Header: "Stock", Width: 16, Align: "C"},
-		{Header: "Déf.", Width: 13, Align: "C"},
-		{Header: "PV", Width: 24, Align: "R"},
+		{Header: "Catégorie", Width: 26, Align: "L"},
+		{Header: "Stock", Width: 14, Align: "C"},
+		{Header: "Déf.", Width: 12, Align: "C"},
+		{Header: "PV", Width: 21, Align: "R"},
 	}
 	if showCost {
 		cols = append(cols,
-			pdfgen.ReportColumn{Header: "Coût", Width: 24, Align: "R"},
-			pdfgen.ReportColumn{Header: "Valeur", Width: 26, Align: "R"})
+			pdfgen.ReportColumn{Header: "Coût", Width: 21, Align: "R"},
+			pdfgen.ReportColumn{Header: "Valeur", Width: 23, Align: "R"})
 	}
 
 	rows := make([][]string, 0, len(products))
@@ -368,6 +370,51 @@ func (s *Documents) PartyStatement(partyID string) (File, error) {
 		return File{}, fmt.Errorf("génération du PDF : %w", err)
 	}
 	return File{Name: "releve_" + slug(party.Name) + ".pdf", MIME: "application/pdf", Content: data}, nil
+}
+
+// Reminder rend la lettre de relance d'un client, avec le détail de ce qu'il
+// doit. Le document reprend toutes ses factures impayées, en signalant celles
+// dont l'échéance est passée.
+func (s *Documents) Reminder(partyID string) (File, error) {
+	if _, err := s.guard("sales"); err != nil {
+		return File{}, err
+	}
+	creances := Creances{s.core}
+	etat, err := creances.Etat(CreanceQuery{CustomerID: partyID})
+	if err != nil {
+		return File{}, err
+	}
+	if len(etat.Lignes) == 0 {
+		return File{}, fmt.Errorf("ce client n'a aucune facture impayée")
+	}
+
+	doc := pdfgen.RelanceDoc{Total: etat.Total, EnRetard: etat.EnRetard}
+	if party, err := s.db.Parties.Get(partyID); err == nil {
+		doc.Client, doc.Societe = party.Name, party.Company
+		doc.Adresse, doc.Ville, doc.Telephone = party.Address, party.City, party.Phone
+	} else {
+		// Vente au comptoir laissée à crédit : on ne dispose que de ce qui a
+		// été saisi sur la facture.
+		doc.Client = etat.Lignes[0].CustomerName
+		doc.Telephone = etat.Lignes[0].CustomerPhone
+	}
+
+	for _, l := range etat.Lignes {
+		doc.Lignes = append(doc.Lignes, pdfgen.RelanceLigne{
+			Numero: l.Number, Date: l.Date, Echeance: l.DueDate,
+			Total: l.Total, Regle: l.Paid, Solde: l.Balance, Retard: l.JoursDeRetard,
+		})
+	}
+
+	data, err := pdfgen.ReminderLetter(doc, s.db.Settings())
+	if err != nil {
+		return File{}, fmt.Errorf("génération du PDF : %w", err)
+	}
+	return File{
+		Name:    "relance_" + slug(doc.Client) + ".pdf",
+		MIME:    "application/pdf",
+		Content: data,
+	}, nil
 }
 
 func phoneSuffix(p models.Party) string {

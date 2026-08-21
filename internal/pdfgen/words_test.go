@@ -1,6 +1,9 @@
 package pdfgen
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestIntegerToFrench(t *testing.T) {
 	cases := map[int64]string{
@@ -150,5 +153,88 @@ func TestLogoPresentDansLeDocument(t *testing.T) {
 	if len(avec) <= len(sans) {
 		t.Errorf("document avec logo = %d octets, sans logo = %d : l'image n'a pas été incluse",
 			len(avec), len(sans))
+	}
+}
+
+// La désignation est la colonne qu'on lit : elle ne doit jamais être réduite à
+// quelques lettres parce que les colonnes chiffrées ont pris toute la place.
+func TestResolveWidths_PlancherDesColonnesLibres(t *testing.T) {
+	cas := []struct {
+		nom      string
+		colonnes []ReportColumn
+		libreIdx int
+	}{
+		{
+			"colonnes imposées gourmandes",
+			[]ReportColumn{
+				{Header: "Référence", Width: 30}, {Header: "Désignation"},
+				{Header: "Catégorie", Width: 34}, {Header: "Stock", Width: 16},
+				{Header: "Déf.", Width: 13}, {Header: "PV", Width: 24},
+				{Header: "Coût", Width: 24}, {Header: "Valeur", Width: 26},
+			}, 1,
+		},
+		{
+			"imposées au-delà de la page",
+			[]ReportColumn{
+				{Header: "A", Width: 90}, {Header: "Désignation"},
+				{Header: "B", Width: 90}, {Header: "C", Width: 40},
+			}, 1,
+		},
+	}
+	for _, c := range cas {
+		t.Run(c.nom, func(t *testing.T) {
+			w := resolveWidths(c.colonnes)
+			if w[c.libreIdx] < largeurLibreMin {
+				t.Errorf("colonne libre = %.1f mm, plancher attendu %.0f mm", w[c.libreIdx], largeurLibreMin)
+			}
+			var total float64
+			for _, x := range w {
+				total += x
+			}
+			if total < 179 || total > 181 {
+				t.Errorf("largeur totale = %.1f mm, attendu 180", total)
+			}
+		})
+	}
+}
+
+func TestResolveWidths_ToutImpose(t *testing.T) {
+	w := resolveWidths([]ReportColumn{{Width: 100}, {Width: 100}})
+	var total float64
+	for _, x := range w {
+		total += x
+	}
+	if total < 179 || total > 181 {
+		t.Errorf("des colonnes toutes imposées doivent être ramenées à 180 mm, obtenu %.1f", total)
+	}
+}
+
+// La troncature mesure le texte : une chaîne étroite qui tient ne doit pas
+// être coupée, une chaîne large qui déborde doit l'être.
+func TestAjuster(t *testing.T) {
+	d := newDoc(reglagesAvecLogo(""))
+	d.pdf.AddPage()
+	d.pdf.SetFont("Helvetica", "", 8.5)
+
+	if got := d.ajuster("Clavier", 50); got != "Clavier" {
+		t.Errorf("un texte court a été coupé : %q", got)
+	}
+	long := "Ordinateur portable HP 250 G9 avec sacoche et souris"
+	court := d.ajuster(long, 40)
+	if court == long {
+		t.Error("un texte trop long n'a pas été raccourci")
+	}
+	if !strings.HasSuffix(court, "…") {
+		t.Errorf("la coupure ne se signale pas : %q", court)
+	}
+	if d.pdf.GetStringWidth(d.text(court)) > 40 {
+		t.Errorf("le texte raccourci déborde encore : %q", court)
+	}
+	// Les caractères larges tiennent moins que les étroits, à nombre égal.
+	etroit := d.ajuster(strings.Repeat("i", 60), 30)
+	large := d.ajuster(strings.Repeat("W", 60), 30)
+	if len([]rune(etroit)) <= len([]rune(large)) {
+		t.Errorf("la mesure ignore la largeur des lettres : %d i contre %d W",
+			len([]rune(etroit)), len([]rune(large)))
 	}
 }

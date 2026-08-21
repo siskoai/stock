@@ -18,6 +18,7 @@ type suite struct {
 	catalog   *Catalog
 	stock     *Stock
 	sales     *Sales
+	creances  *Creances
 	purchases *Purchases
 	expenses  *Expenses
 	reports   *Reports
@@ -41,6 +42,7 @@ func newSuite(t *testing.T) *suite {
 		catalog:   NewCatalog(db, sec),
 		stock:     NewStock(db, sec),
 		sales:     NewSales(db, sec),
+		creances:  NewCreances(db, sec),
 		purchases: NewPurchases(db, sec),
 		expenses:  NewExpenses(db, sec),
 		reports:   NewReports(db, sec),

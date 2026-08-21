@@ -91,6 +91,7 @@ async function main() {
   // --- Chaque page de la barre latérale -------------------------------------
   const pages = [
     ['Ventes', '03-ventes'],
+    ['Créances', '24-creances'],
     ['Achats', '04-achats'],
     ['Articles', '05-articles'],
     ['Catégories', '06-categories'],

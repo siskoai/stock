@@ -65,6 +65,7 @@ export interface SetupInput {
   address: string; city: string; country: string; phone: string; email: string
   currency: string; currencySymbol: string; decimals: number
   defaultTaxRate: number; pricesIncludeTax: boolean
+  defaultPaymentTermDays: number
   seedCategories: boolean
   autoBackup: boolean; backupsToKeep: number
   theme: string
@@ -119,6 +120,8 @@ export interface Invoice {
   subtotalHT: Money; globalDiscount: Money; taxTotal: Money; total: Money
   amountPaid: Money; balance: Money; costTotal: Money; margin: Money
   refundDue: Money
+  /** Échéance du solde. Absente si la facture est réglée. */
+  dueDate?: string
   paymentMethod: PaymentMethod; status: DocStatus; notes: string
   userId: string; userName: string
   createdAt: string; updatedAt: string; cancelledAt?: string
@@ -163,6 +166,7 @@ export interface Settings {
   phone: string; email: string; website: string; logoDataUrl: string
   currency: string; currencySymbol: string; decimals: number
   defaultTaxRate: number; pricesIncludeTax: boolean
+  defaultPaymentTermDays: number
   invoicePrefix: string; invoiceCounter: number
   purchasePrefix: string; purchaseCounter: number; movementCounter: number
   invoiceFooter: string; invoiceTerms: string
@@ -202,6 +206,8 @@ export interface InvoiceInput {
   customerAddress?: string; customerTaxId?: string
   globalDiscount?: Money; amountPaid?: Money
   paymentMethod?: PaymentMethod; notes?: string; draft?: boolean
+  /** Échéance du solde laissé à crédit, au format AAAA-MM-JJ. */
+  dueDate?: string
 }
 
 export interface PurchaseLineInput {
@@ -310,9 +316,48 @@ export interface Dashboard {
   monthMargin: SnapshotKPI; monthExpenses: SnapshotKPI; monthResult: SnapshotKPI
   stockValue: Money; stockUnits: number; defectiveUnits: number
   outstanding: Money; outstandingCount: number
+  overdue: Money; overdueCount: number
   last30Days: PeriodPoint[]; last12Months: PeriodPoint[]
   topProducts: ProductStat[]; lowStock: ProductView[]
   recentInvoices: Invoice[]; recentMovements: Movement[]
+}
+
+// --- Créances ---------------------------------------------------------------
+
+export type Tranche = 'NON_ECHUE' | 'SANS_TERME' | 'J1_30' | 'J31_60' | 'J61_90' | 'J90_PLUS'
+
+export interface Creance {
+  invoiceId: string; number: string; date: string; dueDate?: string
+  customerId: string; customerName: string; customerPhone: string
+  total: Money; paid: Money; balance: Money
+  joursDeRetard: number; tranche: Tranche; vendeur: string
+}
+
+export interface TrancheTotal {
+  tranche: Tranche; libelle: string
+  montant: Money; nombre: number; part: number
+}
+
+export interface DebiteurTotal {
+  partyId: string; nom: string; telephone: string
+  nombre: number; solde: Money; enRetard: Money; plusAncien: number
+}
+
+export interface EtatCreances {
+  arreteAu: string
+  total: Money; nombre: number
+  enRetard: Money; nombreRetard: number
+  tranches: TrancheTotal[]
+  lignes: Creance[]
+  debiteurs: DebiteurTotal[]
+}
+
+export interface CreanceQuery {
+  search?: string; customerId?: string; seulementEnRetard?: boolean
+}
+
+export interface EcheanceInput {
+  invoiceId: string; dueDate: string; note?: string
 }
 
 export interface ExpenseLine { category: string; amount: Money; share: number }

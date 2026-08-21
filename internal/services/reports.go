@@ -317,6 +317,11 @@ type Dashboard struct {
 	Outstanding      int64 `json:"outstanding"`
 	OutstandingCount int   `json:"outstandingCount"`
 
+	// Overdue isole, dans les impayés, ce dont l'échéance est dépassée. C'est
+	// le chiffre qui appelle une action, là où le total appelle une surveillance.
+	Overdue      int64 `json:"overdue"`
+	OverdueCount int   `json:"overdueCount"`
+
 	Last30Days      []PeriodPoint     `json:"last30Days"`
 	Last12Months    []PeriodPoint     `json:"last12Months"`
 	TopProducts     []ProductStat     `json:"topProducts"`
@@ -363,6 +368,10 @@ func (s *Reports) Dashboard() (Dashboard, error) {
 		if countsAsSale(inv) && inv.Balance > 0 {
 			d.Outstanding += inv.Balance
 			d.OutstandingCount++
+			if retard, _ := classer(inv.DueDate, now); retard > 0 {
+				d.Overdue += inv.Balance
+				d.OverdueCount++
+			}
 		}
 	}
 

@@ -118,6 +118,13 @@ export const Sales = {
   deleteDraft: bind<[string], void>('services.Sales', 'DeleteDraft'),
 }
 
+// --- Créances ---------------------------------------------------------------
+
+export const Creances = {
+  etat: bind<[T.CreanceQuery], T.EtatCreances>('services.Creances', 'Etat'),
+  fixerEcheance: bind<[T.EcheanceInput], T.Invoice>('services.Creances', 'FixerEcheance'),
+}
+
 // --- Achats ----------------------------------------------------------------
 
 export const Purchases = {
@@ -158,6 +165,7 @@ export const Documents = {
   stockReport: bind<[T.ProductQuery], T.FileResult>('services.Documents', 'StockReport'),
   partyStatement: bind<[string], T.FileResult>('services.Documents', 'PartyStatement'),
   movement: bind<[string], T.FileResult>('services.Documents', 'Movement'),
+  reminder: bind<[string], T.FileResult>('services.Documents', 'Reminder'),
 }
 
 export const Export = {

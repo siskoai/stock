@@ -306,6 +306,13 @@ function InvoiceDetail(props: {
           <Badge>{paymentLabel[inv.paymentMethod]}</Badge>
           <Badge>Vendu par {inv.userName}</Badge>
           {inv.refundDue > 0 && <Badge tone="orange">À rembourser : {money(inv.refundDue)}</Badge>}
+          {inv.balance > 0 && (
+            <Badge tone={enRetard(inv.dueDate) ? 'red' : 'orange'}>
+              {inv.dueDate
+                ? `${enRetard(inv.dueDate) ? 'Échu depuis le' : 'À régler avant le'} ${formatDate(inv.dueDate)}`
+                : 'Vente à crédit, sans échéance convenue'}
+            </Badge>
+          )}
         </div>
 
         {inv.status === 'CANCELLED' && (
@@ -377,6 +384,13 @@ function InvoiceDetail(props: {
               strong
               accent={inv.balance > 0}
             />
+            {inv.balance > 0 && (
+              <SummaryRow
+                label="Échéance"
+                value={inv.dueDate ? formatDate(inv.dueDate) : 'non convenue'}
+                muted
+              />
+            )}
             {props.canSeeCost && (
               <>
                 <div className="divider" style={{ margin: '8px 0' }} />
@@ -517,6 +531,12 @@ function CancelModal(props: { invoice: Invoice; onClose: () => void; onCancelled
       </div>
     </Modal>
   )
+}
+
+/** enRetard indique si une échéance est dépassée. */
+function enRetard(echeance: string | undefined): boolean {
+  if (!echeance) return false
+  return new Date(echeance).getTime() < Date.now()
 }
 
 // Réexporté pour la page Achats, qui affiche les mêmes totaux.

@@ -123,7 +123,8 @@ func Report(rd ReportDoc, settings models.Settings) ([]byte, error) {
 			p.SetTextColor(255, 255, 255)
 			p.SetFont("Helvetica", "B", 7)
 			for i, c := range t.Columns {
-				p.CellFormat(widths[i], 6.5, d.text(strings.ToUpper(c.Header)), "", 0, align(c.Align), true, 0, "")
+				entete := d.ajuster(strings.ToUpper(c.Header), widths[i])
+				p.CellFormat(widths[i], 6.5, d.text(entete), "", 0, align(c.Align), true, 0, "")
 			}
 			p.Ln(-1)
 		}
@@ -149,7 +150,7 @@ func Report(rd ReportDoc, settings models.Settings) ([]byte, error) {
 				if i < len(row) {
 					value = row[i]
 				}
-				p.CellFormat(widths[i], 5.8, d.text(truncateFor(value, widths[i])), "", 0, align(t.Columns[i].Align), fill, 0, "")
+				p.CellFormat(widths[i], 5.8, d.text(d.ajuster(value, widths[i])), "", 0, align(t.Columns[i].Align), fill, 0, "")
 			}
 			p.Ln(-1)
 			p.Line(15, p.GetY(), 195, p.GetY())
@@ -165,7 +166,7 @@ func Report(rd ReportDoc, settings models.Settings) ([]byte, error) {
 				if i < len(t.TotalRow) {
 					value = t.TotalRow[i]
 				}
-				p.CellFormat(widths[i], 7, d.text(value), "", 0, align(t.Columns[i].Align), true, 0, "")
+				p.CellFormat(widths[i], 7, d.text(d.ajuster(value, widths[i])), "", 0, align(t.Columns[i].Align), true, 0, "")
 			}
 			p.Ln(-1)
 		}
@@ -191,29 +192,62 @@ func Report(rd ReportDoc, settings models.Settings) ([]byte, error) {
 	return output(p)
 }
 
+// largeurLibreMin est la place minimale laissée à une colonne sans largeur
+// imposée. En dessous, elle ne contient plus assez de caractères pour dire
+// quoi que ce soit, et c'est en général la colonne de désignation.
+const largeurLibreMin = 42.0
+
+// resolveWidths répartit les 180 mm de la zone de texte entre les colonnes.
+//
+// Les colonnes sans largeur imposée se partagent ce qui reste, avec un plancher.
+// Si les largeurs imposées ne laissent pas ce plancher, ce sont elles qui sont
+// réduites au prorata : mieux vaut un montant un peu à l'étroit qu'une
+// désignation réduite à sept lettres.
 func resolveWidths(cols []ReportColumn) []float64 {
 	const total = 180.0
 	widths := make([]float64, len(cols))
-	var fixed float64
-	var autoCount int
+	var imposees float64
+	var libres int
 	for i, c := range cols {
 		if c.Width > 0 {
 			widths[i] = c.Width
-			fixed += c.Width
+			imposees += c.Width
 		} else {
-			autoCount++
+			libres++
 		}
 	}
-	if autoCount > 0 {
-		remaining := total - fixed
-		if remaining < float64(autoCount)*10 {
-			remaining = float64(autoCount) * 10
-		}
-		each := remaining / float64(autoCount)
-		for i := range widths {
-			if widths[i] == 0 {
-				widths[i] = each
+	if libres == 0 {
+		// Tout est imposé : on ajuste à la zone de texte pour éviter un
+		// débordement silencieux hors de la page.
+		if imposees > 0 && imposees != total {
+			facteur := total / imposees
+			for i := range widths {
+				widths[i] *= facteur
 			}
+		}
+		return widths
+	}
+
+	besoin := float64(libres) * largeurLibreMin
+	if reste := total - imposees; reste < besoin {
+		// Les colonnes imposées prennent trop de place : on les resserre juste
+		// assez pour dégager le plancher des colonnes libres.
+		disponible := total - besoin
+		if disponible < 0 {
+			disponible = 0
+		}
+		facteur := disponible / imposees
+		for i, c := range cols {
+			if c.Width > 0 {
+				widths[i] = c.Width * facteur
+			}
+		}
+		imposees = disponible
+	}
+	each := (total - imposees) / float64(libres)
+	for i := range widths {
+		if widths[i] == 0 {
+			widths[i] = each
 		}
 	}
 	return widths
@@ -228,14 +262,34 @@ func align(a string) string {
 	}
 }
 
-// truncateFor coupe une valeur trop longue pour la largeur de sa colonne.
-// Approximation : la police 8,5 pt occupe environ 1,7 mm par caractère.
-func truncateFor(s string, widthMM float64) string {
-	maxChars := int(widthMM / 1.7)
-	if maxChars < 4 {
-		maxChars = 4
+// ajuster raccourcit un texte pour qu'il tienne dans une colonne.
+//
+// La largeur est mesurée par le moteur, avec la police en cours, plutôt
+// qu'estimée à partir d'un nombre de caractères : « Imprimante » et « WWWWWWWWWW »
+// comptent dix lettres et n'occupent pas la même place. Une estimation trop
+// prudente coupe des textes qui tenaient ; une estimation trop généreuse les
+// laisse déborder sur la colonne voisine.
+func (d *doc) ajuster(texte string, largeurMM float64) string {
+	const marge = 2.0 // les deux filets de la cellule
+	dispo := largeurMM - marge
+	if dispo <= 0 || texte == "" {
+		return texte
 	}
-	return truncate(s, maxChars)
+	rendu := d.text(texte)
+	if d.pdf.GetStringWidth(rendu) <= dispo {
+		return texte
+	}
+	points := "…"
+	largeurPoints := d.pdf.GetStringWidth(d.text(points))
+	lettres := []rune(texte)
+	for len(lettres) > 0 {
+		lettres = lettres[:len(lettres)-1]
+		essai := strings.TrimRight(string(lettres), " ")
+		if d.pdf.GetStringWidth(d.text(essai))+largeurPoints <= dispo {
+			return essai + points
+		}
+	}
+	return points
 }
 
 func minI(a, b int) int {

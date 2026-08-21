@@ -233,6 +233,13 @@ function SettingsForm(props: {
                 label="Les prix saisis sont TTC"
                 hint="La base hors taxe est alors extraite du prix affiché, au lieu d'y être ajoutée."
               />
+              <Field
+                label="Délai de règlement d'une vente à crédit (jours)"
+                hint="Sert à proposer une échéance quand un client emporte sans payer. Zéro pour n'en proposer aucune."
+              >
+                <NumberInput value={form.defaultPaymentTermDays}
+                  onChange={(v) => set('defaultPaymentTermDays', v)} min={0} max={365} />
+              </Field>
               <Field label="Mois de début d'exercice" hint="1 pour janvier.">
                 <NumberInput value={form.fiscalYearStartMonth} onChange={(v) => set('fiscalYearStartMonth', v)} min={1} max={12} />
               </Field>

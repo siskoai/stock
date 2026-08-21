@@ -58,10 +58,12 @@ export function DashboardPage({ navigate }: PageContext) {
             hint={`${data.defectiveUnits} défectueuse${data.defectiveUnits > 1 ? 's' : ''}`} />
         )}
         <KPI
-          label="Impayés"
+          label={data.overdue > 0 ? 'Impayés, dont en retard' : 'Impayés'}
           value={money(data.outstanding)}
-          hint={`${data.outstandingCount} facture${data.outstandingCount > 1 ? 's' : ''} en attente`}
-          accent={data.outstanding > 0}
+          hint={data.overdue > 0
+            ? `${money(data.overdue)} en retard sur ${data.overdueCount} facture${data.overdueCount > 1 ? 's' : ''}`
+            : `${data.outstandingCount} facture${data.outstandingCount > 1 ? 's' : ''} en attente`}
+          accent={data.overdue > 0}
         />
       </div>
 

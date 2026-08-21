@@ -16,6 +16,7 @@ import { ProductsPage } from './pages/Products'
 import { CategoriesPage } from './pages/Categories'
 import { StockPage } from './pages/Stock'
 import { SalesPage } from './pages/Sales'
+import { CreancesPage } from './pages/Creances'
 import { PurchasesPage } from './pages/Purchases'
 import { PartiesPage } from './pages/Parties'
 import { ExpensesPage } from './pages/Expenses'
@@ -38,6 +39,7 @@ const titles: Record<PageKey, { title: string; subtitle: string }> = {
   categories: { title: 'Catégories', subtitle: 'Classement des articles' },
   stock: { title: 'Mouvements de stock', subtitle: 'Journal des entrées, sorties et corrections' },
   sales: { title: 'Ventes', subtitle: 'Factures, devis et règlements' },
+  creances: { title: 'Créances', subtitle: 'Ce que les clients doivent, et depuis quand' },
   purchases: { title: 'Achats', subtitle: 'Réceptions de marchandise fournisseur' },
   parties: { title: 'Clients et fournisseurs', subtitle: 'Coordonnées et encours' },
   expenses: { title: 'Charges', subtitle: "Dépenses d'exploitation, hors achat de marchandise" },
@@ -136,6 +138,7 @@ function PageBody({ page, ctx }: { page: PageKey; ctx: PageContext }) {
     case 'categories': return <CategoriesPage {...ctx} />
     case 'stock': return <StockPage {...ctx} />
     case 'sales': return <SalesPage {...ctx} />
+    case 'creances': return <CreancesPage {...ctx} />
     case 'purchases': return <PurchasesPage {...ctx} />
     case 'parties': return <PartiesPage {...ctx} />
     case 'expenses': return <ExpensesPage {...ctx} />

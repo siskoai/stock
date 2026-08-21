@@ -152,6 +152,9 @@ type SetupInput struct {
 	DefaultTaxRate   float64 `json:"defaultTaxRate"`
 	PricesIncludeTax bool    `json:"pricesIncludeTax"`
 
+	// DefaultPaymentTermDays est le délai proposé sur une vente à crédit.
+	DefaultPaymentTermDays int `json:"defaultPaymentTermDays"`
+
 	// Catalogue de départ : les catégories courantes d'une boutique
 	// d'informatique, que l'utilisateur pourra renommer ou supprimer.
 	SeedCategories bool `json:"seedCategories"`
@@ -202,6 +205,9 @@ func (s *Session) Setup(in SetupInput) (State, error) {
 	settings.Decimals = in.Decimals
 	settings.DefaultTaxRate = in.DefaultTaxRate
 	settings.PricesIncludeTax = in.PricesIncludeTax
+	if in.DefaultPaymentTermDays >= 0 && in.DefaultPaymentTermDays <= 365 {
+		settings.DefaultPaymentTermDays = in.DefaultPaymentTermDays
+	}
 	settings.AutoBackup = in.AutoBackup
 	settings.BackupsToKeep = maxInt(in.BackupsToKeep, 1)
 	settings.Theme = defaultString(in.Theme, "light")

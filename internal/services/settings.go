@@ -88,6 +88,9 @@ func (s *Config) Save(in models.Settings) (models.Settings, error) {
 	if in.DefaultTaxRate < 0 || in.DefaultTaxRate > 100 {
 		return models.Settings{}, fmt.Errorf("le taux de taxe par défaut doit être compris entre 0 et 100 %%")
 	}
+	if in.DefaultPaymentTermDays < 0 || in.DefaultPaymentTermDays > 365 {
+		return models.Settings{}, fmt.Errorf("le délai de règlement doit être compris entre 0 et 365 jours")
+	}
 	if in.Decimals < 0 || in.Decimals > 2 {
 		return models.Settings{}, fmt.Errorf("le nombre de décimales doit valoir 0, 1 ou 2")
 	}

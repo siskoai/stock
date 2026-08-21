@@ -12,7 +12,7 @@ import { Account } from './Account'
 import { CompanyLogo } from './CompanyLogo'
 
 export type PageKey =
-  | 'dashboard' | 'products' | 'categories' | 'stock' | 'sales'
+  | 'dashboard' | 'products' | 'categories' | 'stock' | 'sales' | 'creances'
   | 'purchases' | 'parties' | 'expenses' | 'reports' | 'settings' | 'users'
 
 interface NavEntry {
@@ -43,7 +43,8 @@ export function Layout(props: {
       title: 'Activité',
       items: [
         { key: 'dashboard', label: 'Tableau de bord', icon: <IconDashboard /> },
-        { key: 'sales', label: 'Ventes', icon: <IconCart />, scope: 'sales', badge: props.unpaidCount },
+        { key: 'sales', label: 'Ventes', icon: <IconCart />, scope: 'sales' },
+        { key: 'creances', label: 'Créances', icon: <IconWallet />, scope: 'sales', badge: props.unpaidCount },
         { key: 'purchases', label: 'Achats', icon: <IconTruck />, scope: 'purchases' },
       ],
     },
@@ -59,7 +60,7 @@ export function Layout(props: {
       title: 'Gestion',
       items: [
         { key: 'parties', label: 'Clients & fournisseurs', icon: <IconUsers /> },
-        { key: 'expenses', label: 'Charges', icon: <IconWallet />, scope: 'expenses' },
+        { key: 'expenses', label: 'Charges', icon: <IconReceipt />, scope: 'expenses' },
         { key: 'reports', label: 'Rapports', icon: <IconChart />, scope: 'finance' },
       ],
     },
@@ -148,6 +149,18 @@ export function Layout(props: {
 
       {account && <Account onClose={() => setAccount(false)} />}
     </div>
+  )
+}
+
+// Les charges prennent une icône distincte de celle des créances : deux
+// entrées voisines avec le même dessin se confondent.
+function IconReceipt() {
+  return (
+    <svg width={17} height={17} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 3v18l2.5-1.6L10 21l2-1.6L14 21l2.5-1.6L19 21V3z" />
+      <path d="M9 8h6M9 12h6" />
+    </svg>
   )
 }
 
