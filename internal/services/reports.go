@@ -226,7 +226,7 @@ func (s *Reports) salesReport(q ReportQuery) (SalesReport, error) {
 	}
 
 	sort.Strings(order)
-	report := SalesReport{Granularity: gran, From: from, To: to}
+	report := SalesReport{Granularity: gran, From: from, To: to, Points: []PeriodPoint{}}
 	for _, key := range order {
 		p := points[key]
 		p.NetResult = p.GrossMargin - p.Expenses - p.ScrapLoss
@@ -431,6 +431,24 @@ func (s *Reports) Dashboard() (Dashboard, error) {
 			d.TopProducts[i].Margin = 0
 		}
 	}
+	if d.Last30Days == nil {
+		d.Last30Days = []PeriodPoint{}
+	}
+	if d.Last12Months == nil {
+		d.Last12Months = []PeriodPoint{}
+	}
+	if d.TopProducts == nil {
+		d.TopProducts = []ProductStat{}
+	}
+	if d.LowStock == nil {
+		d.LowStock = []ProductView{}
+	}
+	if d.RecentInvoices == nil {
+		d.RecentInvoices = []models.Invoice{}
+	}
+	if d.RecentMovements == nil {
+		d.RecentMovements = []models.Movement{}
+	}
 	return d, nil
 }
 
@@ -544,7 +562,12 @@ func (s *Reports) IncomeStatement(from, to string) (IncomeStatement, error) {
 		start = firstActivityDate(s.db, end)
 	}
 
-	st := IncomeStatement{From: start, To: end}
+	// Les listes sont créées vides et non laissées à nil : une tranche nil se
+	// sérialise en « null », que l'interface reçoit là où elle attend un
+	// tableau. Elle appelle alors .map ou .length dessus, lève une exception,
+	// et tout le rendu se démonte. Le symptôme est un écran noir, sans message,
+	// sur les postes dont les données sont encore clairsemées.
+	st := IncomeStatement{From: start, To: end, ExpenseLines: []ExpenseLine{}}
 	for _, inv := range s.db.Invoices.All() {
 		if !countsAsSale(inv) || !util.InRange(inv.Date, start, end) {
 			continue
@@ -798,7 +821,12 @@ func (s *Reports) Statistics(q ReportQuery) (Statistics, error) {
 	if from.IsZero() {
 		from = firstActivityDate(s.db, to)
 	}
-	stats := Statistics{From: from, To: to}
+	stats := Statistics{
+		From: from, To: to,
+		ByCategory: []NamedStat{}, ByCustomer: []NamedStat{}, ByPayment: []NamedStat{},
+		ByMovement: []NamedStat{}, BySeller: []NamedStat{}, ByWeekday: []NamedStat{},
+		TopProducts: []ProductStat{}, SlowProducts: []ProductStat{},
+	}
 
 	products := map[string]models.Product{}
 	for _, p := range s.db.Products.All() {

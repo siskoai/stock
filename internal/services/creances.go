@@ -135,7 +135,10 @@ func (s *Creances) Etat(q CreanceQuery) (EtatCreances, error) {
 		return EtatCreances{}, err
 	}
 	maintenant := time.Now()
-	etat := EtatCreances{ArreteAu: maintenant}
+	etat := EtatCreances{
+		ArreteAu: maintenant,
+		Tranches: []TrancheTotal{}, Lignes: []Creance{}, Debiteurs: []DebiteurTotal{},
+	}
 
 	parTranche := map[Tranche]*TrancheTotal{}
 	parDebiteur := map[string]*DebiteurTotal{}

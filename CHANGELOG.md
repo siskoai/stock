@@ -10,6 +10,33 @@ pas la liste des fichiers modifiés.
 
 Rien pour l'instant.
 
+## [1.3.1] (2026-08-21)
+
+### Corrigé
+
+- **Les écrans Créances, Compte de résultat et Statistiques devenaient noirs.**
+  En Go, une liste laissée vide se sérialise en `null` et non en `[]`.
+  L'interface recevait ce `null` là où elle attendait un tableau, appelait
+  `.length` dessus, levait une exception, et React démontait tout le rendu :
+  l'écran devenait entièrement noir, sans message.
+
+  Le défaut ne se voyait que sur des données clairsemées, ce qui explique qu'il
+  soit passé inaperçu : une boutique bien remplie n'a jamais de liste vide. Il
+  se déclenchait dès qu'un poste n'avait aucun impayé, aucune charge saisie ou
+  aucun article dormant.
+
+  Toutes les réponses du moteur renvoient désormais des listes vides plutôt que
+  nulles, et un test balaie l'ensemble des écrans sur une boutique vide puis sur
+  une boutique partiellement remplie pour que le piège ne revienne pas.
+
+### Ajouté
+
+- **Un filet de sécurité autour des écrans.** Une exception pendant le rendu
+  n'emporte plus toute l'application : l'écran fautif affiche ce qui s'est
+  passé, la barre latérale reste utilisable, et deux boutons permettent de
+  réessayer ou de recharger. Un écran noir ne laisse aucune issue à un
+  commerçant et rien d'exploitable à rapporter ; un message en laisse deux.
+
 ## [1.3.0] (2026-08-21)
 
 ### Corrigé
@@ -233,7 +260,8 @@ Première version utilisable de bout en bout.
 - Refus d'ouvrir des données créées par une version plus récente.
 - Protection contre les archives piégées à la restauration.
 
-[Non publié]: https://github.com/siskoai/stock/compare/v1.3.0...HEAD
+[Non publié]: https://github.com/siskoai/stock/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/siskoai/stock/releases/tag/v1.3.1
 [1.3.0]: https://github.com/siskoai/stock/releases/tag/v1.3.0
 [1.2.0]: https://github.com/siskoai/stock/releases/tag/v1.2.0
 [1.1.0]: https://github.com/siskoai/stock/releases/tag/v1.1.0

@@ -115,14 +115,14 @@ function Evolution({ from, to, granularity }: { from: string; to: string; granul
           </>
         }
       >
-        {gran === 'day' && r.points.length > 40
-          ? <LineChart points={r.points.map((p) => ({ label: p.label, value: p.revenueHT }))} format={amount} />
-          : <BarChart points={r.points.map((p) => ({ label: p.label, value: p.revenueHT }))} format={amount} />}
+        {gran === 'day' && (r.points ?? []).length > 40
+          ? <LineChart points={(r.points ?? []).map((p) => ({ label: p.label, value: p.revenueHT }))} format={amount} />
+          : <BarChart points={(r.points ?? []).map((p) => ({ label: p.label, value: p.revenueHT }))} format={amount} />}
       </Card>
 
       <Card title="Détail par période" flush>
         <DataTable
-          rows={r.points}
+          rows={r.points ?? []}
           rowKey={(p) => p.key}
           empty={<Empty title="Aucune activité sur la période" />}
           footer={
@@ -179,7 +179,7 @@ function Result({ from, to }: { from: string; to: string }) {
           hint={`${s.invoiceCount} facture(s)`} />
         <KPI label="Marge brute" value={money(s.grossMargin)} hint={formatPercent(s.marginRate)} />
         <KPI label="Charges" value={money(s.totalExpenses)}
-          hint={`${s.expenseLines.length} rubrique(s)`} />
+          hint={`${(s.expenseLines ?? []).length} rubrique(s)`} />
         <KPI label="Résultat d'exploitation" value={money(s.operatingResult)}
           hint={formatPercent(s.resultRate)} accent={s.operatingResult < 0} />
       </div>
@@ -204,7 +204,7 @@ function Result({ from, to }: { from: string; to: string }) {
 
         <Card title="Charges">
           <Line label="Coût des marchandises vendues" value={amount(s.costOfSales)} />
-          {s.expenseLines.map((l) => (
+          {(s.expenseLines ?? []).map((l) => (
             <Line key={l.category} label={l.category} value={amount(l.amount)} muted
               hint={formatPercent(l.share, 0)} />
           ))}
@@ -216,9 +216,9 @@ function Result({ from, to }: { from: string; to: string }) {
 
       <div className="grid grid-2">
         <Card title="Répartition des charges d'exploitation">
-          {s.expenseLines.length === 0
+          {(s.expenseLines ?? []).length === 0
             ? <Empty title="Aucune charge sur la période" />
-            : <BarList items={s.expenseLines.map((l) => ({
+            : <BarList items={(s.expenseLines ?? []).map((l) => ({
                 label: l.category, value: l.amount,
                 display: `${amount(l.amount)} · ${formatPercent(l.share, 0)}`,
               }))} />}
@@ -316,8 +316,8 @@ function Stats({ from, to }: { from: string; to: string }) {
     <div className="stack">
       <div className="grid grid-2">
         <Card title="Ventes par catégorie">
-          {s.byCategory.length === 0 ? <Empty title="Aucune vente sur la période" /> : (
-            <BarList items={s.byCategory.map((c) => ({
+          {(s.byCategory ?? []).length === 0 ? <Empty title="Aucune vente sur la période" /> : (
+            <BarList items={(s.byCategory ?? []).map((c) => ({
               label: c.label, value: c.amount,
               display: `${amount(c.amount)} · ${formatPercent(c.share, 0)}`,
             }))} />
@@ -325,8 +325,8 @@ function Stats({ from, to }: { from: string; to: string }) {
         </Card>
 
         <Card title="Modes de règlement">
-          {s.byPayment.length === 0 ? <Empty title="Aucun règlement" /> : (
-            <BarList items={s.byPayment.map((p) => ({
+          {(s.byPayment ?? []).length === 0 ? <Empty title="Aucun règlement" /> : (
+            <BarList items={(s.byPayment ?? []).map((p) => ({
               label: p.label, value: p.amount,
               display: `${amount(p.amount)} · ${p.count}×`,
             }))} />
@@ -336,8 +336,8 @@ function Stats({ from, to }: { from: string; to: string }) {
 
       <div className="grid grid-2">
         <Card title="Meilleurs clients" note="Par chiffre d'affaires hors taxes">
-          {s.byCustomer.length === 0 ? <Empty title="Aucun client sur la période" /> : (
-            <BarList items={s.byCustomer.map((c) => ({
+          {(s.byCustomer ?? []).length === 0 ? <Empty title="Aucun client sur la période" /> : (
+            <BarList items={(s.byCustomer ?? []).map((c) => ({
               label: c.label || 'Client comptoir', value: c.amount,
               display: `${amount(c.amount)} · ${c.count} fact.`,
             }))} />
@@ -348,7 +348,7 @@ function Stats({ from, to }: { from: string; to: string }) {
           <BarChart
             height={170}
             viewWidth={460}
-            points={s.byWeekday.map((d) => ({ label: d.label.slice(0, 3), value: d.amount }))}
+            points={(s.byWeekday ?? []).map((d) => ({ label: d.label.slice(0, 3), value: d.amount }))}
             format={amount}
           />
         </Card>
@@ -357,7 +357,7 @@ function Stats({ from, to }: { from: string; to: string }) {
       <div className="grid grid-2">
         <Card title="Articles les plus vendus" flush>
           <DataTable
-            rows={s.topProducts}
+            rows={s.topProducts ?? []}
             rowKey={(p) => p.productId}
             empty={<Empty title="Aucune vente" />}
             columns={[
@@ -392,7 +392,7 @@ function Stats({ from, to }: { from: string; to: string }) {
           flush
         >
           <DataTable
-            rows={s.slowProducts}
+            rows={s.slowProducts ?? []}
             rowKey={(p) => p.productId}
             empty={<Empty title="Tout le stock tourne" text="Chaque article en stock a été vendu au moins une fois." />}
             columns={[
@@ -415,9 +415,9 @@ function Stats({ from, to }: { from: string; to: string }) {
         </Card>
       </div>
 
-      {can('finance') && s.bySeller.length > 1 && (
+      {can('finance') && (s.bySeller ?? []).length > 1 && (
         <Card title="Ventes par vendeur">
-          <BarList items={s.bySeller.map((v) => ({
+          <BarList items={(s.bySeller ?? []).map((v) => ({
             label: v.label, value: v.amount,
             display: `${amount(v.amount)} · ${v.count} fact.`,
           }))} />

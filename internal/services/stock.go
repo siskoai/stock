@@ -542,7 +542,10 @@ func (s *Stock) History(productID string) (ProductHistory, error) {
 	}
 	showCost := s.canSeeCost(u)
 	cat := Catalog{s.core}
-	h := ProductHistory{Product: cat.viewProduct(p, cats, showCost)}
+	h := ProductHistory{
+		Product:   cat.viewProduct(p, cats, showCost),
+		Movements: []models.Movement{},
+	}
 
 	for _, m := range s.db.Movements.Find(func(m models.Movement) bool { return m.ProductID == productID }) {
 		h.Movements = append(h.Movements, m)

@@ -81,7 +81,7 @@ export function DashboardPage({ navigate }: PageContext) {
         note="Chiffre d'affaires hors taxes, factures émises uniquement"
       >
         <LineChart
-          points={data.last30Days.map((p) => ({ label: p.label, value: p.revenueHT }))}
+          points={(data.last30Days ?? []).map((p) => ({ label: p.label, value: p.revenueHT }))}
           format={(v) => amount(v)}
         />
       </Card>
@@ -90,18 +90,18 @@ export function DashboardPage({ navigate }: PageContext) {
         <Card title="Douze derniers mois">
           <LineChart
             height={170}
-            points={data.last12Months.map((p) => ({ label: p.label, value: p.revenueHT }))}
+            points={(data.last12Months ?? []).map((p) => ({ label: p.label, value: p.revenueHT }))}
             format={(v) => amount(v)}
             maxLabels={6}
           />
         </Card>
 
         <Card title="Meilleures ventes du mois" note="Classées par chiffre d'affaires">
-          {data.topProducts.length === 0 ? (
+          {(data.topProducts ?? []).length === 0 ? (
             <Empty title="Aucune vente ce mois-ci" />
           ) : (
             <BarList
-              items={data.topProducts.map((p) => ({
+              items={(data.topProducts ?? []).map((p) => ({
                 label: p.name,
                 value: p.revenue,
                 display: `${amount(p.revenue)} · ${p.unitsSold}×`,
@@ -119,7 +119,7 @@ export function DashboardPage({ navigate }: PageContext) {
           flush
         >
           <DataTable
-            rows={data.lowStock}
+            rows={data.lowStock ?? []}
             rowKey={(p) => p.id}
             onRowClick={(p) => navigate('products', p.id)}
             empty={<Empty title="Rien à signaler" text="Aucun article n'est sous son seuil d'alerte." />}
@@ -149,7 +149,7 @@ export function DashboardPage({ navigate }: PageContext) {
           flush
         >
           <DataTable
-            rows={data.recentInvoices}
+            rows={data.recentInvoices ?? []}
             rowKey={(i) => i.id}
             onRowClick={(i) => navigate('sales', i.id)}
             empty={<Empty title="Aucune facture" text="Les ventes enregistrées apparaîtront ici." />}
@@ -185,7 +185,7 @@ export function DashboardPage({ navigate }: PageContext) {
         flush
       >
         <DataTable
-          rows={data.recentMovements}
+          rows={data.recentMovements ?? []}
           rowKey={(m) => m.id}
           empty={<Empty title="Aucun mouvement" />}
           columns={[

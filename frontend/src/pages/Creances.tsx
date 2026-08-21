@@ -66,15 +66,15 @@ export function CreancesPage({ navigate }: PageContext) {
         />
         <KPI
           label="Débiteurs"
-          value={String(d?.debiteurs.length ?? 0)}
+          value={String(d?.debiteurs?.length ?? 0)}
           hint="clients avec un solde ouvert"
         />
       </div>
 
-      {d && d.tranches.length > 0 && (
+      {d && (d.tranches ?? []).length > 0 && (
         <Card title="Ancienneté des créances" note="Ce qui est dû, classé par retard">
           <div className="tranches">
-            {d.tranches.map((t) => (
+            {(d.tranches ?? []).map((t) => (
               <div className="tranche" key={t.tranche}>
                 <Badge tone={TON[t.tranche]}>{t.libelle}</Badge>
                 <div className="tranche-montant">{amount(t.montant)}</div>

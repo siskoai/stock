@@ -9,6 +9,7 @@ import { useSession } from './lib/session'
 import { useToast } from './lib/toast'
 import { Layout, type PageKey } from './components/Layout'
 import { Alert, Loading } from './components/UI'
+import { Filet } from './components/Filet'
 import { ChangePasswordGate, LoginPage } from './pages/Gate'
 import { Onboarding } from './pages/Onboarding'
 import { DashboardPage } from './pages/Dashboard'
@@ -126,7 +127,11 @@ export function App() {
       unpaidCount={unpaid}
       onLogout={logout}
     >
-      <PageBody page={page} ctx={ctx} />
+      {/* La clé remet le filet à zéro à chaque changement d'écran : une page
+          en erreur ne doit pas condamner les suivantes. */}
+      <Filet cle={`${page}:${arg ?? ''}`}>
+        <PageBody page={page} ctx={ctx} />
+      </Filet>
     </Layout>
   )
 }
