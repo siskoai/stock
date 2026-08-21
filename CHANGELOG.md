@@ -10,6 +10,26 @@ pas la liste des fichiers modifiés.
 
 Rien pour l'instant.
 
+## [1.3.2] (2026-08-21)
+
+### Corrigé
+
+- **Le mode portable rendait l'application inouvrable sous macOS.** Les données
+  étaient écrites à côté de l'exécutable, c'est-à-dire *dans*
+  `Comptoir.app/Contents/MacOS`. Or ajouter le moindre fichier dans un bundle
+  signé en invalide la signature : macOS refuse alors de l'ouvrir en annonçant
+  qu'elle est « endommagée ou incomplète », sans laisser deviner que les données
+  de l'utilisateur en sont la cause. Elles sont désormais déposées à côté du
+  bundle, comme elles le sont à côté de l'exécutable sur les autres systèmes.
+
+### Ajouté
+
+- **Une image disque pour macOS**, publiée à côté de l'archive ZIP et
+  recommandée à sa place. Un ZIP peut être extrait à moitié, ouvert depuis son
+  aperçu, ou transféré par un moyen qui aplatit le bundle, et macOS déclare
+  alors l'application endommagée. Une image disque se monte au lieu de
+  s'extraire : ce qu'on en glisse vers Applications est forcément intact.
+
 ## [1.3.1] (2026-08-21)
 
 ### Corrigé
@@ -260,7 +280,8 @@ Première version utilisable de bout en bout.
 - Refus d'ouvrir des données créées par une version plus récente.
 - Protection contre les archives piégées à la restauration.
 
-[Non publié]: https://github.com/siskoai/stock/compare/v1.3.1...HEAD
+[Non publié]: https://github.com/siskoai/stock/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/siskoai/stock/releases/tag/v1.3.2
 [1.3.1]: https://github.com/siskoai/stock/releases/tag/v1.3.1
 [1.3.0]: https://github.com/siskoai/stock/releases/tag/v1.3.0
 [1.2.0]: https://github.com/siskoai/stock/releases/tag/v1.2.0

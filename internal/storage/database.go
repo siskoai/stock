@@ -52,10 +52,9 @@ func DataDir() (string, error) {
 	if choisi := strings.TrimSpace(os.Getenv("COMPTOIR_DATA_DIR")); choisi != "" {
 		return choisi, nil
 	}
-	if exe, err := os.Executable(); err == nil {
-		root := filepath.Dir(exe)
-		if _, err := os.Stat(filepath.Join(root, "portable.txt")); err == nil {
-			return filepath.Join(root, "data"), nil
+	if racine, err := racinePortable(); err == nil {
+		if _, err := os.Stat(filepath.Join(racine, "portable.txt")); err == nil {
+			return filepath.Join(racine, "data"), nil
 		}
 	}
 	base, err := os.UserConfigDir()
@@ -63,6 +62,45 @@ func DataDir() (string, error) {
 		return "", fmt.Errorf("répertoire de configuration introuvable : %w", err)
 	}
 	return filepath.Join(base, "Comptoir"), nil
+}
+
+// racinePortable renvoie le dossier où chercher portable.txt et déposer les
+// données en mode portable : celui qui contient l'application telle que
+// l'utilisateur la voit.
+//
+// Sous macOS, l'exécutable ne vit pas à cet endroit mais trois niveaux plus bas,
+// dans Comptoir.app/Contents/MacOS. Y écrire les données les placerait dans le
+// bundle, ce qui invalide la signature de l'application : macOS refuse alors de
+// l'ouvrir en la déclarant « endommagée ou incomplète », et l'utilisateur n'a
+// aucun moyen de deviner que ses propres données en sont la cause. Les données
+// vont donc à côté du bundle, comme sur les autres systèmes elles vont à côté de
+// l'exécutable.
+func racinePortable() (string, error) {
+	exe, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	if resolu, err := filepath.EvalSymlinks(exe); err == nil {
+		exe = resolu
+	}
+	return racineDepuisExecutable(exe), nil
+}
+
+// racineDepuisExecutable applique la règle de remontée. Séparée pour être
+// vérifiable sur des chemins choisis.
+func racineDepuisExecutable(exe string) string {
+	dossier := filepath.Dir(exe)
+	// .../Comptoir.app/Contents/MacOS/Comptoir : on remonte au parent du bundle.
+	if filepath.Base(dossier) == "MacOS" {
+		contents := filepath.Dir(dossier)
+		if filepath.Base(contents) == "Contents" {
+			bundle := filepath.Dir(contents)
+			if strings.EqualFold(filepath.Ext(bundle), ".app") {
+				return filepath.Dir(bundle)
+			}
+		}
+	}
+	return dossier
 }
 
 // Open ouvre (ou initialise) la base dans le répertoire indiqué.

@@ -53,7 +53,7 @@ Téléchargez l'exécutable de votre système depuis la page des
 | Système | Fichier à télécharger | Ce qu'il faut de plus |
 |---|---|---|
 | **Windows 10/11** | `comptoir-windows-amd64-installer.exe` | Rien. WebView2 est déjà présent ; sinon l'installeur le propose. |
-| **macOS 10.15+** | `comptoir-macos-universal.zip` | Décompressez, glissez dans « Applications », puis voir ci-dessous. Intel et Apple Silicon. |
+| **macOS 10.15+** | `comptoir-macos-universal.dmg` | Ouvrez l'image, glissez Comptoir dans « Applications », puis voir ci-dessous. Intel et Apple Silicon. |
 | **Linux** | `comptoir-linux-amd64.tar.gz` | `libgtk-3-0` et `libwebkit2gtk-4.0-37`, présents sur la plupart des distributions. |
 
 Chaque version publiée contient aussi `SHA256SUMS.txt`, qui permet de vérifier
@@ -63,6 +63,12 @@ qu'un fichier téléchargé est bien celui qui a été construit :
 sha256sum -c SHA256SUMS.txt      # Linux
 shasum -a 256 -c SHA256SUMS.txt  # macOS
 ```
+
+> **Préférez l'image disque au fichier ZIP.** Une archive peut être extraite à
+> moitié, ouverte depuis son aperçu, ou transférée par un moyen qui aplatit le
+> bundle : macOS déclare alors l'application « endommagée ou incomplète ». Une
+> image disque se monte au lieu de s'extraire, et ce qu'on en glisse est
+> forcément intact. Le ZIP reste publié pour les usages automatisés.
 
 #### Première ouverture sur macOS
 

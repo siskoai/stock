@@ -377,3 +377,39 @@ func TestDataDir_VariableEnvironnement(t *testing.T) {
 		t.Errorf("une variable vide doit être ignorée, obtenu %q", dir)
 	}
 }
+
+// Sous macOS, l'exécutable vit dans Comptoir.app/Contents/MacOS. Écrire les
+// données à cet endroit les placerait dans le bundle et invaliderait sa
+// signature : macOS refuserait alors d'ouvrir l'application en la déclarant
+// endommagée. Les données doivent donc aller à côté du bundle.
+func TestRacinePortable_HorsDuBundle(t *testing.T) {
+	racine, err := racinePortable()
+	if err != nil {
+		t.Fatalf("racinePortable : %v", err)
+	}
+	if strings.Contains(racine, ".app/Contents") {
+		t.Errorf("la racine portable est dans le bundle : %s", racine)
+	}
+}
+
+// Le calcul lui-même se vérifie sur des chemins choisis, sans dépendre de
+// l'endroit où le test s'exécute.
+func TestRacinePortable_Calcul(t *testing.T) {
+	cas := []struct {
+		nom      string
+		exe      string
+		attendue string
+	}{
+		{"application macOS", "/Applications/Comptoir.app/Contents/MacOS/Comptoir", "/Applications"},
+		{"application sur clé USB", "/Volumes/CLE/Comptoir.app/Contents/MacOS/Comptoir", "/Volumes/CLE"},
+		{"exécutable simple", "/opt/comptoir/comptoir", "/opt/comptoir"},
+		{"dossier nommé MacOS sans bundle", "/home/moi/MacOS/comptoir", "/home/moi/MacOS"},
+	}
+	for _, c := range cas {
+		t.Run(c.nom, func(t *testing.T) {
+			if got := racineDepuisExecutable(c.exe); got != c.attendue {
+				t.Errorf("racine = %q, attendu %q", got, c.attendue)
+			}
+		})
+	}
+}

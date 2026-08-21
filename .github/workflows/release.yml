@@ -147,6 +147,18 @@ jobs:
               app=$(find . -maxdepth 1 -name '*.app' -print -quit)
               [ -n "$app" ] || { echo "aucune application produite"; exit 1; }
               ditto -c -k --keepParent "$app" "${{ matrix.archive }}"
+
+              # Une image disque en plus de l'archive. Un ZIP peut être extrait
+              # à moitié, ouvert depuis son aperçu, ou transféré par un moyen qui
+              # aplatit le bundle : macOS déclare alors l'application endommagée.
+              # Une image disque se monte, ne s'extrait pas, et l'utilisateur
+              # glisse un bundle intact vers Applications.
+              rm -rf montage && mkdir montage
+              ditto "$app" "montage/Comptoir.app"
+              ln -s /Applications montage/Applications
+              hdiutil create -volname Comptoir -srcfolder montage \
+                -ov -format UDZO -quiet comptoir-macos-universal.dmg
+              rm -rf montage
               ;;
             Windows)
               installeur=$(find . -maxdepth 1 -name '*installer*.exe' -print -quit)
@@ -159,7 +171,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.archive }}
-          path: build/bin/${{ matrix.archive }}
+          path: |
+            build/bin/${{ matrix.archive }}
+            build/bin/*.dmg
           if-no-files-found: error
 
   publier:
